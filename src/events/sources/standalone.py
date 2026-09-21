@@ -70,3 +70,36 @@ def get_events() -> list[StandaloneResult]:
         ingest_page(page)
         for page in EVENT_PAGES
     ]
+
+def main() -> None:
+
+    """Run standalone ingestion as a diagnostic."""
+
+    results = get_events()
+
+    for result in results:
+
+        print(f"\n{result.page.source}")
+
+        print(f"URL: {result.page.url}")
+
+        if result.error:
+
+            print(f"FAILED: {result.error}")
+
+            continue
+
+        print(f"Found {len(result.events)} structured event(s)")
+
+        for event in result.events:
+
+            print(f"  Title: {event.get('name')}")
+
+            print(f"  Start: {event.get('startDate')}")
+
+            print(f"  End:   {event.get('endDate')}")
+
+if __name__ == "__main__":
+
+    main()
+
