@@ -3,16 +3,27 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
-from src.events.http import fetch_html
+from src.events.http import FetchError, fetch_html
+from src.events.structured_data import extract_schema_events
 
 
 @dataclass(frozen=True)
 class EventPage:
-    """A known event page awaiting extraction."""
+    """A known standalone event page."""
 
     url: str
     source: str
+
+
+@dataclass(frozen=True)
+class StandaloneResult:
+    """Result of attempting to extract events from one page."""
+
+    page: EventPage
+    events: tuple[dict[str, Any], ...]
+    error: str | None = None
 
 
 EVENT_PAGES = (
@@ -27,13 +38,35 @@ EVENT_PAGES = (
 )
 
 
-def fetch_event_pages() -> list[tuple[EventPage, str]]:
-    """Fetch configured standalone event pages."""
+def ingest_page(page: EventPage) -> StandaloneResult:
+    """Fetch a standalone page and extract structured events."""
+    try:
+        html = fetch_html(page.url)
+    except FetchError as exc:
+        return StandaloneResult(
+            page=page,
+            events=(),
+            error=str(exc),
+        )
 
-    pages: list[tuple[EventPage, str]] = []
+    events = tuple(extract_schema_events(html))
 
-    for event_page in EVENT_PAGES:
-        html = fetch_html(event_page.url)
-        pages.append((event_page, html))
+    if not events:
+        return StandaloneResult(
+            page=page,
+            events=(),
+            error="No schema.org Event data found",
+        )
 
-    return pages
+    return StandaloneResult(
+        page=page,
+        events=events,
+    )
+
+
+def get_events() -> list[StandaloneResult]:
+    """Attempt ingestion for all configured standalone pages."""
+    return [
+        ingest_page(page)
+        for page in EVENT_PAGES
+    ]
