@@ -23,6 +23,10 @@ class Event:
     end_at: str | None = None
     venue_name: str | None = None
     address: str | None = None
+
+    is_free: bool | None = None
+    price_from_gbp: float | None = None
+
     topics: tuple[str, ...] = ()
     status: EventStatus = "scheduled"
 
