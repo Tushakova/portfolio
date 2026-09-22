@@ -1,4 +1,3 @@
-
 """Royal Statistical Society event ingestion."""
 
 from __future__ import annotations
@@ -64,17 +63,18 @@ def discover_event_urls(html: str) -> list[str]:
         absolute_url = urljoin(EVENTS_URL, link["href"])
         path = urlparse(absolute_url).path.casefold()
 
+        # RSS event detail pages currently live below paths such as:
+        # /training-events/events/events-2026/rss-events/event-slug/
         if "/training-events/events/events-20" not in path:
             continue
 
-        # Category/listing pages end at a broad event-type path.
-        # Real event pages have a deeper slug.
         parts = [
             part
             for part in path.split("/")
             if part
         ]
 
+        # Ignore broad listing/category pages.
         if len(parts) < 5:
             continue
 
@@ -92,7 +92,9 @@ def extract_title(html: str) -> str:
     if heading is None:
         raise RSSParseError("event title not found")
 
-    title = clean_text(heading.get_text(" ", strip=True))
+    title = clean_text(
+        heading.get_text(" ", strip=True)
+    )
 
     if not title:
         raise RSSParseError("event title is empty")
@@ -102,8 +104,10 @@ def extract_title(html: str) -> str:
 
 def extract_event_type(text: str) -> str:
     """Extract the RSS event classification."""
+    text_lower = text.casefold()
+
     for event_type in EVENT_TYPES:
-        if event_type.casefold() in text.casefold():
+        if event_type.casefold() in text_lower:
             return event_type
 
     raise RSSParseError("event type not found")
@@ -141,7 +145,9 @@ def extract_datetimes(
             "%d %B %Y %I:%M %p",
         )
 
-        return parsed.replace(tzinfo=LONDON_TZ)
+        return parsed.replace(
+            tzinfo=LONDON_TZ
+        )
 
     start = parse_time(
         match.group(2),
@@ -162,8 +168,16 @@ def extract_datetimes(
     )
 
 
-def extract_location(lines: list[str]) -> tuple[str, str | None]:
-    """Extract the displayed RSS location."""
+def extract_location(
+    lines: list[str],
+) -> tuple[str | None, str | None]:
+    """
+    Extract the displayed RSS location.
+
+    RSS pages are not fully consistent about separating venue name
+    from address. Preserve the information conservatively rather than
+    guessing at an address structure.
+    """
 
     for index, line in enumerate(lines):
         if not line.casefold().startswith("location:"):
@@ -173,32 +187,46 @@ def extract_location(lines: list[str]) -> tuple[str, str | None]:
             line.split(":", 1)[1]
         )
 
-        address = None
+        if not location:
+            location = None
 
-        # RSS sometimes puts the fuller venue/address on the next line.
+        detail = None
+
         if index + 1 < len(lines):
-            candidate = lines[index + 1]
+            candidate = clean_text(
+                lines[index + 1]
+            )
 
-            if candidate not in EVENT_TYPES:
-                if (
-                    "london" in candidate.casefold()
-                    and candidate != location
-                ):
-                    address = candidate
+            if (
+                candidate
+                and candidate not in EVENT_TYPES
+                and "date:" not in candidate.casefold()
+            ):
+                detail = candidate
 
-        return location, address
+        # Some RSS pages put only "London" after Location:
+        # and the fuller venue/address on the following line.
+        if detail and "london" in detail.casefold():
+            return location, detail
+
+        return location, None
 
     raise RSSParseError("event location not found")
 
 
-def infer_topics(title: str, text: str) -> tuple[str, ...]:
-    """Assign controlled topics using conservative deterministic rules."""
+def infer_topics(title: str) -> tuple[str, ...]:
+    """
+    Infer only topics explicitly supported by the event title.
 
-    haystack = f"{title} {text}".casefold()
+    Deliberately avoid classifying from the entire page because RSS
+    navigation and boilerplate contain unrelated data/AI terminology.
+    """
+
+    title_lower = title.casefold()
     topics: list[str] = []
 
     if any(
-        term in haystack
+        term in title_lower
         for term in (
             "data",
             "analytics",
@@ -209,34 +237,43 @@ def infer_topics(title: str, text: str) -> tuple[str, ...]:
         topics.append(DATA_ANALYTICS)
 
     if any(
-        term in haystack
+        term in title_lower
         for term in (
             "artificial intelligence",
-            " ai ",
             "machine learning",
         )
     ):
         topics.append(AI_ML)
 
-    if "data science" in haystack:
+    if "data science" in title_lower:
         topics.append(DATA_SCIENCE)
 
     if any(
-        term in haystack
+        term in title_lower
         for term in (
             "statistics",
             "statistical",
-            "statistician",
         )
     ):
         topics.append(STATISTICS)
 
-    return tuple(dict.fromkeys(topics))
+    return tuple(
+        dict.fromkeys(topics)
+    )
 
 
 def stable_event_id(url: str) -> str:
     """Create a stable ID from the RSS event URL."""
-    slug = urlparse(url).path.rstrip("/").split("/")[-1]
+    slug = (
+        urlparse(url)
+        .path.rstrip("/")
+        .split("/")[-1]
+    )
+
+    if not slug:
+        raise RSSParseError(
+            "could not create event ID from URL"
+        )
 
     return f"rss-{slug}"
 
@@ -252,14 +289,26 @@ def parse_event_page(
 
     event_type = extract_event_type(text)
 
-    # Product rule: expensive professional training is not Radar content.
+    # London Data Radar is aimed at accessible events rather than
+    # professional paid training courses.
     if event_type == "RSS Training":
         return None
 
-    location, address = extract_location(lines)
+    location, location_detail = extract_location(
+        lines
+    )
 
-    # V1 is specifically London in-person discovery.
-    if "london" not in f"{location} {address or ''}".casefold():
+    location_text = " ".join(
+        value
+        for value in (
+            location,
+            location_detail,
+        )
+        if value
+    )
+
+    # V1 contains London in-person events only.
+    if "london" not in location_text.casefold():
         return None
 
     title = extract_title(html)
@@ -277,10 +326,27 @@ def parse_event_page(
         is_free = True
         price_from_gbp = 0.0
 
-    registration_status = (
-        "open"
-        if "book now" in lowered
-        else "unknown"
+    if "waitlist" in lowered:
+        registration_status = "waitlist"
+    elif "sold out" in lowered:
+        registration_status = "sold_out"
+    elif "book now" in lowered:
+        registration_status = "open"
+    else:
+        registration_status = "unknown"
+
+    # RSS does not consistently separate venue and address.
+    # Prefer the fuller location string for display when available.
+    venue_name = (
+        location_detail
+        or location
+        or None
+    )
+
+    address = (
+        location_detail
+        or location
+        or None
     )
 
     return Event(
@@ -292,12 +358,12 @@ def parse_event_page(
         organiser=SOURCE_NAME,
         source=SOURCE_NAME,
         source_url=source_url,
-        venue_name=location,
+        venue_name=venue_name,
         address=address,
         is_free=is_free,
         price_from_gbp=price_from_gbp,
         registration_status=registration_status,
-        topics=infer_topics(title, text),
+        topics=infer_topics(title),
     )
 
 
@@ -310,19 +376,31 @@ def get_events() -> tuple[list[Event], list[str]]:
     try:
         listing_html = fetch_html(EVENTS_URL)
     except FetchError as exc:
-        return [], [f"{SOURCE_NAME}: {exc}"]
+        return [], [
+            f"{SOURCE_NAME}: {exc}"
+        ]
 
-    urls = discover_event_urls(listing_html)
+    urls = discover_event_urls(
+        listing_html
+    )
 
     for url in urls:
         try:
             html = fetch_html(url)
-            event = parse_event_page(html, url)
+
+            event = parse_event_page(
+                html,
+                url,
+            )
 
             if event is not None:
                 events.append(event)
 
-        except (FetchError, RSSParseError, ValueError) as exc:
+        except (
+            FetchError,
+            RSSParseError,
+            ValueError,
+        ) as exc:
             errors.append(
                 f"{SOURCE_NAME} [{url}]: {exc}"
             )
