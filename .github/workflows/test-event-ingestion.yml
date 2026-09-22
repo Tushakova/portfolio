@@ -19,5 +19,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run standalone event ingestion
+      - name: Test standalone event ingestion
         run: python -m src.events.sources.standalone
+
+      - name: Build events dataset
+        run: python -m src.events.build
+
+      - name: Show generated dataset
+        run: cat data/events.json
