@@ -7,17 +7,55 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from src.events.models import Event
-from src.events.sources.standalone import get_events
+from src.events.sources import rss, standalone
+from src.events.validation import (
+    deduplicate_events,
+    validate_events,
+)
 
 
 OUTPUT_PATH = Path("data/events.json")
 SCHEMA_VERSION = "1.0"
 
 
+def collect_events() -> tuple[list[Event], list[str]]:
+    """Collect events from all active sources."""
+
+    events: list[Event] = []
+    errors: list[str] = []
+
+    collectors = (
+        ("Standalone", standalone.get_events),
+        ("RSS", rss.get_events),
+    )
+
+    for source_name, collector in collectors:
+        try:
+            source_events, source_errors = collector()
+            events.extend(source_events)
+            errors.extend(source_errors)
+
+            print(
+                f"{source_name}: "
+                f"{len(source_events)} event(s), "
+                f"{len(source_errors)} warning(s)"
+            )
+
+        except Exception as exc:
+            # Source isolation:
+            # an unexpected failure in one connector must not erase
+            # successfully collected events from other connectors.
+            errors.append(
+                f"{source_name}: unexpected failure: {exc}"
+            )
+
+    return events, errors
+
+
 def build_dataset(events: list[Event]) -> dict:
     """Return the canonical dataset consumed by the frontend."""
 
-    events = sorted(
+    ordered_events = sorted(
         events,
         key=lambda event: event.start_at,
     )
@@ -25,16 +63,16 @@ def build_dataset(events: list[Event]) -> dict:
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "event_count": len(events),
+        "event_count": len(ordered_events),
         "events": [
             event.to_dict()
-            for event in events
+            for event in ordered_events
         ],
     }
 
 
 def write_dataset(dataset: dict) -> None:
-    """Write the canonical dataset atomically."""
+    """Write the dataset atomically."""
 
     OUTPUT_PATH.parent.mkdir(
         parents=True,
@@ -59,12 +97,14 @@ def write_dataset(dataset: dict) -> None:
 
 
 def main() -> None:
-    """Run the event ingestion pipeline."""
+    """Run the complete ingestion pipeline."""
 
-    events, errors = get_events()
+    events, errors = collect_events()
 
     for error in errors:
         print(f"WARNING: {error}")
+
+    events = deduplicate_events(events)
 
     if not events:
         raise RuntimeError(
@@ -72,11 +112,13 @@ def main() -> None:
             "refusing to overwrite the existing dataset."
         )
 
+    validate_events(events)
+
     dataset = build_dataset(events)
     write_dataset(dataset)
 
     print(
-        f"Built {len(events)} event(s) "
+        f"Built {len(events)} validated event(s) "
         f"→ {OUTPUT_PATH}"
     )
 
