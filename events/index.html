@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>London Data Radar — Maria Tushakova</title>
+
+  <meta
+    name="description"
+    content="A live radar for worthwhile data, analytics and experimentation events in London."
+  >
+
+  <style>
+    :root {
+      --background: #ffffff;
+      --surface: #f7f7f5;
+      --surface-hover: #f2f2ef;
+      --text: #171717;
+      --muted: #6b6b66;
+      --border: #e5e5df;
+      --accent: #171717;
+      --max-width: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family:
+        Inter,
+        ui-sans-serif,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .container {
+      width: min(
+        calc(100% - 40px),
+        var(--max-width)
+      );
+      margin: 0 auto;
+    }
+
+    /* Navigation */
+
+    .site-header {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .brand {
+      font-size: 16px;
+      font-weight: 650;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .nav-links a:hover,
+    .nav-links a[aria-current="page"] {
+      color: var(--text);
+    }
+
+    /* Hero */
+
+    .hero {
+      padding: 88px 0 58px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 0;
+      font-size: clamp(42px, 7vw, 76px);
+      font-weight: 600;
+      letter-spacing: -0.055em;
+      line-height: 0.98;
+    }
+
+    .hero-copy {
+      max-width: 690px;
+      margin: 28px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    .hero-meta {
+      margin-top: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* Controls */
+
+    .controls-section {
+      padding: 30px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-button {
+      appearance: none;
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--background);
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      transition:
+        background 120ms ease,
+        border-color 120ms ease,
+        color 120ms ease;
+    }
+
+    .filter-button:hover {
+      border-color: #c9c9c2;
+      color: var(--text);
+    }
+
+    .filter-button.active {
+      border-color: var(--text);
+      background: var(--text);
+      color: #ffffff;
+    }
+
+    .result-count {
+      flex-shrink: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Events */
+
+    .events-section {
+      padding: 18px 0 96px;
+    }
+
+    .event-card {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr) auto;
+      gap: 32px;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .event-date {
+      padding-top: 3px;
+    }
+
+    .event-day {
+      display: block;
+      font-size: 30px;
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .event-month {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .event-time {
+      display: block;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .event-title {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+
+    .event-title a {
+      text-decoration: none;
+    }
+
+    .event-title a:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+
+    .event-location {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .event-topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 18px;
+    }
+
+    .topic {
+      padding: 5px 9px;
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .event-side {
+      min-width: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .price {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: capitalize;
+    }
+
+    .status.waitlist,
+    .status.sold-out {
+      padding: 5px 8px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .source-link {
+      margin-top: auto;
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .source-link:hover {
+      color: var(--text);
+    }
+
+    /* States */
+
+    .state {
+      padding: 72px 0;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .state strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-size: 18px;
+    }
+
+    /* About */
+
+    .about-radar {
+      padding: 72px 0;
+      background: var(--surface);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 64px;
+    }
+
+    .about-radar h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.025em;
+    }
+
+    .about-copy {
+      max-width: 680px;
+    }
+
+    .about-copy p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .about-copy p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Footer */
+
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-inner a {
+      text-decoration: none;
+    }
+
+    .footer-inner a:hover {
+      color: var(--text);
+    }
+
+    @media (max-width: 760px) {
+      .container {
+        width: min(
+          calc(100% - 28px),
+          var(--max-width)
+        );
+      }
+
+      .nav {
+        min-height: 64px;
+      }
+
+      .nav-links {
+        gap: 16px;
+      }
+
+      .nav-links a:not([aria-current="page"]) {
+        display: none;
+      }
+
+      .hero {
+        padding: 64px 0 42px;
+      }
+
+      h1 {
+        font-size: clamp(42px, 14vw, 64px);
+      }
+
+      .hero-copy {
+        font-size: 16px;
+      }
+
+      .controls {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .event-card {
+        grid-template-columns: 74px minmax(0, 1fr);
+        gap: 20px;
+      }
+
+      .event-day {
+        font-size: 26px;
+      }
+
+      .event-title {
+        font-size: 20px;
+      }
+
+      .event-side {
+        grid-column: 2;
+        min-width: 0;
+        align-items: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .source-link {
+        margin: 0 0 0 auto;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="/">
+        Maria Tushakova
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="/">Portfolio</a>
+        <a href="/events/" aria-current="page">
+          London Data Radar
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">
+          Live data product
+        </p>
+
+        <h1>
+          London Data Radar
+        </h1>
+
+        <p class="hero-copy">
+          Worthwhile data, analytics and experimentation events
+          happening in London — collected from multiple sources
+          and refreshed automatically.
+        </p>
+
+        <div class="hero-meta">
+          <span class="live-indicator">
+            <span class="live-dot"></span>
+            Live dataset
+          </span>
+
+          <span id="last-updated">
+            Loading latest data…
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls-section">
+      <div class="container controls">
+
+        <div
+          class="filters"
+          role="group"
+          aria-label="Filter events"
+        >
+          <button
+            class="filter-button active"
+            data-filter="all"
+            type="button"
+          >
+            All
+          </button>
+
+          <button
+            class="filter-button"
+            data-filter="free"
+            type="button"
+          >
+            Free
+          </button>
+
+          <button
+            class="filter-button"
+            data-filter="data"
+            type="button"
+          >
+            Data & Analytics
+          </button>
+
+          <button
+            class="filter-button"
+            data-filter="ai"
+            type="button"
+          >
+            AI & ML
+          </button>
+
+          <button
+            class="filter-button"
+            data-filter="statistics"
+            type="button"
+          >
+            Statistics
+          </button>
+        </div>
+
+        <div
+          class="result-count"
+          id="result-count"
+          aria-live="polite"
+        ></div>
+
+      </div>
+    </section>
+
+    <section class="events-section">
+      <div class="container">
+        <div id="events-list">
+          <div class="state">
+            Loading events…
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-radar">
+      <div class="container about-grid">
+
+        <h2>
+          About the project
+        </h2>
+
+        <div class="about-copy">
+          <p>
+            London Data Radar is a small data product built to solve
+            a practical discovery problem: useful analytics events
+            are fragmented across organisers, communities and event
+            websites.
+          </p>
+
+          <p>
+            A Python ingestion pipeline collects events from multiple
+            public sources, normalises them into a common schema,
+            validates the resulting dataset and publishes refreshed
+            data automatically.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>
+        © 2026 Maria Tushakova
+      </span>
+
+      <a href="/">
+        Back to portfolio
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const DATA_URL = "/data/events.json";
+
+    const eventsList = document.getElementById("events-list");
+    const resultCount = document.getElementById("result-count");
+    const lastUpdated = document.getElementById("last-updated");
+    const filterButtons = document.querySelectorAll(
+      ".filter-button"
+    );
+
+    let events = [];
+    let activeFilter = "all";
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatDateParts(isoDate) {
+      const date = new Date(isoDate);
+
+      return {
+        day: new Intl.DateTimeFormat(
+          "en-GB",
+          {
+            day: "2-digit",
+            timeZone: "Europe/London"
+          }
+        ).format(date),
+
+        month: new Intl.DateTimeFormat(
+          "en-GB",
+          {
+            month: "short",
+            year: "numeric",
+            timeZone: "Europe/London"
+          }
+        ).format(date),
+
+        time: new Intl.DateTimeFormat(
+          "en-GB",
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+            timeZone: "Europe/London"
+          }
+        ).format(date)
+      };
+    }
+
+    function formatUpdated(isoDate) {
+      const date = new Date(isoDate);
+
+      return new Intl.DateTimeFormat(
+        "en-GB",
+        {
+          day: "numeric",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "Europe/London"
+        }
+      ).format(date);
+    }
+
+    function formatPrice(event) {
+      if (event.is_free === true) {
+        return "Free";
+      }
+
+      if (
+        event.price_from_gbp !== null &&
+        event.price_from_gbp !== undefined
+      ) {
+        return `From £${Number(
+          event.price_from_gbp
+        ).toLocaleString("en-GB")}`;
+      }
+
+      return "Price unknown";
+    }
+
+    function formatStatus(status) {
+      const labels = {
+        open: "Registration open",
+        waitlist: "Waitlist",
+        sold_out: "Sold out",
+        closed: "Registration closed",
+        unknown: ""
+      };
+
+      return labels[status] || "";
+    }
+
+    function isUpcoming(event) {
+      if (
+        event.status === "cancelled" ||
+        event.status === "postponed"
+      ) {
+        return false;
+      }
+
+      const relevantEnd = event.end_at || event.start_at;
+
+      return new Date(relevantEnd) >= new Date();
+    }
+
+    function matchesFilter(event) {
+      if (activeFilter === "all") {
+        return true;
+      }
+
+      if (activeFilter === "free") {
+        return event.is_free === true;
+      }
+
+      const topics = event.topics || [];
+
+      if (activeFilter === "data") {
+        return topics.some(
+          topic =>
+            topic === "Data Analytics" ||
+            topic === "Product Analytics" ||
+            topic === "Data Science" ||
+            topic === "Data Engineering" ||
+            topic === "Analytics Engineering" ||
+            topic === "Experimentation" ||
+            topic === "Data Visualisation"
+        );
+      }
+
+      if (activeFilter === "ai") {
+        return topics.includes(
+          "AI & Machine Learning"
+        );
+      }
+
+      if (activeFilter === "statistics") {
+        return topics.includes(
+          "Statistics"
+        );
+      }
+
+      return true;
+    }
+
+    function eventCard(event) {
+      const date = formatDateParts(event.start_at);
+
+      const topics = (event.topics || [])
+        .map(
+          topic =>
+            `<span class="topic">${escapeHtml(topic)}</span>`
+        )
+        .join("");
+
+      const status = formatStatus(
+        event.registration_status
+      );
+
+      const statusClass =
+        event.registration_status === "sold_out"
+          ? "sold-out"
+          : event.registration_status;
+
+      const venue =
+        event.venue_name ||
+        event.address ||
+        "London";
+
+      return `
+        <article class="event-card">
+
+          <div class="event-date">
+            <span class="event-day">
+              ${escapeHtml(date.day)}
+            </span>
+
+            <span class="event-month">
+              ${escapeHtml(date.month)}
+            </span>
+
+            <span class="event-time">
+              ${escapeHtml(date.time)}
+            </span>
+          </div>
+
+          <div class="event-main">
+            <h2 class="event-title">
+              <a
+                href="${escapeHtml(event.source_url)}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ${escapeHtml(event.title)}
+              </a>
+            </h2>
+
+            <p class="event-location">
+              ${escapeHtml(venue)}
+              ·
+              ${escapeHtml(event.organiser)}
+            </p>
+
+            ${
+              topics
+                ? `
+                  <div class="event-topics">
+                    ${topics}
+                  </div>
+                `
+                : ""
+            }
+          </div>
+
+          <div class="event-side">
+            <span class="price">
+              ${escapeHtml(formatPrice(event))}
+            </span>
+
+            ${
+              status
+                ? `
+                  <span
+                    class="status ${escapeHtml(statusClass)}"
+                  >
+                    ${escapeHtml(status)}
+                  </span>
+                `
+                : ""
+            }
+
+            <a
+              class="source-link"
+              href="${escapeHtml(event.source_url)}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View event ↗
+            </a>
+          </div>
+
+        </article>
+      `;
+    }
+
+    function renderEvents() {
+      const visibleEvents = events
+        .filter(isUpcoming)
+        .filter(matchesFilter)
+        .sort(
+          (a, b) =>
+            new Date(a.start_at) -
+            new Date(b.start_at)
+        );
+
+      resultCount.textContent =
+        `${visibleEvents.length} ${
+          visibleEvents.length === 1
+            ? "event"
+            : "events"
+        }`;
+
+      if (!visibleEvents.length) {
+        eventsList.innerHTML = `
+          <div class="state">
+            <strong>No matching events</strong>
+            Try another filter.
+          </div>
+        `;
+
+        return;
+      }
+
+      eventsList.innerHTML = visibleEvents
+        .map(eventCard)
+        .join("");
+    }
+
+    function setActiveFilter(filter) {
+      activeFilter = filter;
+
+      filterButtons.forEach(button => {
+        button.classList.toggle(
+          "active",
+          button.dataset.filter === filter
+        );
+      });
+
+      renderEvents();
+    }
+
+    filterButtons.forEach(button => {
+      button.addEventListener(
+        "click",
+        () => {
+          setActiveFilter(
+            button.dataset.filter
+          );
+        }
+      );
+    });
+
+    async function loadEvents() {
+      try {
+        const response = await fetch(
+          DATA_URL,
+          {
+            cache: "no-store"
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `HTTP ${response.status}`
+          );
+        }
+
+        const dataset = await response.json();
+
+        if (!Array.isArray(dataset.events)) {
+          throw new Error(
+            "Invalid event dataset"
+          );
+        }
+
+        events = dataset.events;
+
+        if (dataset.generated_at) {
+          lastUpdated.textContent =
+            `Last refreshed ${formatUpdated(
+              dataset.generated_at
+            )}`;
+        } else {
+          lastUpdated.textContent =
+            "Refresh time unavailable";
+        }
+
+        renderEvents();
+
+      } catch (error) {
+        console.error(
+          "Could not load events:",
+          error
+        );
+
+        lastUpdated.textContent =
+          "Data temporarily unavailable";
+
+        resultCount.textContent = "";
+
+        eventsList.innerHTML = `
+          <div class="state">
+            <strong>
+              Events couldn't be loaded
+            </strong>
+            Please try again later.
+          </div>
+        `;
+      }
+    }
+
+    loadEvents();
+  </script>
+
+</body>
+</html>
