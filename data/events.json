@@ -1,9 +1,104 @@
 {
-
   "schema_version": "1.0",
-
-  "generated_at": null,
-
-  "events": []
-
+  "generated_at": "2026-09-22T09:16:16.001684+00:00",
+  "event_count": 5,
+  "events": [
+    {
+      "id": "big-data-ldn-2026",
+      "title": "Big Data LDN 2026",
+      "start_at": "2026-09-23T09:00:00+01:00",
+      "format": "in_person",
+      "organiser": "Big Data LDN",
+      "source": "Big Data LDN",
+      "source_url": "https://www.bigdataldn.com/",
+      "end_at": "2026-09-24T17:30:00+01:00",
+      "venue_name": "Olympia London",
+      "address": "Hammersmith Road London W14 8UX",
+      "is_free": false,
+      "price_from_gbp": 49.0,
+      "registration_status": "open",
+      "topics": [
+        "Data Analytics",
+        "AI & Machine Learning",
+        "Data Engineering"
+      ],
+      "status": "scheduled"
+    },
+    {
+      "id": "rss-beyond-the-hype-synthetic-data-in-practice",
+      "title": "Beyond the Hype: Synthetic Data in Practice",
+      "start_at": "2026-09-24T14:00:00+01:00",
+      "format": "in_person",
+      "organiser": "Royal Statistical Society",
+      "source": "Royal Statistical Society",
+      "source_url": "https://rss.org.uk/training-events/events/events-2026/other-events-(non-rss)/beyond-the-hype-synthetic-data-in-practice/",
+      "end_at": "2026-09-24T18:00:00+01:00",
+      "venue_name": "MRS London",
+      "address": "MRS London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled"
+    },
+    {
+      "id": "measurecamp-london-19-2026",
+      "title": "MeasureCamp London 19",
+      "start_at": "2026-09-26T08:30:00+01:00",
+      "format": "in_person",
+      "organiser": "MeasureCamp London",
+      "source": "MeasureCamp London",
+      "source_url": "https://london.measurecamp.org/registration/",
+      "end_at": null,
+      "venue_name": "Etc Venues Fenchurch Street",
+      "address": "8 Fenchurch Pl, London EC3M 4PB",
+      "is_free": true,
+      "price_from_gbp": 0.0,
+      "registration_status": "waitlist",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled"
+    },
+    {
+      "id": "rss-2026-cathie-marsh-lecture-countering-misinformatio",
+      "title": "2026 Cathie Marsh Lecture - Countering Misinformation with Statistics",
+      "start_at": "2026-10-29T13:00:00+00:00",
+      "format": "in_person",
+      "organiser": "Royal Statistical Society",
+      "source": "Royal Statistical Society",
+      "source_url": "https://rss.org.uk/training-events/events/events-2026/section-groups/2026-cathie-marsh-lecture-countering-misinformatio/",
+      "end_at": "2026-10-29T15:00:00+00:00",
+      "venue_name": "London",
+      "address": "London",
+      "is_free": true,
+      "price_from_gbp": 0.0,
+      "registration_status": "open",
+      "topics": [
+        "Statistics"
+      ],
+      "status": "scheduled"
+    },
+    {
+      "id": "rss-survey-futures-ecr-impact-awards",
+      "title": "Survey Futures ECR Impact Awards",
+      "start_at": "2026-11-11T13:30:00+00:00",
+      "format": "in_person",
+      "organiser": "Royal Statistical Society",
+      "source": "Royal Statistical Society",
+      "source_url": "https://rss.org.uk/training-events/events/events-2026/rss-events/survey-futures-ecr-impact-awards/",
+      "end_at": "2026-11-11T17:00:00+00:00",
+      "venue_name": "Hallam Conference Centre, 44 Hallam Street, London, W1W 6JJ",
+      "address": "Hallam Conference Centre, 44 Hallam Street, London, W1W 6JJ",
+      "is_free": true,
+      "price_from_gbp": 0.0,
+      "registration_status": "open",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled"
+    }
+  ]
 }
