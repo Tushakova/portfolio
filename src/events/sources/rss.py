@@ -269,7 +269,6 @@ def parse_event_page(
 
     is_free: bool | None = None
     price_from_gbp: float | None = None
-м
 
     if (
         "free of charge" in lowered
