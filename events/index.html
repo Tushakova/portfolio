@@ -204,6 +204,28 @@
       font-size: 13px;
     }
 
+    .search-row {
+      margin-top: 20px;
+    }
+
+    .event-search {
+      width: min(100%, 440px);
+      box-sizing: border-box;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--background);
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+    }
+
+    .event-search:focus-visible,
+    .filter-button:focus-visible {
+      outline: 2px solid var(--text);
+      outline-offset: 2px;
+    }
+
     /* Events */
 
     .events-section {
@@ -506,7 +528,7 @@
         <div class="hero-meta">
           <span class="live-indicator">
             <span class="live-dot"></span>
-            Live dataset
+            Automatically updated
           </span>
 
           <span id="last-updated">
@@ -572,6 +594,11 @@
         ></div>
 
       </div>
+      <div class="container search-row">
+        <input class="event-search" id="event-search" type="search"
+          placeholder="Search events, organisers or topics"
+          aria-label="Search events, organisers or topics" />
+      </div>
     </section>
 
     <section class="events-section">
@@ -630,12 +657,22 @@
     const eventsList = document.getElementById("events-list");
     const resultCount = document.getElementById("result-count");
     const lastUpdated = document.getElementById("last-updated");
+    const eventSearch = document.getElementById("event-search");
     const filterButtons = document.querySelectorAll(
       ".filter-button"
     );
 
     let events = [];
     let activeFilter = "all";
+
+    function londonDayKey(date) {
+      const parts = new Intl.DateTimeFormat("en-GB", {
+        year: "numeric", month: "2-digit", day: "2-digit",
+        timeZone: "Europe/London"
+      }).formatToParts(date);
+      const value = type => parts.find(part => part.type === type).value;
+      return `${value("year")}-${value("month")}-${value("day")}`;
+    }
 
     function escapeHtml(value) {
       return String(value)
@@ -731,12 +768,23 @@
         return false;
       }
 
-      const relevantEnd = event.end_at || event.start_at;
+      if (event.end_at) {
+        return new Date(event.end_at) >= new Date();
+      }
 
-      return new Date(relevantEnd) >= new Date();
+      // Unknown end time: show the event for its whole London calendar day.
+      return londonDayKey(new Date(event.start_at)) >= londonDayKey(new Date());
     }
 
     function matchesFilter(event) {
+      const query = eventSearch.value.trim().toLocaleLowerCase("en-GB");
+      if (query && ![
+        event.title, event.organiser, event.venue_name,
+        ...(event.topics || [])
+      ].some(value => String(value || "").toLocaleLowerCase("en-GB").includes(query))) {
+        return false;
+      }
+
       if (activeFilter === "all") {
         return true;
       }
@@ -896,7 +944,7 @@
         eventsList.innerHTML = `
           <div class="state">
             <strong>No matching events</strong>
-            Try another filter.
+            Try another filter or search term.
           </div>
         `;
 
@@ -932,6 +980,8 @@
       );
     });
 
+    eventSearch.addEventListener("input", renderEvents);
+
     async function loadEvents() {
       try {
         const response = await fetch(
@@ -959,7 +1009,7 @@
 
         if (dataset.generated_at) {
           lastUpdated.textContent =
-            `Last refreshed ${formatUpdated(
+            `Event details updated ${formatUpdated(
               dataset.generated_at
             )}`;
         } else {

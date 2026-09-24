@@ -96,6 +96,20 @@ def write_dataset(dataset: dict) -> None:
     temporary_path.replace(OUTPUT_PATH)
 
 
+def events_unchanged(dataset: dict) -> bool:
+    """Avoid publishing a new timestamp when event facts have not changed."""
+    try:
+        previous = json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return False
+
+    return (
+        previous.get("schema_version") == dataset["schema_version"]
+        and previous.get("events") == dataset["events"]
+        and previous.get("event_count") == dataset["event_count"]
+    )
+
+
 def main() -> None:
     """Run the complete ingestion pipeline."""
 
@@ -115,6 +129,9 @@ def main() -> None:
     validate_events(events)
 
     dataset = build_dataset(events)
+    if events_unchanged(dataset):
+        print("Event data unchanged; keeping the previous refresh timestamp.")
+        return
     write_dataset(dataset)
 
     print(
