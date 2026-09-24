@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-24T11:51:59.680626+00:00",
-  "event_count": 6,
+  "generated_at": "2026-09-24T14:42:57.048526+00:00",
+  "event_count": 10,
   "events": [
     {
       "id": "big-data-ldn-2026",
@@ -63,6 +63,44 @@
       "status": "scheduled"
     },
     {
+      "id": "meetup-316572897",
+      "title": "The Friendly Data Meetup September 2026",
+      "start_at": "2026-09-28T19:00:00+01:00",
+      "format": "in_person",
+      "organiser": "The Friendly Data Meetup London",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/the-friendly-data-meetup/events/316572897/",
+      "end_at": "2026-09-28T22:00:00+01:00",
+      "venue_name": "The Ledger Building",
+      "address": "4 Hertsmere Road, West India Quay, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled"
+    },
+    {
+      "id": "meetup-316454710",
+      "title": "London Analytics Engineering Meetup #26",
+      "start_at": "2026-10-08T18:00:00+01:00",
+      "format": "in_person",
+      "organiser": "London Analytics Engineering Meetup",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/london-analytics-engineering-meetup/events/316454710/",
+      "end_at": "2026-10-08T21:00:00+01:00",
+      "venue_name": "Databricks London HQ",
+      "address": "11-14, Windmill Street, London, United Kingdom, W1T 2JG, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Analytics Engineering"
+      ],
+      "status": "scheduled"
+    },
+    {
       "id": "rss-david-hand-what-s-the-question-deciding-what-you-r",
       "title": "David Hand: What's the Question? Deciding What You Really Want to Know",
       "start_at": "2026-10-15T16:00:00+01:00",
@@ -77,6 +115,45 @@
       "price_from_gbp": null,
       "registration_status": "open",
       "topics": [],
+      "status": "scheduled"
+    },
+    {
+      "id": "meetup-316511066",
+      "title": "dbt Global Circuit: London",
+      "start_at": "2026-10-21T18:00:00+01:00",
+      "format": "in_person",
+      "organiser": "London dbt Meetup",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/london-dbt-meetup/events/316511066/",
+      "end_at": "2026-10-21T20:00:00+01:00",
+      "venue_name": "The Information Lab",
+      "address": "25 Watling St, City of London, London EC4M 9BR, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Analytics Engineering"
+      ],
+      "status": "scheduled"
+    },
+    {
+      "id": "meetup-312536046",
+      "title": "London Data Intelligence Network | Meetup | Oct 2026",
+      "start_at": "2026-10-22T18:00:00+01:00",
+      "format": "in_person",
+      "organiser": "London Data Intelligence Network",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/london-data-intelligence-network/events/312536046/",
+      "end_at": "2026-10-22T20:00:00+01:00",
+      "venue_name": "Incubeta",
+      "address": "14th Floor, The Bower, 207-211 Old St, London EC1V 9NR, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics",
+        "Data Science"
+      ],
       "status": "scheduled"
     },
     {

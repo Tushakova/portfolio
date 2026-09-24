@@ -192,6 +192,22 @@
       margin-bottom: 24px;
     }
 
+    .project-link {
+      display: inline-block;
+      align-self: flex-start;
+      margin-bottom: 20px;
+      color: #17202a;
+      font-size: 14px;
+      font-weight: 650;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .project-link:focus-visible {
+      outline: 2px solid #17202a;
+      outline-offset: 4px;
+    }
+
     .tags {
       margin-top: auto;
       display: flex;
@@ -403,11 +419,12 @@
 
         <article class="project">
           <div class="project-number">03</div>
-          <h3>London Data Radar</h3>
+          <h3><a href="/events/">London Data Radar</a></h3>
           <p>
             A data product for discovering and organising worthwhile
             analytics and data events across London.
           </p>
+          <a class="project-link" href="/events/">Explore live events ↗</a>
           <div class="tags">
             <span class="tag">Python</span>
             <span class="tag">Data Pipelines</span>

@@ -716,6 +716,21 @@
       };
     }
 
+    function formatEventDate(event) {
+      const start = formatDateParts(event.start_at);
+      if (!event.end_at) return start;
+
+      const end = formatDateParts(event.end_at);
+      if (londonDayKey(new Date(event.start_at)) ===
+          londonDayKey(new Date(event.end_at))) return start;
+
+      if (start.month === end.month) {
+        return { ...start, day: `${start.day}–${end.day}` };
+      }
+
+      return { ...start, month: `${start.month} – ${end.day} ${end.month}` };
+    }
+
     function formatUpdated(isoDate) {
       const date = new Date(isoDate);
 
@@ -824,7 +839,7 @@
     }
 
     function eventCard(event) {
-      const date = formatDateParts(event.start_at);
+      const date = formatEventDate(event);
 
       const topics = (event.topics || [])
         .map(

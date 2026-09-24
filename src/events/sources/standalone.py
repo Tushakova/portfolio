@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Callable
 from zoneinfo import ZoneInfo
 
@@ -137,12 +137,12 @@ def parse_measurecamp(html: str, source_url: str) -> Event:
 
 
 def parse_big_data_ldn(html: str, source_url: str) -> Event:
-    """Parse the current Big Data LDN event."""
+    """Parse the published two-day dates and opening hours."""
 
     text = page_text(html)
 
     dates_match = require_match(
-        r"23[\s–-]+24\s+September\s+2026",
+        r"\b(\d{1,2})\s*[–-]\s*(\d{1,2})\s+([A-Za-z]+)\s+(20\d{2})\b",
         text,
         "Big Data LDN dates",
     )
@@ -165,22 +165,39 @@ def parse_big_data_ldn(html: str, source_url: str) -> Event:
         "Big Data LDN address",
     )
 
-    # Opening hours published for Wednesday and Thursday.
+    first_day, last_day, month, year = dates_match.groups()
+    try:
+        first_date = datetime.strptime(f"{first_day} {month} {year}", "%d %B %Y")
+        last_date = datetime.strptime(f"{last_day} {month} {year}", "%d %B %Y")
+    except ValueError as exc:
+        raise EventParseError("Invalid Big Data LDN dates") from exc
+    if last_date != first_date + timedelta(days=1):
+        raise EventParseError("Big Data LDN dates are not two consecutive days")
+
+    first_weekday = first_date.strftime("%A")
+    last_weekday = last_date.strftime("%A")
+    opening_match = require_match(
+        rf"Opening hours\s+{first_weekday}\s+(\d{{1,2}}:\d{{2}})\s*-\s*\d{{1,2}}:\d{{2}}"
+        rf"\s+{last_weekday}\s+\d{{1,2}}:\d{{2}}\s*-\s*(\d{{1,2}}:\d{{2}})",
+        text,
+        "Big Data LDN opening hours",
+    )
+
     start_at = london_datetime(
-        "23 September 2026 09:00",
+        f"{first_date:%d %B %Y} {opening_match.group(1)}",
         "%d %B %Y %H:%M",
     )
 
     end_at = london_datetime(
-        "24 September 2026 17:30",
+        f"{last_date:%d %B %Y} {opening_match.group(2)}",
         "%d %B %Y %H:%M",
     )
 
     price = float(price_match.group(1))
 
     return Event(
-        id="big-data-ldn-2026",
-        title="Big Data LDN 2026",
+        id=f"big-data-ldn-{year}",
+        title=f"Big Data LDN {year}",
         start_at=start_at,
         end_at=end_at,
         format="in_person",
@@ -191,7 +208,7 @@ def parse_big_data_ldn(html: str, source_url: str) -> Event:
         address=address_match.group(1),
         is_free=False,
         price_from_gbp=price,
-        registration_status="open",
+        registration_status="open" if "register now" in text.casefold() else "unknown",
         topics=(
             DATA_ANALYTICS,
             AI_ML,
@@ -226,7 +243,7 @@ def get_events() -> tuple[list[Event], list[str]]:
             event = page.parser(html, page.url)
             events.append(event)
 
-        except (FetchError, EventParseError) as exc:
+        except (FetchError, EventParseError, ValueError) as exc:
             errors.append(f"{page.source}: {exc}")
 
     return events, errors

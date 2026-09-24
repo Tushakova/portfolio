@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from src.events.models import Event
-from src.events.sources import rss, standalone
+from src.events.sources import meetup, rss, standalone
 from src.events.validation import (
     deduplicate_events,
     validate_events,
@@ -27,6 +27,7 @@ def collect_events() -> tuple[list[Event], list[str]]:
     collectors = (
         ("Standalone", standalone.get_events),
         ("RSS", rss.get_events),
+        ("Meetup", meetup.get_events),
     )
 
     for source_name, collector in collectors:
@@ -117,6 +118,12 @@ def main() -> None:
 
     for error in errors:
         print(f"WARNING: {error}")
+
+    if errors:
+        raise RuntimeError(
+            "One or more sources failed; keeping the last published dataset "
+            "rather than silently dropping events."
+        )
 
     events = deduplicate_events(events)
 
