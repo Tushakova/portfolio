@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-24T14:42:57.048526+00:00",
+  "generated_at": "2026-09-24T15:18:47.972540+00:00",
   "event_count": 10,
   "events": [
     {
@@ -22,7 +22,8 @@
         "AI & Machine Learning",
         "Data Engineering"
       ],
-      "status": "scheduled"
+      "status": "scheduled",
+      "time_tbc": false
     },
     {
       "id": "rss-beyond-the-hype-synthetic-data-in-practice",
@@ -41,7 +42,8 @@
       "topics": [
         "Data Analytics"
       ],
-      "status": "scheduled"
+      "status": "scheduled",
+      "time_tbc": false
     },
     {
       "id": "measurecamp-london-19-2026",
@@ -60,7 +62,8 @@
       "topics": [
         "Data Analytics"
       ],
-      "status": "scheduled"
+      "status": "scheduled",
+      "time_tbc": false
     },
     {
       "id": "meetup-316572897",
@@ -79,7 +82,8 @@
       "topics": [
         "Data Analytics"
       ],
-      "status": "scheduled"
+      "status": "scheduled",
+      "time_tbc": false
     },
     {
       "id": "meetup-316454710",
@@ -98,7 +102,8 @@
       "topics": [
         "Analytics Engineering"
       ],
-      "status": "scheduled"
+      "status": "scheduled",
+      "time_tbc": false
     },
     {
       "id": "rss-david-hand-what-s-the-question-deciding-what-you-r",
@@ -115,7 +120,8 @@
       "price_from_gbp": null,
       "registration_status": "open",
       "topics": [],
-      "status": "scheduled"
+      "status": "scheduled",
+      "time_tbc": false
     },
     {
       "id": "meetup-316511066",
@@ -134,7 +140,8 @@
       "topics": [
         "Analytics Engineering"
       ],
-      "status": "scheduled"
+      "status": "scheduled",
+      "time_tbc": false
     },
     {
       "id": "meetup-312536046",
@@ -154,7 +161,8 @@
         "Data Analytics",
         "Data Science"
       ],
-      "status": "scheduled"
+      "status": "scheduled",
+      "time_tbc": false
     },
     {
       "id": "rss-2026-cathie-marsh-lecture-countering-misinformatio",
@@ -173,7 +181,8 @@
       "topics": [
         "Statistics"
       ],
-      "status": "scheduled"
+      "status": "scheduled",
+      "time_tbc": false
     },
     {
       "id": "rss-survey-futures-ecr-impact-awards",
@@ -192,7 +201,8 @@
       "topics": [
         "Data Analytics"
       ],
-      "status": "scheduled"
+      "status": "scheduled",
+      "time_tbc": false
     }
   ]
 }

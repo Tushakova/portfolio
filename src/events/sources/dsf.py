@@ -1,58 +1,107 @@
-"""Data Science Festival event source."""
+"""Discover future data-career days on the organiser's own website.
+
+The organiser's main page has a separate Upcoming/Past navigation. We
+check actual dates on detail pages, so old career-day navigation links never
+become upcoming events just because they are still indexed or linked.
+"""
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from urllib.error import HTTPError, URLError
-from urllib.request import Request, urlopen
+import re
+from datetime import datetime
+from urllib.parse import urljoin, urlparse
+from zoneinfo import ZoneInfo
+
+from bs4 import BeautifulSoup
+
+from src.events.http import FetchError, fetch_html
+from src.events.models import Event
+from src.events.topics import CAREERS, DATA_ANALYTICS, DATA_SCIENCE
+
+BASE_URL = "https://datasciencefestival.com/"
+INDEX_URLS = (BASE_URL, urljoin(BASE_URL, "events/"))
+LONDON_TZ = ZoneInfo("Europe/London")
 
 
-EVENTS_URL = "https://datasciencefestival.com/events/"
-SOURCE_NAME = "Data Science Festival"
-
-REQUEST_TIMEOUT_SECONDS = 20
-USER_AGENT = "LondonDataRadar/0.1 (+https://tushakova.co.uk)"
+class DSFParseError(ValueError):
+    """An advertised career event lacks a verifiable date or location."""
 
 
-class DSFSourceError(RuntimeError):
-    """Raised when Data Science Festival data cannot be retrieved."""
+def discover_career_urls(html: str) -> set[str]:
+    """Only discover career-day detail pages on the organiser's domain."""
+    soup = BeautifulSoup(html, "html.parser")
+    urls: set[str] = set()
+    for link in soup.select("a[href]"):
+        url = urljoin(BASE_URL, link["href"])
+        parsed = urlparse(url)
+        if parsed.netloc != "datasciencefestival.com":
+            continue
+        if not re.fullmatch(r"/event/career-day-20\d{2}/?", parsed.path):
+            continue
+        urls.add(f"{parsed.scheme}://{parsed.netloc}{parsed.path.rstrip('/')}/")
+    return urls
 
 
-@dataclass(frozen=True)
-class RawDSFEvent:
-    """Event data extracted from Data Science Festival before normalisation."""
-
-    title: str
-    source_url: str
-    date_text: str | None = None
-    location_text: str | None = None
-    price_text: str | None = None
-
-
-def fetch_events_page() -> str:
-    """Fetch the Data Science Festival events page."""
-    request = Request(
-        EVENTS_URL,
-        headers={"User-Agent": USER_AGENT},
+def parse_career_day(html: str, url: str, now: datetime | None = None) -> Event | None:
+    soup = BeautifulSoup(html, "html.parser")
+    heading = soup.find("h3", string=re.compile(r"Career Day 20\d{2}", re.I))
+    if heading is None:
+        raise DSFParseError(f"Career day heading missing: {url}")
+    # The first text after the event heading contains the primary event date
+    # and venue. Ignore the many dates of individual talks further down.
+    event_intro = heading.parent.get_text(" ", strip=True)[:350]
+    match = re.search(
+        r"\b(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+"
+        r"(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]+)\s+(20\d{2})"
+        r"\s*\|\s*([^|.]{1,90}?London)\b",
+        event_intro,
+        re.IGNORECASE,
+    )
+    if match is None:
+        raise DSFParseError(f"Career day date or London venue missing: {url}")
+    try:
+        date = datetime.strptime(" ".join(match.group(i) for i in (1, 2, 3)), "%d %B %Y")
+    except ValueError as exc:
+        raise DSFParseError(f"Invalid career day date: {url}") from exc
+    start = date.replace(tzinfo=LONDON_TZ)
+    if start.date() < (now or datetime.now(LONDON_TZ)).astimezone(LONDON_TZ).date():
+        return None
+    title = f"DSF Career Day {match.group(3)}"
+    return Event(
+        id=f"dsf-career-day-{match.group(3)}",
+        title=title,
+        start_at=start.isoformat(),
+        end_at=None,
+        format="in_person",
+        organiser="Data Science Festival",
+        source="Data Science Festival",
+        source_url=url,
+        venue_name=match.group(4).strip(),
+        is_free=None,
+        registration_status="unknown",
+        topics=(CAREERS, DATA_ANALYTICS, DATA_SCIENCE),
+        time_tbc=True,
     )
 
-    try:
-        with urlopen(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
-            charset = response.headers.get_content_charset() or "utf-8"
-            return response.read().decode(charset)
 
-    except (HTTPError, URLError, TimeoutError) as exc:
-        raise DSFSourceError(
-            f"Failed to fetch Data Science Festival events: {exc}"
-        ) from exc
-
-
-def parse_events_page(html: str) -> list[RawDSFEvent]:
-    """Extract event records from Data Science Festival HTML."""
-    raise NotImplementedError("DSF parser has not been implemented yet.")
-
-
-def get_events() -> list[RawDSFEvent]:
-    """Retrieve raw events from Data Science Festival."""
-    html = fetch_events_page()
-    return parse_events_page(html)
+def get_events() -> tuple[list[Event], list[str]]:
+    events: list[Event] = []
+    errors: list[str] = []
+    urls: set[str] = set()
+    for listing in INDEX_URLS:
+        try:
+            urls.update(discover_career_urls(fetch_html(listing)))
+        except FetchError as exc:
+            errors.append(f"Data Science Festival listing: {exc}")
+    current_year = datetime.now(LONDON_TZ).year
+    for url in sorted(urls):
+        year = int(re.search(r"career-day-(20\d{2})", url).group(1))
+        if year < current_year:
+            continue
+        try:
+            event = parse_career_day(fetch_html(url), url)
+            if event is not None:
+                events.append(event)
+        except (FetchError, DSFParseError) as exc:
+            errors.append(f"Data Science Festival career day: {exc}")
+    return events, errors

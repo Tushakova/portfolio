@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from src.events.models import Event
-from src.events.sources import meetup, rss, standalone
+from src.events.sources import dsf, meetup, rss, standalone
 from src.events.validation import (
     deduplicate_events,
     validate_events,
@@ -28,6 +28,7 @@ def collect_events() -> tuple[list[Event], list[str]]:
         ("Standalone", standalone.get_events),
         ("RSS", rss.get_events),
         ("Meetup", meetup.get_events),
+        ("Data Science Festival", dsf.get_events),
     )
 
     for source_name, collector in collectors:

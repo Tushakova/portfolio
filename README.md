@@ -6,9 +6,12 @@ The public event finder lives at [tushakova.co.uk/events](https://tushakova.co.u
 
 - Royal Statistical Society London events
 - Big Data LDN and MeasureCamp London event pages
-- Public event listings for four London Meetup groups: The Friendly Data Meetup, London Analytics Engineering Meetup, London Data Intelligence Network, and London dbt Meetup
+- Public event listings for six London Meetup groups: The Friendly Data Meetup, London Analytics Engineering Meetup, London Data Intelligence Network, London dbt Meetup, Data Science Festival London and Data Pub Social. Career-themed events receive a distinct Data Careers topic.
+- Data Science Festival organiser website: future London Career Day detail pages discovered from its website (past editions excluded)
 
 The Meetup connector reads schema.org event data from group pages. Missing prices are shown as unknown; the source event link has current booking details. A group with no future London event contributes no records.
+
+Search on the site filters the published event dataset; it does not search Google or all independent organiser sites. Career Day discovery checks the Data Science Festival website daily. Other standalone organisers must be added as new, validated sources; a visitor can submit a URL through the suggestion link on the page. Unknown event times are explicitly labelled Time TBC instead of inventing an hour. University-only career fairs are not included without checking who is eligible to attend.
 
 ## Refresh and deployment
 

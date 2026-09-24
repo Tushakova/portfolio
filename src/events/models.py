@@ -45,6 +45,7 @@ class Event:
 
     topics: tuple[str, ...] = ()
     status: EventStatus = "scheduled"
+    time_tbc: bool = False
 
     def to_dict(self) -> dict:
         """Return a JSON-serialisable representation."""

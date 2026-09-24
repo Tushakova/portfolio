@@ -15,7 +15,7 @@ from zoneinfo import ZoneInfo
 from src.events.http import FetchError, fetch_html
 from src.events.models import Event
 from src.events.structured_data import extract_schema_events
-from src.events.topics import ANALYTICS_ENGINEERING, DATA_ANALYTICS, DATA_SCIENCE
+from src.events.topics import ANALYTICS_ENGINEERING, CAREERS, DATA_ANALYTICS, DATA_SCIENCE, is_career_event
 
 
 LONDON_TZ = ZoneInfo("Europe/London")
@@ -33,6 +33,8 @@ GROUPS = (
     MeetupGroup("london-analytics-engineering-meetup", "London Analytics Engineering Meetup", (ANALYTICS_ENGINEERING,)),
     MeetupGroup("london-data-intelligence-network", "London Data Intelligence Network", (DATA_ANALYTICS, DATA_SCIENCE)),
     MeetupGroup("london-dbt-meetup", "London dbt Meetup", (ANALYTICS_ENGINEERING,)),
+    MeetupGroup("data-science-festival-london", "Data Science Festival", (DATA_ANALYTICS, DATA_SCIENCE)),
+    MeetupGroup("data-pub-social", "Data Pub Social", (DATA_ANALYTICS, DATA_SCIENCE)),
 )
 
 
@@ -87,7 +89,7 @@ def parse_event(item: dict, group: MeetupGroup, now: datetime | None = None) -> 
         is_free=free,
         price_from_gbp=0.0 if free else None,
         registration_status="unknown",
-        topics=group.topics,
+        topics=group.topics + ((CAREERS,) if is_career_event(title) else ()),
     )
 
 

@@ -226,6 +226,12 @@
       outline-offset: 2px;
     }
 
+    .search-note {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
     /* Events */
 
     .events-section {
@@ -564,6 +570,14 @@
 
           <button
             class="filter-button"
+            data-filter="careers"
+            type="button"
+          >
+            Data careers
+          </button>
+
+          <button
+            class="filter-button"
             data-filter="data"
             type="button"
           >
@@ -598,6 +612,10 @@
         <input class="event-search" id="event-search" type="search"
           placeholder="Search events, organisers or topics"
           aria-label="Search events, organisers or topics" />
+        <p class="search-note">
+          Searches events listed here only.
+          <a href="https://www.google.com/search?q=London+%22data+science%22+OR+%22data+analytics%22+%22career+fair%22+OR+%22career+day%22+events" target="_blank" rel="noopener noreferrer">Search the wider web ↗</a>
+        </p>
       </div>
     </section>
 
@@ -631,6 +649,12 @@
             public sources, normalises them into a common schema,
             validates the resulting dataset and publishes refreshed
             data automatically.
+          </p>
+          <p>
+            Search and filters cover the events already collected here.
+            A new event on an unrelated website is not found automatically;
+            <a href="mailto:marie.tsh@gmail.com?subject=London%20Data%20Radar%20event%20suggestion">suggest its link</a>
+            to have its organiser considered as a source.
           </p>
         </div>
 
@@ -808,6 +832,10 @@
         return event.is_free === true;
       }
 
+      if (activeFilter === "careers") {
+        return (event.topics || []).includes("Data Careers");
+      }
+
       const topics = event.topics || [];
 
       if (activeFilter === "data") {
@@ -875,7 +903,7 @@
             </span>
 
             <span class="event-time">
-              ${escapeHtml(date.time)}
+              ${event.time_tbc ? "Time TBC" : escapeHtml(date.time)}
             </span>
           </div>
 

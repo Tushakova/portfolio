@@ -13,9 +13,11 @@ from src.events.http import FetchError, fetch_html
 from src.events.models import Event
 from src.events.topics import (
     AI_ML,
+    CAREERS,
     DATA_ANALYTICS,
     DATA_SCIENCE,
     STATISTICS,
+    is_career_event,
 )
 
 
@@ -256,6 +258,9 @@ def infer_topics(title: str) -> tuple[str, ...]:
         )
     ):
         topics.append(STATISTICS)
+
+    if is_career_event(title):
+        topics.append(CAREERS)
 
     return tuple(
         dict.fromkeys(topics)
