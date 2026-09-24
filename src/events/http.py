@@ -27,22 +27,24 @@ def fetch_html(url: str) -> str:
         },
     )
 
-    try:
-        with urlopen(
-            request,
-            timeout=REQUEST_TIMEOUT_SECONDS,
-        ) as response:
-            charset = (
-                response.headers.get_content_charset()
-                or "utf-8"
-            )
+    for attempt in range(2):
+        try:
+            with urlopen(
+                request,
+                timeout=REQUEST_TIMEOUT_SECONDS,
+            ) as response:
+                charset = (
+                    response.headers.get_content_charset()
+                    or "utf-8"
+                )
 
-            return response.read().decode(
-                charset,
-                errors="replace",
-            )
-
-    except (HTTPError, URLError, TimeoutError) as exc:
-        raise FetchError(
-            f"Failed to fetch {url}: {exc}"
-        ) from exc
+                return response.read().decode(
+                    charset,
+                    errors="replace",
+                )
+        except HTTPError as exc:
+            # An unavailable page is not repaired by an immediate retry.
+            raise FetchError(f"Failed to fetch {url}: {exc}") from exc
+        except (URLError, TimeoutError) as exc:
+            if attempt:
+                raise FetchError(f"Failed to fetch {url}: {exc}") from exc

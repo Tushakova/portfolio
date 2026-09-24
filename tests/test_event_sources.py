@@ -1,11 +1,16 @@
 """Guard date and location rules for independently refreshed event sources."""
 
 import unittest
+import json
 from datetime import datetime, timezone
+from unittest.mock import patch
 
+from src.events.http import FetchError
+from src.events.models import Event
 from src.events.sources.dsf import discover_career_urls, parse_career_day
 from src.events.sources.meetup import GROUPS, parse_event
-from src.events.sources.rss import infer_topics
+from src.events.sources import rss
+from src.events.sources.rss import infer_topics, parse_event_page
 from src.events.sources.standalone import parse_big_data_ldn
 from src.events.topics import CAREERS
 
@@ -31,7 +36,7 @@ class EventSourceTests(unittest.TestCase):
             "endDate": "2026-09-28T21:00:00.000Z",
             "eventStatus": "https://schema.org/EventScheduled",
             "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-            "location": {"name": "The Ledger Building", "address": {
+            "location": {"@type": "Place", "name": "The Ledger Building", "address": {
                 "addressLocality": "London", "streetAddress": "4 Hertsmere Road, London"
             }},
         }
@@ -40,10 +45,77 @@ class EventSourceTests(unittest.TestCase):
         self.assertEqual(event.start_at, "2026-09-28T19:00:00+01:00")
         self.assertIsNone(event.is_free)
 
-        outside_london = {**event_data, "location": {"address": {"addressLocality": "Manchester"}}}
+        outside_london = {**event_data, "location": {"@type": "Place", "address": {"addressLocality": "Manchester"}}}
         self.assertIsNone(parse_event(outside_london, GROUPS[0], now))
         cancelled = {**event_data, "eventStatus": "https://schema.org/EventCancelled"}
         self.assertIsNone(parse_event(cancelled, GROUPS[0], now))
+
+    def test_meetup_modes_and_unrelated_meetup_posts(self):
+        base = {
+            "name": "Data Science London: Bayesian Modelling",
+            "url": "https://www.meetup.com/another-london-group/events/316572897/",
+            "startDate": "2026-10-21T12:00:00Z",
+            "endDate": "2026-10-21T13:00:00Z",
+            "eventStatus": "https://schema.org/EventScheduled",
+            "organizer": {"name": "New London Analytics Group"},
+        }
+        from src.events.sources.meetup import MeetupGroup, discovered_topics
+        group = MeetupGroup("another-london-group", "New London Analytics Group",
+                            discovered_topics(base["name"]))
+        now = datetime(2026, 9, 24, tzinfo=timezone.utc)
+        virtual = {"@type": "VirtualLocation", "url": base["url"]}
+        physical = {"@type": "Place", "name": "London venue",
+                    "address": {"addressLocality": "London"}}
+        online = parse_event({**base, "eventAttendanceMode":
+            "https://schema.org/OnlineEventAttendanceMode", "location": virtual,
+            "endDate": ""},
+            group, now, discovered=True)
+        self.assertEqual(online.format, "online")
+        self.assertIsNone(online.end_at)
+        self.assertEqual(online.organiser, "New London Analytics Group")
+        hybrid = parse_event({**base, "eventAttendanceMode":
+            "https://schema.org/MixedEventAttendanceMode", "location": [virtual, physical]},
+            group, now, discovered=True)
+        self.assertEqual(hybrid.format, "hybrid")
+        self.assertIsNone(parse_event({**base, "name": "AI & Society Run & Coffee Club",
+            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            "location": physical}, group, now, discovered=True))
+        self.assertIsNone(parse_event({**base, "eventAttendanceMode":
+            "https://schema.org/OfflineEventAttendanceMode",
+            "location": {"@type": "Place", "address": {"addressLocality": "Paris"}}},
+            group, now, discovered=True))
+
+    def test_rss_online_only_if_topic_is_explicit(self):
+        base = """<h1>Data science in practice</h1>
+            Date: Thursday 29 October 2026, 1.00PM - 3.00PM
+            Location: Online
+            RSS Event
+        """
+        event = parse_event_page(base, "https://rss.org.uk/training-events/events/events-2026/rss-events/data-science/")
+        self.assertEqual(event.format, "online")
+        self.assertIsNone(parse_event_page(base.replace("Data science in practice", "Member welcome"),
+            "https://rss.org.uk/training-events/events/events-2026/rss-events/member-welcome/"))
+
+    def test_one_unavailable_rss_page_keeps_last_verified_event(self):
+        previous = Event(id="rss-example", title="Statistical lecture",
+                         start_at="2026-10-29T13:00:00+00:00", format="in_person",
+                         organiser=rss.SOURCE_NAME, source=rss.SOURCE_NAME,
+                         source_url="https://rss.org.uk/example/")
+
+        def fetch(url):
+            if url == previous.source_url:
+                raise FetchError("temporary timeout")
+            return "<html></html>"
+
+        with patch.object(rss, "fetch_html", side_effect=fetch), \
+                patch.object(rss, "discover_event_urls", return_value=[
+                    previous.source_url, "https://rss.org.uk/other/"]), \
+                patch.object(rss, "parse_event_page", return_value=None), \
+                patch.object(rss.Path, "read_text", return_value=json.dumps({
+                    "events": [previous.to_dict()]})):
+            events, errors = rss.get_events()
+        self.assertEqual(events, [previous])
+        self.assertEqual(errors, [])
 
     def test_career_meetup_is_career_only_when_title_matches(self):
         item = {
@@ -53,7 +125,7 @@ class EventSourceTests(unittest.TestCase):
             "endDate": "2027-09-28T18:00:00Z",
             "eventStatus": "https://schema.org/EventScheduled",
             "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-            "location": {"name": "CodeNode", "address": {"addressLocality": "London"}},
+            "location": {"@type": "Place", "name": "CodeNode", "address": {"addressLocality": "London"}},
         }
         now = datetime(2026, 9, 24, tzinfo=timezone.utc)
         group = next(g for g in GROUPS if g.slug == "data-science-festival-london")

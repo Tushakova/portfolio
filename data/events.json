@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-24T15:18:47.972540+00:00",
-  "event_count": 10,
+  "generated_at": "2026-09-24T15:51:31.310230+00:00",
+  "event_count": 16,
   "events": [
     {
       "id": "big-data-ldn-2026",
@@ -36,6 +36,26 @@
       "end_at": "2026-09-24T18:00:00+01:00",
       "venue_name": "MRS London",
       "address": "MRS London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-316592693",
+      "title": "Power BI Agentic Authoring – Building Semantic Models and Reports with AI",
+      "start_at": "2026-09-24T18:00:00+01:00",
+      "format": "online",
+      "organiser": "Microsoft Fabric UK",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/microsoft-power-bi-uk/events/316592693/",
+      "end_at": null,
+      "venue_name": null,
+      "address": null,
       "is_free": null,
       "price_from_gbp": null,
       "registration_status": "unknown",
@@ -86,6 +106,86 @@
       "time_tbc": false
     },
     {
+      "id": "meetup-316581844",
+      "title": "CRAP Talks #35 - Back to School",
+      "start_at": "2026-09-29T18:00:00+01:00",
+      "format": "in_person",
+      "organiser": "CRAP Talks: CRO, Analytics & Product - London",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/crap-talks-cro-analytics-product-london/events/316581844/",
+      "end_at": "2026-09-29T21:00:00+01:00",
+      "venue_name": "RVU",
+      "address": "5 Copper Row, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-315974846",
+      "title": "London PyTorch #28",
+      "start_at": "2026-10-01T18:30:00+01:00",
+      "format": "in_person",
+      "organiser": "London PyTorch Meetup",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/london-pytorch-meetup/events/315974846/",
+      "end_at": null,
+      "venue_name": "Revolut HQ",
+      "address": "30 S Colonnade, Canary Wharf Estate, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Science"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-316399210",
+      "title": "Bayesian Modelling in Real Life",
+      "start_at": "2026-10-06T18:00:00+01:00",
+      "format": "in_person",
+      "organiser": "Bayesian Mixer London",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/bayesian-mixer-london/events/316399210/",
+      "end_at": null,
+      "venue_name": "Bayes Business School",
+      "address": "106 Bunhill Row, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Statistics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-316581290",
+      "title": "New Postgres Tools for Analytics",
+      "start_at": "2026-10-07T18:30:00+01:00",
+      "format": "in_person",
+      "organiser": "London PostgreSQL Meetup Group",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/london-postgresql-meetup-group/events/316581290/",
+      "end_at": null,
+      "venue_name": "Doggett's Coat and Badge",
+      "address": "1 Blackfriars Bridge, London SE1 9UD, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
       "id": "meetup-316454710",
       "title": "London Analytics Engineering Meetup #26",
       "start_at": "2026-10-08T18:00:00+01:00",
@@ -124,6 +224,26 @@
       "time_tbc": false
     },
     {
+      "id": "meetup-316602218",
+      "title": "Databricks London Meetup - Data & Spritz - Databricks Genie",
+      "start_at": "2026-10-15T17:30:00+01:00",
+      "format": "in_person",
+      "organiser": "Databricks Community UK",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/databricks-community-uk/events/316602218/",
+      "end_at": null,
+      "venue_name": "HAHNEMANN HOUSE",
+      "address": "HAHNEMANN HOUSE, 32 Welbeck St, London W1G 8EU, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
       "id": "meetup-316511066",
       "title": "dbt Global Circuit: London",
       "start_at": "2026-10-21T18:00:00+01:00",
@@ -148,7 +268,7 @@
       "title": "London Data Intelligence Network | Meetup | Oct 2026",
       "start_at": "2026-10-22T18:00:00+01:00",
       "format": "in_person",
-      "organiser": "London Data Intelligence Network",
+      "organiser": "London: Data Intelligence Network",
       "source": "Meetup",
       "source_url": "https://www.meetup.com/london-data-intelligence-network/events/312536046/",
       "end_at": "2026-10-22T20:00:00+01:00",

@@ -45,6 +45,9 @@ def validate_event(event: Event) -> None:
             f"{event.id}: title cannot be empty"
         )
 
+    if event.format not in ("in_person", "online", "hybrid"):
+        raise EventValidationError(f"{event.id}: unknown event format")
+
     if not event.source_url.startswith(("http://", "https://")):
         raise EventValidationError(
             f"{event.id}: invalid source URL"

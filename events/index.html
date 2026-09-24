@@ -208,6 +208,13 @@
       margin-top: 20px;
     }
 
+    .search-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
     .event-search {
       width: min(100%, 440px);
       box-sizing: border-box;
@@ -220,7 +227,18 @@
       font-size: 14px;
     }
 
+    .format-select {
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--background);
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+    }
+
     .event-search:focus-visible,
+    .format-select:focus-visible,
     .filter-button:focus-visible {
       outline: 2px solid var(--text);
       outline-offset: 2px;
@@ -311,6 +329,15 @@
       background: var(--surface);
       color: var(--muted);
       font-size: 12px;
+    }
+
+    .event-format {
+      padding: 5px 9px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-size: 12px;
+      white-space: nowrap;
     }
 
     .event-side {
@@ -609,9 +636,17 @@
 
       </div>
       <div class="container search-row">
-        <input class="event-search" id="event-search" type="search"
-          placeholder="Search events, organisers or topics"
-          aria-label="Search events, organisers or topics" />
+        <div class="search-controls">
+          <input class="event-search" id="event-search" type="search"
+            placeholder="Search events, organisers or topics"
+            aria-label="Search events, organisers or topics" />
+          <select id="format-filter" class="format-select" aria-label="Event format">
+            <option value="all">All formats</option>
+            <option value="in_person">In person (incl. hybrid)</option>
+            <option value="online">Online (incl. hybrid)</option>
+            <option value="hybrid">Hybrid only</option>
+          </select>
+        </div>
         <p class="search-note">
           Searches events listed here only.
           <a href="https://www.google.com/search?q=London+%22data+science%22+OR+%22data+analytics%22+%22career+fair%22+OR+%22career+day%22+events" target="_blank" rel="noopener noreferrer">Search the wider web ↗</a>
@@ -682,6 +717,7 @@
     const resultCount = document.getElementById("result-count");
     const lastUpdated = document.getElementById("last-updated");
     const eventSearch = document.getElementById("event-search");
+    const formatFilter = document.getElementById("format-filter");
     const filterButtons = document.querySelectorAll(
       ".filter-button"
     );
@@ -816,6 +852,9 @@
     }
 
     function matchesFilter(event) {
+      if (formatFilter.value !== "all" &&
+          event.format !== formatFilter.value &&
+          event.format !== "hybrid") return false;
       const query = eventSearch.value.trim().toLocaleLowerCase("en-GB");
       if (query && ![
         event.title, event.organiser, event.venue_name,
@@ -886,6 +925,7 @@
           : event.registration_status;
 
       const venue =
+        (event.format === "online" ? "Online" : null) ||
         event.venue_name ||
         event.address ||
         "London";
@@ -936,6 +976,9 @@
           </div>
 
           <div class="event-side">
+            <span class="event-format">
+              ${escapeHtml({in_person: "In person", online: "Online", hybrid: "Hybrid"}[event.format] || "Format unknown")}
+            </span>
             <span class="price">
               ${escapeHtml(formatPrice(event))}
             </span>
@@ -1024,6 +1067,7 @@
     });
 
     eventSearch.addEventListener("input", renderEvents);
+    formatFilter.addEventListener("change", renderEvents);
 
     async function loadEvents() {
       try {

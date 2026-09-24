@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import re
+import json
 from datetime import datetime
+from pathlib import Path
 from urllib.parse import urljoin, urlparse
 from zoneinfo import ZoneInfo
 
@@ -312,11 +314,18 @@ def parse_event_page(
         if value
     )
 
-    # V1 contains London in-person events only.
-    if "london" not in location_text.casefold():
-        return None
-
     title = extract_title(html)
+    has_london_venue = "london" in location_text.casefold()
+    has_online = "online" in location_text.casefold() or "virtual" in location_text.casefold()
+    if not has_london_venue and not has_online:
+        return None
+    # Online events should clearly be about the radar's subject rather
+    # than generic membership, training or professional administration.
+    if not has_london_venue and not infer_topics(title):
+        return None
+    event_format = "hybrid" if has_london_venue and has_online else (
+        "online" if has_online else "in_person"
+    )
     start_at, end_at = extract_datetimes(text)
 
     lowered = text.casefold()
@@ -359,7 +368,7 @@ def parse_event_page(
         title=title,
         start_at=start_at,
         end_at=end_at,
-        format="in_person",
+        format=event_format,
         organiser=SOURCE_NAME,
         source=SOURCE_NAME,
         source_url=source_url,
@@ -389,9 +398,26 @@ def get_events() -> tuple[list[Event], list[str]]:
         listing_html
     )
 
+    # Keep previously verified event facts if one detail page temporarily
+    # fails, so an otherwise healthy daily refresh does not erase it.
+    cached: dict[str, Event] = {}
+    try:
+        dataset = json.loads(Path("data/events.json").read_text(encoding="utf-8"))
+        for raw in dataset.get("events", []):
+            if raw.get("source") == SOURCE_NAME:
+                cached[raw["source_url"]] = Event(**{
+                    **raw, "topics": tuple(raw.get("topics", []))
+                })
+    except (OSError, ValueError, TypeError, KeyError):
+        pass
+
+    fetched = 0
+    failed = 0
+
     for url in urls:
         try:
             html = fetch_html(url)
+            fetched += 1
 
             event = parse_event_page(
                 html,
@@ -406,8 +432,12 @@ def get_events() -> tuple[list[Event], list[str]]:
             RSSParseError,
             ValueError,
         ) as exc:
-            errors.append(
-                f"{SOURCE_NAME} [{url}]: {exc}"
-            )
+            failed += 1
+            print(f"WARNING: {SOURCE_NAME} [{url}]: {exc}")
+            if url in cached:
+                events.append(cached[url])
+
+    if failed and not fetched:
+        errors.append(f"{SOURCE_NAME}: all event detail pages failed")
 
     return events, errors
