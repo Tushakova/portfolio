@@ -1,5 +1,8 @@
 """Web discovery for London Data Radar using Brave Search API."""
 
+from src.events.candidates import (
+    inspect_candidates,
+)
 from __future__ import annotations
 
 import json
