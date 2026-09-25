@@ -10,8 +10,13 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from src.events.discovery import (
+
     SEARCH_QUERIES,
+
+    domain_diagnostics,
+
     evaluate_targets,
+
 )
 
 
@@ -28,6 +33,20 @@ REQUEST_TIMEOUT_SECONDS = 20
 # so 10 queries/day is roughly 300-310 requests/month.
 MAX_QUERIES_PER_RUN = 10
 
+DIAGNOSTIC_QUERIES = (
+    (
+        "London Analytics Engineering Meetup #26",
+        '"London Analytics Engineering Meetup" London',
+    ),
+    (
+        "Big Data LDN 2026",
+        '"Big Data LDN" 2026',
+    ),
+    (
+        "MeasureCamp London 19",
+        '"MeasureCamp London" 2026',
+    ),
+)
 
 class SearchError(RuntimeError):
     """Raised when web discovery cannot complete safely."""
@@ -172,6 +191,66 @@ def discover() -> tuple[
 
     return discovered_urls, summary
 
+def run_target_diagnostics(
+    api_key: str,
+) -> list[tuple[str, bool]]:
+    """
+    Test whether Brave can retrieve each known target when searched
+    for directly.
+
+    These queries evaluate the search provider only. They are not
+    part of production discovery.
+    """
+    results: list[tuple[str, bool]] = []
+
+    for target_name, query in DIAGNOSTIC_QUERIES:
+        search_results = search_web(
+            query,
+            api_key,
+        )
+
+        target_tokens = {
+            token.casefold()
+            for token in target_name.split()
+            if len(token) > 2
+        }
+
+        found = False
+
+        for result in search_results:
+            searchable_text = " ".join(
+                str(result.get(field, ""))
+                for field in (
+                    "title",
+                    "url",
+                    "description",
+                )
+            ).casefold()
+
+            matched_tokens = sum(
+                token in searchable_text
+                for token in target_tokens
+            )
+
+            if (
+                target_tokens
+                and matched_tokens
+                >= max(
+                    2,
+                    len(target_tokens) - 1,
+                )
+            ):
+                found = True
+                break
+
+        results.append(
+            (
+                target_name,
+                found,
+            )
+        )
+
+    return results
 
 def main() -> None:
     discovered_urls, summary = discover()
@@ -188,12 +267,24 @@ def main() -> None:
         f"Unique URLs: {summary.unique_url_count}"
     )
 
+    print("\nDomain diagnostics")
+    print("------------------")
+
+    diagnostics = domain_diagnostics(
+        discovered_urls
+    )
+
+    for domain, count in diagnostics.items():
+        print(
+            f"{domain:<18} {count}"
+        )
+
     evaluation = evaluate_targets(
         discovered_urls
     )
 
-    print("\nEvaluation targets")
-    print("------------------")
+    print("\nGeneric discovery targets")
+    print("-------------------------")
 
     found_count = 0
 
@@ -204,14 +295,46 @@ def main() -> None:
             else "NOT FOUND"
         )
 
-        print(f"{status}: {name}")
+        print(
+            f"{status}: {name}"
+        )
 
         if found:
             found_count += 1
 
     print(
-        f"\nTarget recall: "
+        f"\nGeneric target recall: "
         f"{found_count}/{len(evaluation)}"
+    )
+
+    print("\nDirect-search diagnostics")
+    print("-------------------------")
+
+    api_key = get_api_key()
+
+    direct_results = run_target_diagnostics(
+        api_key
+    )
+
+    direct_found = 0
+
+    for name, found in direct_results:
+        status = (
+            "FOUND"
+            if found
+            else "NOT FOUND"
+        )
+
+        print(
+            f"{status}: {name}"
+        )
+
+        if found:
+            direct_found += 1
+
+    print(
+        f"\nDirect-search recall: "
+        f"{direct_found}/{len(direct_results)}"
     )
 
 
