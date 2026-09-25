@@ -10,14 +10,14 @@ from urllib.parse import urlsplit, urlunsplit
 SEARCH_QUERIES = (
     "data analytics events London",
     "product analytics events London",
-    "analytics engineering events London",
+    "site:meetup.com London data analytics engineering events",
     "data science events London",
     "data engineering events London",
     "experimentation analytics events London",
-    "machine learning events London",
+    "site:eventbrite.co.uk London data science analytics events",
     "statistics events London",
     "data conference London",
-    "analytics meetup London",
+    "site:luma.com London data science analytics events",
     "career fair data analytics London",
     "career fair data science London",
 )

@@ -17,6 +17,8 @@ from zoneinfo import ZoneInfo
 from bs4 import BeautifulSoup
 
 from src.events.http import fetch_html
+from src.events.source_policy import source_kind
+from src.events.sources.dsf import parse_career_day, discover_career_urls
 from src.events.discovery_html import extract_microdata_events, detail_links
 from src.events.models import Event
 from src.events.structured_data import extract_schema_events
@@ -82,6 +84,7 @@ class CandidateInspection:
     events: tuple[Event, ...] = ()
     links: tuple[str, ...] = ()
     extraction: str = "none"
+    provenance: str = "independent_unconfirmed"
 
     @property
     def plausible(self) -> bool:
@@ -207,11 +210,30 @@ def inspect_candidate(url: str, now: datetime | None = None) -> CandidateInspect
     if not structured:
         structured = extract_microdata_events(html)
     facts = dict(url=url, fetched=True, event_path=has_event_path(url),
+                 provenance=source_kind(url),
                  links=detail_links(html, url), extraction=extraction if structured else "none",
                  topic_evidence=bool(TECHNICAL_TITLE.search(text)),
                  london_evidence=bool(re.search(r"\bLondon\b", text, re.I)),
                  date_evidence=any(item.get("startDate") for item in structured))
+    if urlsplit(url).hostname in ("datasciencefestival.com", "www.datasciencefestival.com"):
+        # Career-day links live in DSF navigation; dates on each detail page,
+        # rather than the navigation label, determine whether they are current.
+        career_links = tuple(sorted(link for link in discover_career_urls(html)
+                                   if int(re.search(r"career-day-(20\d{2})", link).group(1)) >= now.astimezone(LONDON).year))
+        facts["links"] = tuple(dict.fromkeys(facts["links"] + career_links))[:10]
     if not structured:
+        if canonical_url(url) == "https://datasciencefestival.com/event/sandbox-sessions" and "sandbox sessions return this autumn" in text.lower():
+            return CandidateInspection(**facts, decision="review", reason="dates_not_announced")
+        if source_kind(url) == "organiser" and urlsplit(url).hostname in ("datasciencefestival.com", "www.datasciencefestival.com") and re.fullmatch(r"/event/career-day-20\d{2}/?", urlsplit(url).path):
+            try:
+                event = parse_career_day(html, url, now)
+                if event is None:
+                    return CandidateInspection(**facts, decision="rejected", reason="past_event")
+                validate_event(event)
+            except ValueError:
+                return CandidateInspection(**facts, decision="review", reason="known_parser_changed")
+            facts["extraction"] = "organiser_html"
+            return CandidateInspection(**facts, decision="accepted", reason="organiser_event", events=(event,))
         for page in EVENT_PAGES:
             if canonical_url(url) != canonical_url(page.url):
                 continue
@@ -225,13 +247,17 @@ def inspect_candidate(url: str, now: datetime | None = None) -> CandidateInspect
             if (end and end <= now) or (not end and start.astimezone(LONDON).date() < now.astimezone(LONDON).date()):
                 return CandidateInspection(**facts, decision="rejected", reason="past_event")
             facts["extraction"] = "organiser_html"
-            return CandidateInspection(**facts, decision="accepted", reason="verified_organiser_html", events=(event,))
+            return CandidateInspection(**facts, decision="accepted", reason="organiser_event", events=(event,))
         # An independent organiser without JSON-LD remains in review, not rejected.
         return CandidateInspection(**facts, decision="review", reason="no_structured_event")
     results = [verify_event(item, url, now) for item in structured[:MAX_EVENTS_PER_PAGE]]
     accepted = tuple(event for event, _, _ in results if event)
     if accepted:
-        return CandidateInspection(**facts, decision="accepted", reason="verified_structured_event", events=accepted)
+        kind = facts["provenance"]
+        if kind in ("catalogue", "independent_unconfirmed"):
+            return CandidateInspection(**facts, decision="review", reason="source_confirmation_needed", events=accepted)
+        reason = "organiser_event" if kind == "organiser" else "platform_listing"
+        return CandidateInspection(**facts, decision="accepted", reason=reason, events=accepted)
     review = next((result for result in results if result[1] == "review"), results[0])
     return CandidateInspection(**facts, decision=review[1], reason=review[2])
 
@@ -272,19 +298,42 @@ def candidate_priority(url: str) -> int:
     return score
 
 
+def select_discovery_roots(urls: set[str], limit: int = 36) -> list[str]:
+    """Reserve capacity for useful sources without excluding new organisers.
+
+    Base allocation: 12 platform, 10 configured organiser, 12 independent,
+    2 catalogue pages. Unused capacity spills over in that order, with the
+    total catalogue allocation capped at two pages per selection.
+    """
+    if limit <= 0:
+        return []
+    quotas = (("platform", 12), ("organiser", 10), ("independent_unconfirmed", 12), ("catalogue", 2))
+    groups = {kind: {u for u in urls if public_url(u) and source_kind(u) == kind} for kind, _ in quotas}
+    selected = []
+    for kind, quota in quotas:
+        selected += select_candidates(groups[kind], min(quota, limit - len(selected)))
+    seen = {canonical_url(u) for u in selected}
+    for kind, _ in quotas[:-1]:
+        extra = {u for u in groups[kind] if canonical_url(u) not in seen}
+        additions = select_candidates(extra, limit - len(selected))
+        selected += additions
+        seen.update(canonical_url(u) for u in additions)
+    return selected
+
+
 def inspect_candidates(urls: set[str]) -> list[CandidateInspection]:
     # Reserve a quarter of the unchanged page budget for detail links. If there
     # are none, spend that budget on remaining search results instead.
-    selected = select_candidates(urls, limit=36)
+    selected = select_discovery_roots(urls, limit=36)
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
         first = list(pool.map(inspect_candidate, selected))
         seen = {canonical_url(url) for url in selected}
-        links = {url for result in first if not result.events for url in result.links
-                 if public_url(url) and canonical_url(url) not in seen}
+        links = {url for result in first if result.decision != "accepted" for url in result.links
+                 if public_url(url) and canonical_url(url) not in seen and source_kind(url) != "catalogue"}
         second_urls = select_candidates(links, limit=MAX_PAGES - len(first))
         seen.update(canonical_url(url) for url in second_urls)
-        remaining = {url for url in urls if public_url(url) and canonical_url(url) not in seen}
-        second_urls += select_candidates(remaining, limit=MAX_PAGES - len(first) - len(second_urls))
+        remaining = {url for url in urls if public_url(url) and canonical_url(url) not in seen and source_kind(url) != "catalogue"}
+        second_urls += select_discovery_roots(remaining, limit=MAX_PAGES - len(first) - len(second_urls))
         return first + list(pool.map(inspect_candidate, second_urls))
 
 
@@ -296,16 +345,25 @@ def summarise_events(inspections: list[CandidateInspection], known: list[dict]) 
         return ("url", canonical_url(item["source_url"]), day), ("name", title, day, item["organiser"].casefold())
     known_keys = {key for item in known for key in keys(item)}
     seen = set()
-    counts = {"verified_records": 0, "duplicate_records": 0, "already_published": 0, "new_verified_events": 0}
+    counts = {"fact_checked_records": 0, "organiser_records": 0, "platform_records": 0,
+              "unconfirmed_source_records": 0, "duplicate_records": 0,
+              "already_published": 0, "new_source_supported_events": 0}
+    # Prefer primary/platform records over duplicate catalogue records.
+    inspections = sorted(inspections, key=lambda i: i.provenance not in ("organiser", "platform"))
     for inspection in inspections:
         for event in inspection.events:
-            counts["verified_records"] += 1
+            counts["fact_checked_records"] += 1
+            if inspection.decision != "accepted":
+                counts["unconfirmed_source_records"] += 1
+                continue
+            tier = "organiser_records" if inspection.provenance == "organiser" else "platform_records"
+            counts[tier] += 1
             event_keys = keys(event.to_dict())
             if any(key in seen for key in event_keys):
                 counts["duplicate_records"] += 1
             elif any(key in known_keys for key in event_keys):
                 counts["already_published"] += 1
             else:
-                counts["new_verified_events"] += 1
+                counts["new_source_supported_events"] += 1
             seen.update(event_keys)
     return counts

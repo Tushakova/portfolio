@@ -6,6 +6,7 @@ identify an Event scope; links are candidates only, never evidence of an event.
 from urllib.parse import urljoin, urlsplit
 import re
 from bs4 import BeautifulSoup
+from src.events.source_policy import source_kind
 
 
 def extract_microdata_events(html: str) -> list[dict]:
@@ -48,4 +49,15 @@ def detail_links(html: str, page_url: str) -> tuple[str, ...]:
         is_detail = re.search(r"/(?:events?|e|talks?|conferences?|workshops?)/[^/]+", parsed.path, re.I)
         if is_detail and url not in found and url.rstrip("/") != page_url.rstrip("/"):
             found.append(url)
-    return tuple(found[:8])
+    # A catalogue may link explicitly to an organiser. Follow at most two
+    # labelled links, never guess from ads or generic outbound navigation.
+    official = []
+    if source_kind(page_url) == "catalogue":
+        for a in soup.select("a[href]"):
+            label = a.get_text(" ", strip=True)
+            if not re.fullmatch(r"(?:visit\s+)?(?:official|event|conference|organis[ez]er)\s+(?:web)?site(?:\s*(?:→|»))?", label, re.I):
+                continue
+            url = urljoin(page_url, a["href"])
+            if urlsplit(url).scheme in ("http", "https") and urlsplit(url).hostname != urlsplit(page_url).hostname:
+                official.append(url)
+    return tuple(dict.fromkeys(official[:2] + found[:8]))

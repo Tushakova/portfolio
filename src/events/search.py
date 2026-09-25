@@ -13,6 +13,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode, urlsplit
 from urllib.request import Request, urlopen
 
+from src.events.source_policy import source_kind
 from src.events.candidates import inspect_candidates, summarise_events, MAX_PAGES
 from src.events.discovery import (
     SEARCH_QUERIES,
@@ -298,6 +299,9 @@ def main() -> None:
 
     print(f"URL candidates:   {len(discovered_urls)}")
     print(f"Pages inspected:  {len(inspections)} (cap {MAX_PAGES})")
+    print("Inspected source mix:")
+    for kind, count in sorted(Counter(source_kind(i.url) for i in inspections).items()):
+        print(f"  {kind:<28} {count}")
     print("Page decisions:")
     for (decision, reason), count in sorted(Counter((i.decision, i.reason) for i in inspections).items()):
         print(f"  {decision:<10} {reason:<38} {count}")
@@ -308,10 +312,10 @@ def main() -> None:
     for (host, reason), count in sorted(Counter(
             (urlsplit(i.url).hostname, i.reason) for i in inspections).items()):
         print(f"  {host:<38} {reason:<38} {count}")
-    print(f"Detail links available: {len({link for i in inspections for link in i.links})}")
+    print(f"Detail-link candidates available (not all fetched): {len({link for i in inspections for link in i.links})}")
     previous = json.loads(Path("data/events.json").read_text(encoding="utf-8"))
     counts = summarise_events(inspections, previous.get("events", []) + previous.get("past_events", []))
-    print("\nVerified event records (not published):")
+    print("\nEvent facts and source evidence (not published):")
     for label, count in counts.items():
         print(f"  {label:<28} {count}")
     print("Only pages within the budget were assessed. Review is not acceptance.")
