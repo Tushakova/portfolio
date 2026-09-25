@@ -1,30 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-24T15:51:31.310230+00:00",
-  "event_count": 16,
+  "generated_at": "2026-09-25T10:22:32.566749+00:00",
+  "event_count": 15,
   "events": [
-    {
-      "id": "big-data-ldn-2026",
-      "title": "Big Data LDN 2026",
-      "start_at": "2026-09-23T09:00:00+01:00",
-      "format": "in_person",
-      "organiser": "Big Data LDN",
-      "source": "Big Data LDN",
-      "source_url": "https://www.bigdataldn.com/",
-      "end_at": "2026-09-24T17:30:00+01:00",
-      "venue_name": "Olympia London",
-      "address": "Hammersmith Road London W14 8UX",
-      "is_free": false,
-      "price_from_gbp": 49.0,
-      "registration_status": "open",
-      "topics": [
-        "Data Analytics",
-        "AI & Machine Learning",
-        "Data Engineering"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "rss-beyond-the-hype-synthetic-data-in-practice",
       "title": "Beyond the Hype: Synthetic Data in Practice",
@@ -33,29 +11,9 @@
       "organiser": "Royal Statistical Society",
       "source": "Royal Statistical Society",
       "source_url": "https://rss.org.uk/training-events/events/events-2026/other-events-(non-rss)/beyond-the-hype-synthetic-data-in-practice/",
-      "end_at": "2026-09-24T18:00:00+01:00",
+      "end_at": null,
       "venue_name": "MRS London",
       "address": "MRS London",
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Analytics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
-    {
-      "id": "meetup-316592693",
-      "title": "Power BI Agentic Authoring – Building Semantic Models and Reports with AI",
-      "start_at": "2026-09-24T18:00:00+01:00",
-      "format": "online",
-      "organiser": "Microsoft Fabric UK",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/microsoft-power-bi-uk/events/316592693/",
-      "end_at": null,
-      "venue_name": null,
-      "address": null,
       "is_free": null,
       "price_from_gbp": null,
       "registration_status": "unknown",
@@ -320,6 +278,28 @@
       "registration_status": "open",
       "topics": [
         "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "big-data-ldn-2027",
+      "title": "Big Data LDN 2027",
+      "start_at": "2027-09-22T09:00:00+01:00",
+      "format": "in_person",
+      "organiser": "Big Data LDN",
+      "source": "Big Data LDN",
+      "source_url": "https://www.bigdataldn.com/",
+      "end_at": "2027-09-23T17:30:00+01:00",
+      "venue_name": "Olympia London",
+      "address": "Hammersmith Road London W14 8UX",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics",
+        "AI & Machine Learning",
+        "Data Engineering"
       ],
       "status": "scheduled",
       "time_tbc": false
