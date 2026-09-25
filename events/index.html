@@ -148,8 +148,16 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: currentColor;
+      background: #a1a1a1;
     }
+
+    .live-indicator.fresh .live-dot { background: #29844a; }
+    .event-card.past { opacity: 0.62; }
+    .event-card.past .event-title a { color: var(--text); }
+    .archive-controls { display: flex; gap: 8px; margin-bottom: 12px; }
+    .change-log { margin-top: 42px; color: var(--muted); font-size: 14px; }
+    .change-log summary { cursor: pointer; }
+    .change-log li { margin: 8px 0; }
 
     /* Controls */
 
@@ -559,9 +567,9 @@
         </p>
 
         <div class="hero-meta">
-          <span class="live-indicator">
+          <span class="live-indicator" id="refresh-indicator">
             <span class="live-dot"></span>
-            Automatically updated
+            <span id="last-checked">Checking refresh status…</span>
           </span>
 
           <span id="last-updated">
@@ -601,6 +609,10 @@
             type="button"
           >
             Data careers
+          </button>
+
+          <button class="filter-button" data-filter="fairs" type="button">
+            Career fairs
           </button>
 
           <button
@@ -656,11 +668,19 @@
 
     <section class="events-section">
       <div class="container">
+        <div class="archive-controls" role="group" aria-label="Event period">
+          <button class="filter-button active" data-period="upcoming" type="button">Upcoming</button>
+          <button class="filter-button" data-period="past" type="button">Past events</button>
+        </div>
         <div id="events-list">
           <div class="state">
             Loading events…
           </div>
         </div>
+        <details class="change-log" id="change-log" hidden>
+          <summary>Event change log</summary>
+          <ol id="change-list"></ol>
+        </details>
       </div>
     </section>
 
@@ -687,7 +707,9 @@
           </p>
           <p>
             Search and filters cover the events already collected here.
-            A new event on an unrelated website is not found automatically;
+            Discovery covers selected organisers and public Meetup search listings,
+            including a targeted search for data career events. It does not cover
+            every independent event website;
             <a href="mailto:marie.tsh@gmail.com?subject=London%20Data%20Radar%20event%20suggestion">suggest its link</a>
             to have its organiser considered as a source.
           </p>
@@ -712,6 +734,12 @@
 
   <script>
     const DATA_URL = "/data/events.json";
+    const STATUS_URL = "/data/refresh-status.json";
+    const refreshIndicator = document.getElementById("refresh-indicator");
+    const lastChecked = document.getElementById("last-checked");
+    const changeLog = document.getElementById("change-log");
+    const changeList = document.getElementById("change-list");
+    const periodButtons = document.querySelectorAll("[data-period]");
 
     const eventsList = document.getElementById("events-list");
     const resultCount = document.getElementById("result-count");
@@ -723,6 +751,8 @@
     );
 
     let events = [];
+    let pastEvents = [];
+    let activePeriod = "upcoming";
     let activeFilter = "all";
 
     function londonDayKey(date) {
@@ -874,6 +904,9 @@
       if (activeFilter === "careers") {
         return (event.topics || []).includes("Data Careers");
       }
+      if (activeFilter === "fairs") {
+        return (event.topics || []).includes("Career Fairs");
+      }
 
       const topics = event.topics || [];
 
@@ -905,7 +938,7 @@
       return true;
     }
 
-    function eventCard(event) {
+    function eventCard(event, historical = false) {
       const date = formatEventDate(event);
 
       const topics = (event.topics || [])
@@ -931,7 +964,7 @@
         "London";
 
       return `
-        <article class="event-card">
+        <article class="event-card ${historical ? "past" : ""}">
 
           <div class="event-date">
             <span class="event-day">
@@ -979,12 +1012,10 @@
             <span class="event-format">
               ${escapeHtml({in_person: "In person", online: "Online", hybrid: "Hybrid"}[event.format] || "Format unknown")}
             </span>
-            <span class="price">
-              ${escapeHtml(formatPrice(event))}
-            </span>
+            ${historical ? "" : `<span class="price">${escapeHtml(formatPrice(event))}</span>`}
 
             ${
-              status
+              status && !historical
                 ? `
                   <span
                     class="status ${escapeHtml(statusClass)}"
@@ -1010,14 +1041,13 @@
     }
 
     function renderEvents() {
-      const visibleEvents = events
-        .filter(isUpcoming)
+      const historical = activePeriod === "past";
+      const visibleEvents = (historical ? pastEvents : events)
+        .filter(event => historical ? !isUpcoming(event) : isUpcoming(event))
         .filter(matchesFilter)
-        .sort(
-          (a, b) =>
-            new Date(a.start_at) -
-            new Date(b.start_at)
-        );
+        .sort((a, b) => historical
+          ? new Date(b.start_at) - new Date(a.start_at)
+          : new Date(a.start_at) - new Date(b.start_at));
 
       resultCount.textContent =
         `${visibleEvents.length} ${
@@ -1030,7 +1060,7 @@
         eventsList.innerHTML = `
           <div class="state">
             <strong>No matching events</strong>
-            Try another filter or search term.
+            ${historical ? "No past events saved yet, or try another filter." : "Try another filter or search term."}
           </div>
         `;
 
@@ -1038,7 +1068,7 @@
       }
 
       eventsList.innerHTML = visibleEvents
-        .map(eventCard)
+        .map(event => eventCard(event, historical))
         .join("");
     }
 
@@ -1065,6 +1095,12 @@
         }
       );
     });
+
+    periodButtons.forEach(button => button.addEventListener("click", () => {
+      activePeriod = button.dataset.period;
+      periodButtons.forEach(other => other.classList.toggle("active", other === button));
+      renderEvents();
+    }));
 
     eventSearch.addEventListener("input", renderEvents);
     formatFilter.addEventListener("change", renderEvents);
@@ -1093,6 +1129,26 @@
         }
 
         events = dataset.events;
+        pastEvents = Array.isArray(dataset.past_events) ? dataset.past_events : [];
+        const changes = Array.isArray(dataset.changes) ? dataset.changes.slice(-20).reverse() : [];
+        changeLog.hidden = !changes.length;
+        changeList.innerHTML = changes.map(change =>
+          `<li>${escapeHtml(formatUpdated(change.at))}: ${escapeHtml(change.title)} — ${escapeHtml(change.action)}</li>`
+        ).join("");
+        try {
+          const statusResponse = await fetch(STATUS_URL, { cache: "no-store" });
+          if (!statusResponse.ok) throw new Error("Refresh status unavailable");
+          const status = await statusResponse.json();
+          const checked = new Date(status.last_successful_check);
+          if (Number.isNaN(checked.getTime())) throw new Error("Invalid refresh status");
+          const recent = Date.now() - checked.getTime() >= 0 &&
+            Date.now() - checked.getTime() < 36 * 60 * 60 * 1000;
+          refreshIndicator.classList.toggle("fresh", recent);
+          lastChecked.textContent = `Last successful check ${formatUpdated(status.last_successful_check)}`
+            + (recent ? "" : " · check overdue");
+        } catch (statusError) {
+          lastChecked.textContent = "Last successful check unavailable";
+        }
 
         if (dataset.generated_at) {
           lastUpdated.textContent =

@@ -44,7 +44,7 @@ jobs:
 
       - name: Commit updated dataset
         run: |
-          if git diff --quiet -- data/events.json; then
+          if [ -z "$(git status --porcelain -- data/events.json data/refresh-status.json)" ]; then
             echo "No event data changes to commit."
             exit 0
           fi
@@ -52,6 +52,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add data/events.json
+          git add data/events.json data/refresh-status.json
           git commit -m "Refresh event data"
           git push

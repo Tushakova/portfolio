@@ -17,7 +17,7 @@ from src.events.models import Event
 from src.events.structured_data import extract_schema_events
 from src.events.topics import (
     ANALYTICS_ENGINEERING, CAREERS, DATA_ANALYTICS, DATA_SCIENCE,
-    EXPERIMENTATION, STATISTICS, is_career_event,
+    EXPERIMENTATION, STATISTICS, CAREER_FAIRS, is_career_event, is_career_fair,
 )
 
 
@@ -47,6 +47,7 @@ SEARCH_URLS = (
     "https://www.meetup.com/find/gb--london/data-science/",
     "https://www.meetup.com/find/?keywords=analytics&location=gb--london&source=EVENTS",
     "https://www.meetup.com/find/gb--london/machine-learning/",
+    "https://www.meetup.com/find/?keywords=data%20career&location=gb--london&source=EVENTS",
 )
 
 TECHNICAL_TITLE = re.compile(
@@ -180,7 +181,8 @@ def parse_event(item: dict, group: MeetupGroup, now: datetime | None = None,
         is_free=free,
         price_from_gbp=0.0 if free else None,
         registration_status="unknown",
-        topics=group.topics + ((CAREERS,) if is_career_event(title) else ()),
+        topics=group.topics + ((CAREERS,) if is_career_event(title) else ())
+        + ((CAREER_FAIRS,) if is_career_fair(title) else ()),
     )
 
 

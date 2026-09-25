@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from src.events.models import Event
-from src.events.sources import dsf, meetup, rss, standalone
+from src.events.sources import career_fairs, dsf, meetup, rss, standalone
 from src.events.validation import (
     deduplicate_events,
     validate_events,
@@ -15,6 +15,7 @@ from src.events.validation import (
 
 
 OUTPUT_PATH = Path("data/events.json")
+CHECK_PATH = Path("data/refresh-status.json")
 SCHEMA_VERSION = "1.0"
 
 
@@ -29,6 +30,7 @@ def collect_events() -> tuple[list[Event], list[str]]:
         ("RSS", rss.get_events),
         ("Meetup", meetup.get_events),
         ("Data Science Festival", dsf.get_events),
+        ("Career fairs", career_fairs.get_events),
     )
 
     for source_name, collector in collectors:
@@ -54,22 +56,65 @@ def collect_events() -> tuple[list[Event], list[str]]:
     return events, errors
 
 
-def build_dataset(events: list[Event]) -> dict:
+def previous_dataset() -> dict:
+    try:
+        return json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return {}
+
+
+def is_past(item: dict, now: datetime) -> bool:
+    """Keep an event through its final local calendar day if end time is unknown."""
+    if item.get("end_at"):
+        return datetime.fromisoformat(item["end_at"]) < now
+    from zoneinfo import ZoneInfo
+    london = ZoneInfo("Europe/London")
+    return datetime.fromisoformat(item["start_at"]).astimezone(london).date() < now.astimezone(london).date()
+
+
+def build_dataset(events: list[Event], previous: dict | None = None,
+                  now: datetime | None = None) -> dict:
     """Return the canonical dataset consumed by the frontend."""
 
-    ordered_events = sorted(
-        events,
-        key=lambda event: event.start_at,
-    )
+    previous = previous or {}
+    now = now or datetime.now(timezone.utc)
+    current = {event.id: event.to_dict() for event in events}
+    archived = {item["id"]: item for item in previous.get("past_events", [])}
+    # Previous snapshots become an archive when sources stop listing past events.
+    for item in previous.get("events", []):
+        if is_past(item, now):
+            archived[item["id"]] = item
+    for item in current.values():
+        if is_past(item, now):
+            archived[item["id"]] = item
+    for event_id in current:
+        if not is_past(current[event_id], now):
+            archived.pop(event_id, None)
+    upcoming = sorted((item for item in current.values() if not is_past(item, now)),
+                      key=lambda item: item["start_at"])
+    past = sorted(archived.values(), key=lambda item: item["start_at"], reverse=True)
+    changes = list(previous.get("changes", []))
+    old = {item["id"]: item for item in previous.get("events", [])}
+    for event_id, item in current.items():
+        if event_id not in old:
+            changes.append({"at": now.isoformat(), "event_id": event_id,
+                            "title": item["title"], "action": "added"})
+        elif old[event_id] != item:
+            changes.append({"at": now.isoformat(), "event_id": event_id,
+                            "title": item["title"], "action": "updated"})
+    for event_id, item in old.items():
+        if event_id not in current:
+            changes.append({"at": now.isoformat(), "event_id": event_id,
+                            "title": item["title"],
+                            "action": "archived" if is_past(item, now) else "removed from source"})
 
     return {
         "schema_version": SCHEMA_VERSION,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "event_count": len(ordered_events),
-        "events": [
-            event.to_dict()
-            for event in ordered_events
-        ],
+        "generated_at": now.isoformat(),
+        "event_count": len(upcoming),
+        "events": upcoming,
+        "past_events": past,
+        "changes": changes[-250:],
     }
 
 
@@ -109,6 +154,8 @@ def events_unchanged(dataset: dict) -> bool:
         previous.get("schema_version") == dataset["schema_version"]
         and previous.get("events") == dataset["events"]
         and previous.get("event_count") == dataset["event_count"]
+        and previous.get("past_events", []) == dataset["past_events"]
+        and previous.get("changes", []) == dataset["changes"]
     )
 
 
@@ -136,14 +183,16 @@ def main() -> None:
 
     validate_events(events)
 
-    dataset = build_dataset(events)
+    now = datetime.now(timezone.utc)
+    dataset = build_dataset(events, previous_dataset(), now)
+    CHECK_PATH.write_text(json.dumps({"last_successful_check": now.isoformat()}, indent=2) + "\n", encoding="utf-8")
     if events_unchanged(dataset):
         print("Event data unchanged; keeping the previous refresh timestamp.")
         return
     write_dataset(dataset)
 
     print(
-        f"Built {len(events)} validated event(s) "
+        f"Built {dataset['event_count']} upcoming and {len(dataset['past_events'])} archived event(s) "
         f"→ {OUTPUT_PATH}"
     )
 

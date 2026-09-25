@@ -12,6 +12,7 @@ EXPERIMENTATION = "Experimentation"
 DATA_VISUALISATION = "Data Visualisation"
 STATISTICS = "Statistics"
 CAREERS = "Data Careers"
+CAREER_FAIRS = "Career Fairs"
 
 CAREER_EVENT_TITLE = re.compile(
     r"\b(?:career\s+(?:day|fair|event|talk|network|growth|change|journey|switch)|"
@@ -26,6 +27,11 @@ def is_career_event(title: str) -> bool:
     return bool(CAREER_EVENT_TITLE.search(title))
 
 
+def is_career_fair(title: str) -> bool:
+    """Distinguish employer fairs from career talks and advice sessions."""
+    return bool(re.search(r"\b(?:career|job|recruitment|hiring)\s+(?:fair|show|expo)\b", title, re.I))
+
+
 ALL_TOPICS = frozenset(
     {
         DATA_ANALYTICS,
@@ -38,5 +44,6 @@ ALL_TOPICS = frozenset(
         DATA_VISUALISATION,
         STATISTICS,
         CAREERS,
+        CAREER_FAIRS,
     }
 )

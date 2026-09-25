@@ -13,9 +13,37 @@ from src.events.sources import rss
 from src.events.sources.rss import infer_topics, parse_event_page
 from src.events.sources.standalone import parse_big_data_ldn
 from src.events.topics import CAREERS
+from src.events.build import build_dataset
+from src.events.sources.career_fairs import parse_london_job_show
+from src.events.topics import CAREER_FAIRS, is_career_fair
 
 
 class EventSourceTests(unittest.TestCase):
+    def test_career_fair_requires_data_roles_and_real_dates(self):
+        page = "16th & 17th October 2026 Westfield London, Ariel Way 11am – 5pm on both days Free entry Register free"
+        fair = parse_london_job_show(page, "Hiring Data Management Professionals")
+        self.assertEqual(fair.start_at, "2026-10-16T11:00:00+01:00")
+        self.assertEqual(fair.end_at, "2026-10-17T17:00:00+01:00")
+        self.assertIn(CAREER_FAIRS, fair.topics)
+        with self.assertRaises(ValueError):
+            parse_london_job_show(page, "Hiring shop assistants")
+        self.assertTrue(is_career_fair("London Career Fair"))
+        self.assertFalse(is_career_fair("Data Science Career Talk"))
+
+    def test_past_events_survive_disappearance_from_source(self):
+        event = Event(id="old-data-fair", title="Old fair",
+                      start_at="2026-09-23T09:00:00+01:00",
+                      end_at="2026-09-24T17:00:00+01:00",
+                      format="in_person", organiser="Example", source="Example",
+                      source_url="https://example.com/", topics=(CAREER_FAIRS,))
+        first = build_dataset([event], now=datetime(2026, 9, 23, tzinfo=timezone.utc))
+        second = build_dataset([], first, datetime(2026, 9, 25, tzinfo=timezone.utc))
+        self.assertEqual(second["event_count"], 0)
+        self.assertEqual(second["past_events"][0]["id"], "old-data-fair")
+        self.assertEqual(second["changes"][-1]["action"], "archived")
+        third = build_dataset([], second, datetime(2026, 9, 26, tzinfo=timezone.utc))
+        self.assertEqual(third["past_events"], second["past_events"])
+
     def test_big_data_dates_follow_the_published_year(self):
         html = """
         22-23 September 2027 Olympia London

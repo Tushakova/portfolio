@@ -304,5 +304,52 @@
       "status": "scheduled",
       "time_tbc": false
     }
-  ]
+  ],
+  "past_events": [
+    {
+      "id": "big-data-ldn-2026",
+      "title": "Big Data LDN 2026",
+      "start_at": "2026-09-23T09:00:00+01:00",
+      "format": "in_person",
+      "organiser": "Big Data LDN",
+      "source": "Big Data LDN",
+      "source_url": "https://www.bigdataldn.com/",
+      "end_at": "2026-09-24T17:30:00+01:00",
+      "venue_name": "Olympia London",
+      "address": "Hammersmith Road London W14 8UX",
+      "is_free": false,
+      "price_from_gbp": 49.0,
+      "registration_status": "open",
+      "topics": [
+        "Data Analytics",
+        "AI & Machine Learning",
+        "Data Engineering"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "dsf-career-day-2026",
+      "title": "DSF Career Day 2026",
+      "start_at": "2026-09-17T00:00:00+01:00",
+      "format": "in_person",
+      "organiser": "Data Science Festival",
+      "source": "Data Science Festival",
+      "source_url": "https://datasciencefestival.com/event/career-day-2026/",
+      "end_at": null,
+      "venue_name": "CodeNode, London",
+      "address": null,
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Careers",
+        "Data Analytics",
+        "Data Science"
+      ],
+      "status": "scheduled",
+      "time_tbc": true
+    }
+  ],
+  "changes": []
 }

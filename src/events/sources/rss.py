@@ -16,10 +16,12 @@ from src.events.models import Event
 from src.events.topics import (
     AI_ML,
     CAREERS,
+    CAREER_FAIRS,
     DATA_ANALYTICS,
     DATA_SCIENCE,
     STATISTICS,
     is_career_event,
+    is_career_fair,
 )
 
 
@@ -263,6 +265,8 @@ def infer_topics(title: str) -> tuple[str, ...]:
 
     if is_career_event(title):
         topics.append(CAREERS)
+    if is_career_fair(title):
+        topics.append(CAREER_FAIRS)
 
     return tuple(
         dict.fromkeys(topics)
