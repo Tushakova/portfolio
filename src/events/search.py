@@ -10,7 +10,7 @@ from pathlib import Path
 import os
 from dataclasses import dataclass
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlsplit
 from urllib.request import Request, urlopen
 
 from src.events.candidates import inspect_candidates, summarise_events, MAX_PAGES
@@ -301,6 +301,14 @@ def main() -> None:
     print("Page decisions:")
     for (decision, reason), count in sorted(Counter((i.decision, i.reason) for i in inspections).items()):
         print(f"  {decision:<10} {reason:<38} {count}")
+    print("\nExtraction methods (pages):")
+    for method, count in sorted(Counter(i.extraction for i in inspections).items()):
+        print(f"  {method:<20} {count}")
+    print("\nDomain/reason counts (no result URLs or snippets):")
+    for (host, reason), count in sorted(Counter(
+            (urlsplit(i.url).hostname, i.reason) for i in inspections).items()):
+        print(f"  {host:<38} {reason:<38} {count}")
+    print(f"Detail links available: {len({link for i in inspections for link in i.links})}")
     previous = json.loads(Path("data/events.json").read_text(encoding="utf-8"))
     counts = summarise_events(inspections, previous.get("events", []) + previous.get("past_events", []))
     print("\nVerified event records (not published):")

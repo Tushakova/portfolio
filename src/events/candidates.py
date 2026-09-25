@@ -10,15 +10,17 @@ import re
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
-from datetime import datetime, timezone
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from datetime import datetime, timezone, timedelta
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit, urljoin
 from zoneinfo import ZoneInfo
 
 from bs4 import BeautifulSoup
 
 from src.events.http import fetch_html
+from src.events.discovery_html import extract_microdata_events, detail_links
 from src.events.models import Event
 from src.events.structured_data import extract_schema_events
+from src.events.sources.standalone import EVENT_PAGES, EventParseError
 from src.events.sources.meetup import TECHNICAL_TITLE, discovered_topics
 from src.events.topics import CAREERS, CAREER_FAIRS, is_career_event, is_career_fair
 from src.events.validation import validate_event
@@ -78,6 +80,8 @@ class CandidateInspection:
     decision: str = "review"
     reason: str = "unverified"
     events: tuple[Event, ...] = ()
+    links: tuple[str, ...] = ()
+    extraction: str = "none"
 
     @property
     def plausible(self) -> bool:
@@ -111,9 +115,12 @@ def verify_event(item: dict, page_url: str, now: datetime) -> tuple[Event | None
         if start.tzinfo is None:
             return None, "review", "missing_timezone"
         raw_end = item.get("endDate")
-        if raw_end and re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(raw_end)):
-            return None, "review", "date_only_end_needs_review"
+        end_is_date = bool(raw_end and re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(raw_end)))
         end = datetime.fromisoformat(raw_end.replace("Z", "+00:00")) if raw_end else None
+        if end_is_date:
+            # Inclusive calendar date; internal boundary only, never a claimed closing time.
+            end = (end + timedelta(days=1)).replace(tzinfo=LONDON) - timedelta(microseconds=1)
+            all_day = True
         if end and (end.tzinfo is None or end <= start):
             return None, "review", "invalid_end_date"
     except (ValueError, TypeError, AttributeError):
@@ -152,6 +159,8 @@ def verify_event(item: dict, page_url: str, now: datetime) -> tuple[Event | None
         return None, "review", "unconfirmed_location_or_format"
 
     url = item.get("url") or page_url
+    if isinstance(url, str):
+        url = urljoin(page_url, url)
     if not isinstance(url, str) or not public_url(url):
         return None, "review", "invalid_event_url"
     organiser = item.get("organizer", {})
@@ -194,11 +203,29 @@ def inspect_candidate(url: str, now: datetime | None = None) -> CandidateInspect
         return CandidateInspection(url, decision="review", reason=reason)
     text = clean_html_text(html)
     structured = extract_schema_events(html)
+    extraction = "json_ld" if structured else "microdata"
+    if not structured:
+        structured = extract_microdata_events(html)
     facts = dict(url=url, fetched=True, event_path=has_event_path(url),
+                 links=detail_links(html, url), extraction=extraction if structured else "none",
                  topic_evidence=bool(TECHNICAL_TITLE.search(text)),
                  london_evidence=bool(re.search(r"\bLondon\b", text, re.I)),
                  date_evidence=any(item.get("startDate") for item in structured))
     if not structured:
+        for page in EVENT_PAGES:
+            if canonical_url(url) != canonical_url(page.url):
+                continue
+            try:
+                event = page.parser(html, url)
+                validate_event(event)
+            except (EventParseError, ValueError):
+                return CandidateInspection(**facts, decision="review", reason="known_parser_changed")
+            start = datetime.fromisoformat(event.start_at)
+            end = datetime.fromisoformat(event.end_at) if event.end_at else None
+            if (end and end <= now) or (not end and start.astimezone(LONDON).date() < now.astimezone(LONDON).date()):
+                return CandidateInspection(**facts, decision="rejected", reason="past_event")
+            facts["extraction"] = "organiser_html"
+            return CandidateInspection(**facts, decision="accepted", reason="verified_organiser_html", events=(event,))
         # An independent organiser without JSON-LD remains in review, not rejected.
         return CandidateInspection(**facts, decision="review", reason="no_structured_event")
     results = [verify_event(item, url, now) for item in structured[:MAX_EVENTS_PER_PAGE]]
@@ -211,6 +238,8 @@ def inspect_candidate(url: str, now: datetime | None = None) -> CandidateInspect
 
 def select_candidates(urls: set[str], limit: int = MAX_PAGES) -> list[str]:
     """Deduplicate tracking URLs, then fairly spread a fixed budget across domains."""
+    if limit <= 0:
+        return []
     domains: dict[str, list[str]] = defaultdict(list)
     seen: set[str] = set()
     for url in sorted(urls):
@@ -222,10 +251,10 @@ def select_candidates(urls: set[str], limit: int = MAX_PAGES) -> list[str]:
         seen.add(key)
         domains[urlsplit(key).hostname].append(url)
     for group in domains.values():
-        group.sort(key=lambda url: (not has_event_path(url), url))
+        group.sort(key=lambda url: (-candidate_priority(url), url))
     selected = []
     while domains and len(selected) < limit:
-        for domain in sorted(list(domains)):
+        for domain in sorted(list(domains), key=lambda d: (-candidate_priority(domains[d][0]), d)):
             selected.append(domains[domain].pop(0))
             if not domains[domain]:
                 del domains[domain]
@@ -234,10 +263,29 @@ def select_candidates(urls: set[str], limit: int = MAX_PAGES) -> list[str]:
     return selected
 
 
+def candidate_priority(url: str) -> int:
+    """Prefer detail pages over calendars, articles, courses and search pages."""
+    path = urlsplit(url).path.lower()
+    score = 4 if re.search(r"/(?:events?|e|talks?|conferences?|workshops?)/[^/]+", path) else 0
+    score += 2 if re.search(r"data|analytics|statistic|experiment|career", path) else 0
+    score -= 5 if re.search(r"/(?:blog|news|courses?|training|jobs|archive|past|search)(?:/|$)", path) else 0
+    return score
+
+
 def inspect_candidates(urls: set[str]) -> list[CandidateInspection]:
-    selected = select_candidates(urls)
+    # Reserve a quarter of the unchanged page budget for detail links. If there
+    # are none, spend that budget on remaining search results instead.
+    selected = select_candidates(urls, limit=36)
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
-        return list(pool.map(inspect_candidate, selected))
+        first = list(pool.map(inspect_candidate, selected))
+        seen = {canonical_url(url) for url in selected}
+        links = {url for result in first if not result.events for url in result.links
+                 if public_url(url) and canonical_url(url) not in seen}
+        second_urls = select_candidates(links, limit=MAX_PAGES - len(first))
+        seen.update(canonical_url(url) for url in second_urls)
+        remaining = {url for url in urls if public_url(url) and canonical_url(url) not in seen}
+        second_urls += select_candidates(remaining, limit=MAX_PAGES - len(first) - len(second_urls))
+        return first + list(pool.map(inspect_candidate, second_urls))
 
 
 def summarise_events(inspections: list[CandidateInspection], known: list[dict]) -> dict[str, int]:
