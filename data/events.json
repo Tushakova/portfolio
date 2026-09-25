@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-25T11:03:49.259167+00:00",
+  "generated_at": "2026-09-25T11:35:17.311142+00:00",
   "event_count": 15,
   "events": [
     {
@@ -377,6 +377,12 @@
       "at": "2026-09-25T11:03:49.259167+00:00",
       "event_id": "london-job-show-2026-16-october",
       "title": "London Job Show (general careers fair, including data roles)",
+      "action": "added"
+    },
+    {
+      "at": "2026-09-25T11:35:17.311142+00:00",
+      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
+      "title": "Beyond the Hype: Synthetic Data in Practice",
       "action": "added"
     }
   ]
