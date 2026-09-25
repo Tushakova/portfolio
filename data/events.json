@@ -1,28 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-25T10:22:32.566749+00:00",
+  "generated_at": "2026-09-25T11:03:49.259167+00:00",
   "event_count": 15,
   "events": [
-    {
-      "id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "start_at": "2026-09-24T14:00:00+01:00",
-      "format": "in_person",
-      "organiser": "Royal Statistical Society",
-      "source": "Royal Statistical Society",
-      "source_url": "https://rss.org.uk/training-events/events/events-2026/other-events-(non-rss)/beyond-the-hype-synthetic-data-in-practice/",
-      "end_at": null,
-      "venue_name": "MRS London",
-      "address": "MRS London",
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Analytics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "measurecamp-london-19-2026",
       "title": "MeasureCamp London 19",
@@ -202,6 +182,27 @@
       "time_tbc": false
     },
     {
+      "id": "london-job-show-2026-16-october",
+      "title": "London Job Show (general careers fair, including data roles)",
+      "start_at": "2026-10-16T11:00:00+01:00",
+      "format": "in_person",
+      "organiser": "London Job Show",
+      "source": "London Job Show",
+      "source_url": "https://www.londonjobshow.co.uk/shepherdsbush/want-to-visit/",
+      "end_at": "2026-10-17T17:00:00+01:00",
+      "venue_name": "Westfield London, Shepherd's Bush",
+      "address": null,
+      "is_free": true,
+      "price_from_gbp": 0.0,
+      "registration_status": "open",
+      "topics": [
+        "Data Careers",
+        "Career Fairs"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
       "id": "meetup-316511066",
       "title": "dbt Global Circuit: London",
       "start_at": "2026-10-21T18:00:00+01:00",
@@ -307,6 +308,26 @@
   ],
   "past_events": [
     {
+      "id": "rss-beyond-the-hype-synthetic-data-in-practice",
+      "title": "Beyond the Hype: Synthetic Data in Practice",
+      "start_at": "2026-09-24T14:00:00+01:00",
+      "format": "in_person",
+      "organiser": "Royal Statistical Society",
+      "source": "Royal Statistical Society",
+      "source_url": "https://rss.org.uk/training-events/events/events-2026/other-events-(non-rss)/beyond-the-hype-synthetic-data-in-practice/",
+      "end_at": null,
+      "venue_name": "MRS London",
+      "address": "MRS London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
       "id": "big-data-ldn-2026",
       "title": "Big Data LDN 2026",
       "start_at": "2026-09-23T09:00:00+01:00",
@@ -351,5 +372,12 @@
       "time_tbc": true
     }
   ],
-  "changes": []
+  "changes": [
+    {
+      "at": "2026-09-25T11:03:49.259167+00:00",
+      "event_id": "london-job-show-2026-16-october",
+      "title": "London Job Show (general careers fair, including data roles)",
+      "action": "added"
+    }
+  ]
 }
