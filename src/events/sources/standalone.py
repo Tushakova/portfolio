@@ -72,6 +72,12 @@ def parse_measurecamp(html: str, source_url: str) -> Event:
 
     text = page_text(html)
 
+    edition_match = require_match(
+        r"\bMeasureCamp London\s+(\d+)\s+is happening\b",
+        text,
+        "MeasureCamp London edition",
+    )
+
     date_match = require_match(
         r"Saturday\s+(\d{1,2}\s+[A-Za-z]{3},?\s+\d{4})",
         text,
@@ -119,8 +125,8 @@ def parse_measurecamp(html: str, source_url: str) -> Event:
     )
 
     return Event(
-        id="measurecamp-london-19-2026",
-        title="MeasureCamp London 19",
+        id=f"measurecamp-london-{edition_match.group(1)}-{datetime.fromisoformat(start_at).year}",
+        title=f"MeasureCamp London {edition_match.group(1)}",
         start_at=start_at,
         end_at=None,
         format="in_person",

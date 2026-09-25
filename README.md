@@ -2,6 +2,8 @@
 
 The public event finder lives at [tushakova.co.uk/events](https://tushakova.co.uk/events/). It uses only organisers' publicly published event information. It does not collect attendee or member details.
 
+**New to the project?** Read [How London Data Radar works](docs/HOW_IT_WORKS.md) for a plain-English walkthrough of collection, filtering, refreshes, archives, failure handling and limitations.
+
 ## Data sources
 
 - Royal Statistical Society London events

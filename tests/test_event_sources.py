@@ -11,7 +11,7 @@ from src.events.sources.dsf import discover_career_urls, parse_career_day
 from src.events.sources.meetup import GROUPS, parse_event
 from src.events.sources import rss
 from src.events.sources.rss import infer_topics, parse_event_page
-from src.events.sources.standalone import parse_big_data_ldn
+from src.events.sources.standalone import parse_big_data_ldn, parse_measurecamp, EventParseError
 from src.events.topics import CAREERS
 from src.events.build import build_dataset
 from src.events.sources.career_fairs import parse_london_job_show
@@ -19,6 +19,17 @@ from src.events.topics import CAREER_FAIRS, is_career_fair
 
 
 class EventSourceTests(unittest.TestCase):
+    def test_measurecamp_edition_tracks_organiser_and_fails_if_missing(self):
+        html = """MeasureCamp London 20 is happening 18th September 2027.
+        Saturday 18 Sep, 2027 Starting at 8.30am doors open
+        Etc Venues Fenchurch Street 8 Fenchurch Pl, London EC3M 4PB"""
+        event = parse_measurecamp(html, "https://london.measurecamp.org/registration/")
+        self.assertEqual(event.id, "measurecamp-london-20-2027")
+        self.assertEqual(event.title, "MeasureCamp London 20")
+        with self.assertRaises(EventParseError):
+            parse_measurecamp(html.replace("London 20 is happening", "London is happening"),
+                              "https://london.measurecamp.org/registration/")
+
     def test_career_fair_requires_data_roles_and_real_dates(self):
         page = "16th & 17th October 2026 Westfield London, Ariel Way 11am – 5pm on both days Free entry Register free"
         fair = parse_london_job_show(page, "Hiring Data Management Professionals")
