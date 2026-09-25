@@ -16,7 +16,7 @@ Search on the site filters the published event dataset; it does not search Googl
 
 ## Refresh and deployment
 
-`.github/workflows/refresh-events.yml` runs once a day at 07:17 UTC and can also be started manually from GitHub Actions. It validates events and commits `data/events.json` only when event facts change. If a source fails, it keeps the previously published dataset and marks the workflow failed so incomplete data are not silently published.
+`.github/workflows/refresh-events.yml` runs daily at 06:17 Europe/London (including summer/winter clock changes), on changes to ingestion code or this workflow on main, and can also be started manually from GitHub Actions. Scheduled runs may be delayed by GitHub; Codespaces does not need to be running. It validates events and commits `data/events.json` only when event facts change. Missing Big Data LDN ticket prices remain unknown and do not block refreshes. If a source fails, it keeps the previously published dataset and marks the workflow failed so incomplete data are not silently published.
 
 An isolated RSS event detail page can be temporarily unavailable even while the calendar works. In that case the refresh logs a warning, preserves that event's last verified details if already published, and continues with the other pages. If the entire RSS calendar or every detail page fails, the refresh still fails rather than silently clearing the source.
 

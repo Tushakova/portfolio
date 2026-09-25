@@ -27,6 +27,20 @@ class EventSourceTests(unittest.TestCase):
         self.assertEqual(event.start_at, "2027-09-22T09:00:00+01:00")
         self.assertEqual(event.end_at, "2027-09-23T17:30:00+01:00")
         self.assertEqual(event.id, "big-data-ldn-2027")
+        self.assertEqual(event.price_from_gbp, 49.0)
+        self.assertFalse(event.is_free)
+
+    def test_big_data_missing_price_is_unknown_not_a_source_failure(self):
+        html = """
+        23-24 September 2026 Olympia London
+        Hammersmith Road London W14 8UX
+        Opening hours Wednesday 09:00 - 18:00 Thursday 09:00 - 17:30
+        """
+        event = parse_big_data_ldn(html, "https://www.bigdataldn.com/")
+        self.assertEqual(event.start_at, "2026-09-23T09:00:00+01:00")
+        self.assertEqual(event.end_at, "2026-09-24T17:30:00+01:00")
+        self.assertIsNone(event.price_from_gbp)
+        self.assertIsNone(event.is_free)
 
     def test_meetup_only_accepts_future_scheduled_london_events(self):
         event_data = {

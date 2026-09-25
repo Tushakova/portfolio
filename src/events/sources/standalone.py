@@ -153,10 +153,12 @@ def parse_big_data_ldn(html: str, source_url: str) -> Event:
         "Big Data LDN venue",
     )
 
-    price_match = require_match(
+    # Ticket pricing may disappear after the event or before sales open.
+    # Unknown price is valid; do not block all other sources or assume free entry.
+    price_match = re.search(
         r"BDL Visitor Pass.*?£\s*(\d+(?:\.\d+)?)",
         text,
-        "Big Data LDN visitor price",
+        re.IGNORECASE,
     )
 
     address_match = require_match(
@@ -193,7 +195,7 @@ def parse_big_data_ldn(html: str, source_url: str) -> Event:
         "%d %B %Y %H:%M",
     )
 
-    price = float(price_match.group(1))
+    price = float(price_match.group(1)) if price_match else None
 
     return Event(
         id=f"big-data-ldn-{year}",
@@ -206,7 +208,7 @@ def parse_big_data_ldn(html: str, source_url: str) -> Event:
         source_url=source_url,
         venue_name="Olympia London",
         address=address_match.group(1),
-        is_free=False,
+        is_free=(price == 0) if price is not None else None,
         price_from_gbp=price,
         registration_status="open" if "register now" in text.casefold() else "unknown",
         topics=(
