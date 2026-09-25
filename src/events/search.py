@@ -1,8 +1,5 @@
 """Web discovery for London Data Radar using Brave Search API."""
 
-from src.events.candidates import (
-    inspect_candidates,
-)
 from __future__ import annotations
 
 import json
@@ -12,14 +9,11 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
+from src.events.candidates import inspect_candidates
 from src.events.discovery import (
-
     SEARCH_QUERIES,
-
     domain_diagnostics,
-
     evaluate_targets,
-
 )
 
 
@@ -31,10 +25,9 @@ API_URL = (
 RESULTS_PER_QUERY = 20
 REQUEST_TIMEOUT_SECONDS = 20
 
-# Operational guardrail.
-# The scheduled version will run at most once per day,
-# so 10 queries/day is roughly 300-310 requests/month.
+# 12 generic discovery queries per run.
 MAX_QUERIES_PER_RUN = 12
+
 
 DIAGNOSTIC_QUERIES = (
     (
@@ -50,6 +43,7 @@ DIAGNOSTIC_QUERIES = (
         '"MeasureCamp London" 2026',
     ),
 )
+
 
 class SearchError(RuntimeError):
     """Raised when web discovery cannot complete safely."""
@@ -84,8 +78,7 @@ def search_web(
     """
     Run one Brave web search.
 
-    Search results remain transient: they are used only during
-    this process and are never written to disk.
+    Search results remain transient and are never written to disk.
     """
     parameters = urlencode(
         {
@@ -151,9 +144,10 @@ def discover() -> tuple[
     SearchSummary,
 ]:
     """
-    Run discovery without persisting Brave search results.
+    Run generic discovery queries.
 
-    Only aggregate counts and evaluation outcomes are logged.
+    Brave result data remains in memory. Only aggregate
+    diagnostics are logged.
     """
     api_key = get_api_key()
 
@@ -194,15 +188,16 @@ def discover() -> tuple[
 
     return discovered_urls, summary
 
+
 def run_target_diagnostics(
     api_key: str,
 ) -> list[tuple[str, bool]]:
     """
-    Test whether Brave can retrieve each known target when searched
-    for directly.
+    Check whether Brave can retrieve known evaluation targets
+    when they are searched for directly.
 
-    These queries evaluate the search provider only. They are not
-    part of production discovery.
+    These searches diagnose provider coverage only. They are not
+    part of production event discovery.
     """
     results: list[tuple[str, bool]] = []
 
@@ -255,7 +250,9 @@ def run_target_diagnostics(
 
     return results
 
+
 def main() -> None:
+    """Run discovery and print aggregate diagnostics."""
     discovered_urls, summary = discover()
 
     print("\nDiscovery summary")
@@ -282,11 +279,7 @@ def main() -> None:
             f"{domain:<18} {count}"
         )
 
-    evaluation = evaluate_targets(
-        discovered_urls
-    )
-
-        print("\nCandidate inspection")
+    print("\nCandidate inspection")
     print("--------------------")
 
     inspections = inspect_candidates(
@@ -343,6 +336,10 @@ def main() -> None:
     )
     print(
         f"Plausible pages:  {plausible}"
+    )
+
+    evaluation = evaluate_targets(
+        discovered_urls
     )
 
     print("\nGeneric discovery targets")
