@@ -1,0 +1,20 @@
+{
+  "description": "Known relevant events used only to evaluate discovery coverage.",
+  "targets": [
+    {
+      "name": "London Analytics Engineering Meetup #26",
+      "url": "https://www.meetup.com/london-analytics-engineering-meetup/events/316454710/",
+      "reason": "Highly relevant analytics engineering community event"
+    },
+    {
+      "name": "Big Data LDN 2026",
+      "url": "https://www.bigdataldn.com/",
+      "reason": "Major standalone London data and analytics conference"
+    },
+    {
+      "name": "MeasureCamp London 19",
+      "url": "https://london.measurecamp.org/registration/",
+      "reason": "Free specialist analytics community event"
+    }
+  ]
+}
