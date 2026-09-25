@@ -31,7 +31,7 @@ REQUEST_TIMEOUT_SECONDS = 20
 # Operational guardrail.
 # The scheduled version will run at most once per day,
 # so 10 queries/day is roughly 300-310 requests/month.
-MAX_QUERIES_PER_RUN = 10
+MAX_QUERIES_PER_RUN = 12
 
 DIAGNOSTIC_QUERIES = (
     (
