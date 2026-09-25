@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from html import unescape
 from urllib.parse import urlsplit
 
-from src.events.http import fetch_text
+from src.events.http import fetch_html
 
 
 EVENT_PATH_TERMS = (
@@ -153,7 +153,7 @@ def inspect_candidate(
 ) -> CandidateInspection:
     """Fetch and inspect one discovered candidate page."""
     try:
-        html = fetch_text(url)
+        html = fetch_html(url)
 
     except Exception:
         return CandidateInspection(
