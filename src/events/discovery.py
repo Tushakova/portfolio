@@ -8,19 +8,29 @@ from urllib.parse import urlsplit, urlunsplit
 
 
 SEARCH_QUERIES = (
-    '"data analytics" events London',
-    '"product analytics" meetup London',
-    '"analytics engineering" meetup London',
-    '"data science" meetup London',
-    '"data engineering" meetup London',
-    '"experimentation" product meetup London',
-    '"machine learning" meetup London',
-    '"statistics" events London',
-    '"data conference" London',
-    '"analytics conference" London',
+    "data analytics events London",
+    "product analytics events London",
+    "analytics engineering events London",
+    "data science events London",
+    "data engineering events London",
+    "experimentation analytics events London",
+    "machine learning events London",
+    "statistics events London",
+    "data conference London",
+    "analytics meetup London",
+    "career fair data analytics London",
+    "career fair data science London",
 )
 
 TARGETS_PATH = Path("data/discovery_targets.json")
+
+DIAGNOSTIC_DOMAINS = (
+    "meetup.com",
+    "lu.ma",
+    "luma.com",
+    "eventbrite.co.uk",
+    "eventbrite.com",
+)
 
 
 def normalise_url(url: str) -> str:
@@ -81,3 +91,54 @@ def evaluate_targets(
         )
 
     return results
+
+
+def hostname_for_url(url: str) -> str:
+    """Return a normalised hostname for aggregate diagnostics."""
+    hostname = (
+        urlsplit(url).hostname
+        or ""
+    ).casefold()
+
+    if hostname.startswith("www."):
+        hostname = hostname[4:]
+
+    return hostname
+
+
+def domain_diagnostics(
+    discovered_urls: set[str],
+) -> dict[str, int]:
+    """
+    Count selected event-platform domains.
+
+    Only aggregate counts are returned. Search result URLs are not
+    logged or persisted.
+    """
+    counts = {
+        domain: 0
+        for domain in DIAGNOSTIC_DOMAINS
+    }
+
+    counts["other"] = 0
+
+    for url in discovered_urls:
+        hostname = hostname_for_url(url)
+
+        matched = False
+
+        for domain in DIAGNOSTIC_DOMAINS:
+            if (
+                hostname == domain
+                or hostname.endswith(
+                    f".{domain}"
+                )
+            ):
+                counts[domain] += 1
+                matched = True
+                break
+
+        if not matched:
+            counts["other"] += 1
+
+    return counts
