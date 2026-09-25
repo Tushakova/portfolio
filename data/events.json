@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-25T15:04:15.966174+00:00",
+  "generated_at": "2026-09-25T15:19:59.674093+00:00",
   "event_count": 15,
   "events": [
     {
@@ -447,6 +447,12 @@
     },
     {
       "at": "2026-09-25T15:04:15.966174+00:00",
+      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
+      "title": "Beyond the Hype: Synthetic Data in Practice",
+      "action": "added"
+    },
+    {
+      "at": "2026-09-25T15:19:59.674093+00:00",
       "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
       "title": "Beyond the Hype: Synthetic Data in Practice",
       "action": "added"
