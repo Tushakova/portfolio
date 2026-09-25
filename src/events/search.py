@@ -286,6 +286,65 @@ def main() -> None:
         discovered_urls
     )
 
+        print("\nCandidate inspection")
+    print("--------------------")
+
+    inspections = inspect_candidates(
+        discovered_urls
+    )
+
+    fetched = sum(
+        item.fetched
+        for item in inspections
+    )
+
+    event_paths = sum(
+        item.event_path
+        for item in inspections
+    )
+
+    topic_matches = sum(
+        item.topic_evidence
+        for item in inspections
+    )
+
+    london_matches = sum(
+        item.london_evidence
+        for item in inspections
+    )
+
+    date_matches = sum(
+        item.date_evidence
+        for item in inspections
+    )
+
+    plausible = sum(
+        item.plausible
+        for item in inspections
+    )
+
+    print(
+        f"Discovered:       {len(inspections)}"
+    )
+    print(
+        f"Fetched:          {fetched}"
+    )
+    print(
+        f"Event-like path:  {event_paths}"
+    )
+    print(
+        f"Topic evidence:   {topic_matches}"
+    )
+    print(
+        f"London evidence:  {london_matches}"
+    )
+    print(
+        f"Date evidence:    {date_matches}"
+    )
+    print(
+        f"Plausible pages:  {plausible}"
+    )
+
     print("\nGeneric discovery targets")
     print("-------------------------")
 
