@@ -2,10 +2,16 @@ name: Test event discovery
 
 on:
   workflow_dispatch:
+    inputs:
+      diagnostics:
+        description: "Run 3 additional API queries for target diagnostics"
+        type: boolean
+        default: false
 
 jobs:
   test-discovery:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Check out repository
@@ -16,7 +22,19 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Test filtering
+        run: python -m unittest discover -s tests
+
       - name: Run event discovery
         env:
           BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
-        run: python -m src.events.search
+          RUN_DIAGNOSTICS: ${{ inputs.diagnostics }}
+        run: |
+          if [ "$RUN_DIAGNOSTICS" = "true" ]; then
+            python -u -m src.events.search --diagnostics
+          else
+            python -u -m src.events.search
+          fi

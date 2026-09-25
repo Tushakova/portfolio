@@ -2,6 +2,8 @@
 
 The public event finder lives at [tushakova.co.uk/events](https://tushakova.co.uk/events/). It uses only organisers' publicly published event information. It does not collect attendee or member details.
 
+**Web-search prototype:** Brave Search now finds independent candidate sites and checks structured event facts in a separate manual workflow. It does not publish them yet. See [Web discovery and verification](docs/DISCOVERY.md) for the limits, decisions and next steps.
+
 **New to the project?** Read [How London Data Radar works](docs/HOW_IT_WORKS.md) for a plain-English walkthrough of collection, filtering, refreshes, archives, failure handling and limitations.
 
 ## Data sources

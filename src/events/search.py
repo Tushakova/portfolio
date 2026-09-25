@@ -2,14 +2,18 @@
 
 from __future__ import annotations
 
+import argparse
 import json
+import time
+from collections import Counter
+from pathlib import Path
 import os
 from dataclasses import dataclass
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from src.events.candidates import inspect_candidates
+from src.events.candidates import inspect_candidates, summarise_events, MAX_PAGES
 from src.events.discovery import (
     SEARCH_QUERIES,
     domain_diagnostics,
@@ -35,12 +39,12 @@ DIAGNOSTIC_QUERIES = (
         '"London Analytics Engineering Meetup" London',
     ),
     (
-        "Big Data LDN 2026",
-        '"Big Data LDN" 2026',
+        "Big Data LDN",
+        '"Big Data LDN" London',
     ),
     (
-        "MeasureCamp London 19",
-        '"MeasureCamp London" 2026',
+        "MeasureCamp London",
+        '"MeasureCamp London"',
     ),
 )
 
@@ -162,6 +166,8 @@ def discover() -> tuple[
         queries,
         start=1,
     ):
+        if index > 1:
+            time.sleep(1.1)
         results = search_web(
             query,
             api_key,
@@ -202,6 +208,7 @@ def run_target_diagnostics(
     results: list[tuple[str, bool]] = []
 
     for target_name, query in DIAGNOSTIC_QUERIES:
+        time.sleep(1.1)
         search_results = search_web(
             query,
             api_key,
@@ -253,6 +260,9 @@ def run_target_diagnostics(
 
 def main() -> None:
     """Run discovery and print aggregate diagnostics."""
+    parser = argparse.ArgumentParser(description="Bounded event discovery; no publication or saved search results.")
+    parser.add_argument("--diagnostics", action="store_true", help="Use three extra API queries on known-target diagnostics")
+    args = parser.parse_args()
     discovered_urls, summary = discover()
 
     print("\nDiscovery summary")
@@ -286,63 +296,24 @@ def main() -> None:
         discovered_urls
     )
 
-    fetched = sum(
-        item.fetched
-        for item in inspections
-    )
-
-    event_paths = sum(
-        item.event_path
-        for item in inspections
-    )
-
-    topic_matches = sum(
-        item.topic_evidence
-        for item in inspections
-    )
-
-    london_matches = sum(
-        item.london_evidence
-        for item in inspections
-    )
-
-    date_matches = sum(
-        item.date_evidence
-        for item in inspections
-    )
-
-    plausible = sum(
-        item.plausible
-        for item in inspections
-    )
-
-    print(
-        f"Discovered:       {len(inspections)}"
-    )
-    print(
-        f"Fetched:          {fetched}"
-    )
-    print(
-        f"Event-like path:  {event_paths}"
-    )
-    print(
-        f"Topic evidence:   {topic_matches}"
-    )
-    print(
-        f"London evidence:  {london_matches}"
-    )
-    print(
-        f"Date evidence:    {date_matches}"
-    )
-    print(
-        f"Plausible pages:  {plausible}"
-    )
+    print(f"URL candidates:   {len(discovered_urls)}")
+    print(f"Pages inspected:  {len(inspections)} (cap {MAX_PAGES})")
+    print("Page decisions:")
+    for (decision, reason), count in sorted(Counter((i.decision, i.reason) for i in inspections).items()):
+        print(f"  {decision:<10} {reason:<38} {count}")
+    previous = json.loads(Path("data/events.json").read_text(encoding="utf-8"))
+    counts = summarise_events(inspections, previous.get("events", []) + previous.get("past_events", []))
+    print("\nVerified event records (not published):")
+    for label, count in counts.items():
+        print(f"  {label:<28} {count}")
+    print("Only pages within the budget were assessed. Review is not acceptance.")
+    print("Search results and extracted candidates were not saved or added to the website.")
 
     evaluation = evaluate_targets(
         discovered_urls
     )
 
-    print("\nGeneric discovery targets")
+    print("\nKnown-page URL coverage (not event acceptance)")
     print("-------------------------")
 
     found_count = 0
@@ -362,9 +333,13 @@ def main() -> None:
             found_count += 1
 
     print(
-        f"\nGeneric target recall: "
+        f"\nKnown-page URL matches: "
         f"{found_count}/{len(evaluation)}"
     )
+
+    if not args.diagnostics:
+        print("\nDirect diagnostics skipped (use --diagnostics for 3 extra API queries).")
+        return
 
     print("\nDirect-search diagnostics")
     print("-------------------------")

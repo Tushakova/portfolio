@@ -18,7 +18,9 @@ The separate Past events view contains events the product has previously recorde
 | Data Science Festival | Discover Career Day pages from its public site and verify their dates and London venue. | Other events on its site are not automatically added by this connector. |
 | London Job Show | Check the visitor page for dates, hours and free registration, and its IT recruitment page for an explicit reference to data roles. | This is a **general** careers fair. We do not imply that every exhibitor has a data job. |
 
-A new independent event site will not appear just because Google indexes it. The “Search the wider web” link opens a separate Google search for the visitor; it does not import results into the radar. A new standalone organiser requires a specific source parser and validation. The site has an email link for suggesting one. University-only fairs are excluded unless eligibility for the wider public is confirmed.
+A separate [Brave web-search prototype](DISCOVERY.md) now discovers independent sites and verifies structured event facts. It runs manually, logs aggregate diagnostics and does not publish events yet.
+
+A new independent event site will not appear on the public radar just because Google indexes it. The “Search the wider web” link opens a separate Google search for the visitor; it does not import results into the radar. A new standalone organiser requires a specific source parser and validation. The site has an email link for suggesting one. University-only fairs are excluded unless eligibility for the wider public is confirmed.
 
 ## How an event becomes a card
 
@@ -62,7 +64,7 @@ The third command fetches live public pages and may change the JSON files. Revie
 
 ## Current limits and next decisions
 
-- Coverage is deliberately selective. Google-wide crawling, Eventbrite-wide search and guaranteed discovery of every standalone event are **not implemented**. Broader discovery would need a dependable public feed/API or maintained organiser connectors, plus relevance and eligibility checks.
+- Coverage is deliberately selective. Google-wide crawling, Eventbrite-wide search and guaranteed discovery of every standalone event are **not implemented**. The Brave prototype provides bounded web discovery and verification, but integration with daily publication and a review process remain future work.
 - Parsers depend on organisers' public pages. Changed markup, blocked requests and temporary source outages can interrupt a scheduled refresh; the last verified dataset is retained.
 - The on-page status is the **last successful check**, not a live indicator of an Actions job in progress or a guarantee that every event link still accepts bookings.
 - Hosting/deployment account settings are outside this repository. The public domain currently serves the repository's event files, but a future hosting change must keep `/events/`, `/data/events.json` and `/data/refresh-status.json` accessible together.
