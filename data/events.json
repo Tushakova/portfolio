@@ -1,28 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-26T09:52:06.294134+00:00",
-  "event_count": 15,
+  "generated_at": "2026-09-27T10:33:45.265476+00:00",
+  "event_count": 14,
   "events": [
-    {
-      "id": "measurecamp-london-19-2026",
-      "title": "MeasureCamp London 19",
-      "start_at": "2026-09-26T08:30:00+01:00",
-      "format": "in_person",
-      "organiser": "MeasureCamp London",
-      "source": "MeasureCamp London",
-      "source_url": "https://london.measurecamp.org/registration/",
-      "end_at": null,
-      "venue_name": "Etc Venues Fenchurch Street",
-      "address": "8 Fenchurch Pl, London EC3M 4PB",
-      "is_free": true,
-      "price_from_gbp": 0.0,
-      "registration_status": "waitlist",
-      "topics": [
-        "Data Analytics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "meetup-316572897",
       "title": "The Friendly Data Meetup September 2026",
@@ -308,6 +288,26 @@
   ],
   "past_events": [
     {
+      "id": "measurecamp-london-19-2026",
+      "title": "MeasureCamp London 19",
+      "start_at": "2026-09-26T08:30:00+01:00",
+      "format": "in_person",
+      "organiser": "MeasureCamp London",
+      "source": "MeasureCamp London",
+      "source_url": "https://london.measurecamp.org/registration/",
+      "end_at": null,
+      "venue_name": "Etc Venues Fenchurch Street",
+      "address": "8 Fenchurch Pl, London EC3M 4PB",
+      "is_free": true,
+      "price_from_gbp": 0.0,
+      "registration_status": "waitlist",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
       "id": "rss-beyond-the-hype-synthetic-data-in-practice",
       "title": "Beyond the Hype: Synthetic Data in Practice",
       "start_at": "2026-09-24T14:00:00+01:00",
@@ -459,6 +459,12 @@
     },
     {
       "at": "2026-09-26T09:52:06.294134+00:00",
+      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
+      "title": "Beyond the Hype: Synthetic Data in Practice",
+      "action": "added"
+    },
+    {
+      "at": "2026-09-27T10:33:45.265476+00:00",
       "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
       "title": "Beyond the Hype: Synthetic Data in Practice",
       "action": "added"
