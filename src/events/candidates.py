@@ -307,7 +307,7 @@ def select_discovery_roots(urls: set[str], limit: int = 36) -> list[str]:
     """
     if limit <= 0:
         return []
-    quotas = (("platform", 12), ("organiser", 10), ("independent_unconfirmed", 12), ("catalogue", 2))
+    quotas = (("platform", 8), ("organiser", 7), ("independent_unconfirmed", 8), ("catalogue", 1)) if limit <= 24 else (("platform", 12), ("organiser", 10), ("independent_unconfirmed", 12), ("catalogue", 2))
     groups = {kind: {u for u in urls if public_url(u) and source_kind(u) == kind} for kind, _ in quotas}
     selected = []
     for kind, quota in quotas:
@@ -321,23 +321,36 @@ def select_discovery_roots(urls: set[str], limit: int = 36) -> list[str]:
     return selected
 
 
-def inspect_candidates(urls: set[str]) -> list[CandidateInspection]:
-    # Reserve a quarter of the unchanged page budget for detail links. If there
+def known_detail_urls(known: list[dict]) -> set[str]:
+    """Skip immutable event pages, never reusable annual homepages or calendars."""
+    result = set()
+    for item in known:
+        url = item.get("source_url", "")
+        path = urlsplit(url).path
+        if source_kind(url) == "platform" and re.search(r"/events/[0-9]{6,}(?:/|$)|/e/[^/]+-[0-9]{6,}(?:/|$)", path):
+            result.add(canonical_url(url))
+    return result
+
+
+def inspect_candidates(urls: set[str], known: list[dict] | None = None) -> list[CandidateInspection]:
+    # Reserve half of the unchanged page budget for detail links. If there
     # are none, spend that budget on remaining search results instead.
-    selected = select_discovery_roots(urls, limit=36)
+    skip = known_detail_urls(known or [])
+    urls = {url for url in urls if canonical_url(url) not in skip}
+    selected = select_discovery_roots(urls, limit=24)
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
         first = list(pool.map(inspect_candidate, selected))
-        seen = {canonical_url(url) for url in selected}
-        links = {url for result in first if result.decision != "accepted" for url in result.links
+        seen = {canonical_url(url) for url in selected} | skip
+        links = {url for result in first for url in result.links
                  if public_url(url) and canonical_url(url) not in seen and source_kind(url) != "catalogue"}
-        second_urls = select_candidates(links, limit=MAX_PAGES - len(first))
+        second_urls = select_discovery_roots(links, limit=MAX_PAGES - len(first))
         seen.update(canonical_url(url) for url in second_urls)
         remaining = {url for url in urls if public_url(url) and canonical_url(url) not in seen and source_kind(url) != "catalogue"}
         second_urls += select_discovery_roots(remaining, limit=MAX_PAGES - len(first) - len(second_urls))
         return first + list(pool.map(inspect_candidate, second_urls))
 
 
-def summarise_events(inspections: list[CandidateInspection], known: list[dict]) -> dict[str, int]:
+def summarise_events(inspections: list[CandidateInspection], known: list[dict], new_events: list[Event] | None = None) -> dict[str, int]:
     """Separate verified records from unique new events and already published events."""
     def keys(item):
         day = datetime.fromisoformat(item["start_at"]).astimezone(LONDON).date().isoformat()
@@ -365,5 +378,7 @@ def summarise_events(inspections: list[CandidateInspection], known: list[dict]) 
                 counts["already_published"] += 1
             else:
                 counts["new_source_supported_events"] += 1
+                if new_events is not None:
+                    new_events.append(event)
             seen.update(event_keys)
     return counts

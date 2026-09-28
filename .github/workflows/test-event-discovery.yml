@@ -34,7 +34,7 @@ jobs:
           RUN_DIAGNOSTICS: ${{ inputs.diagnostics }}
         run: |
           if [ "$RUN_DIAGNOSTICS" = "true" ]; then
-            python -u -m src.events.search --diagnostics
+            python -u -m src.events.search --diagnostics --show-events
           else
-            python -u -m src.events.search
+            python -u -m src.events.search --show-events
           fi

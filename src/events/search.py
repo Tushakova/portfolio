@@ -14,7 +14,7 @@ from urllib.parse import urlencode, urlsplit
 from urllib.request import Request, urlopen
 
 from src.events.source_policy import source_kind
-from src.events.candidates import inspect_candidates, summarise_events, MAX_PAGES
+from src.events.candidates import inspect_candidates, summarise_events, known_detail_urls, canonical_url, MAX_PAGES
 from src.events.discovery import (
     SEARCH_QUERIES,
     domain_diagnostics,
@@ -263,7 +263,10 @@ def main() -> None:
     """Run discovery and print aggregate diagnostics."""
     parser = argparse.ArgumentParser(description="Bounded event discovery; no publication or saved search results.")
     parser.add_argument("--diagnostics", action="store_true", help="Use three extra API queries on known-target diagnostics")
+    parser.add_argument("--show-events", action="store_true", help="Log source-page facts for new supported events; no search snippets or rejected URLs")
     args = parser.parse_args()
+    previous = json.loads(Path("data/events.json").read_text(encoding="utf-8"))
+    known = previous.get("events", []) + previous.get("past_events", [])
     discovered_urls, summary = discover()
 
     print("\nDiscovery summary")
@@ -294,9 +297,10 @@ def main() -> None:
     print("--------------------")
 
     inspections = inspect_candidates(
-        discovered_urls
+        discovered_urls, known=known
     )
 
+    print(f"Known event-detail URLs skipped before fetching: {len({canonical_url(u) for u in discovered_urls} & known_detail_urls(known))}")
     print(f"URL candidates:   {len(discovered_urls)}")
     print(f"Pages inspected:  {len(inspections)} (cap {MAX_PAGES})")
     print("Inspected source mix:")
@@ -313,13 +317,25 @@ def main() -> None:
             (urlsplit(i.url).hostname, i.reason) for i in inspections).items()):
         print(f"  {host:<38} {reason:<38} {count}")
     print(f"Detail-link candidates available (not all fetched): {len({link for i in inspections for link in i.links})}")
-    previous = json.loads(Path("data/events.json").read_text(encoding="utf-8"))
-    counts = summarise_events(inspections, previous.get("events", []) + previous.get("past_events", []))
+    new_events = []
+    counts = summarise_events(inspections, known, new_events)
     print("\nEvent facts and source evidence (not published):")
     for label, count in counts.items():
         print(f"  {label:<28} {count}")
+    print("Already published = known website/archive records, not new discoveries.")
+    print("Duplicate records = repeated copies within this run, not the known-event count.")
+    if args.show_events:
+        print("\nNew source-supported events for review (not published):")
+        for event in new_events:
+            # JSON escaping prevents page text injecting terminal/control lines.
+            print(json.dumps({"title": event.title, "start_at": event.start_at,
+                              "end_at": event.end_at, "format": event.format,
+                              "organiser": event.organiser, "source_url": event.source_url},
+                             ensure_ascii=True))
+        if not new_events:
+            print("None. No new verified events in the assessed sample.")
     print("Only pages within the budget were assessed. Review is not acceptance.")
-    print("Search results and extracted candidates were not saved or added to the website.")
+    print("Raw search results were not saved. No events were added to the website.")
 
     evaluation = evaluate_targets(
         discovered_urls

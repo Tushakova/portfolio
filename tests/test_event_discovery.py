@@ -264,3 +264,39 @@ class SourceQualityTests(unittest.TestCase):
         with patch('src.events.candidates.fetch_html', return_value=html):
             result = inspect_candidate('https://datasciencefestival.com/', NOW)
         self.assertEqual(result.links, ('https://datasciencefestival.com/event/career-day-2026/',))
+
+
+class ProductiveDiscoveryTests(unittest.TestCase):
+    def test_known_platform_detail_skipped_but_annual_homepage_refetched(self):
+        from src.events.candidates import inspect_candidates
+        known_url = "https://www.meetup.com/data/events/123456789/"
+        annual = "https://www.bigdataldn.com/"
+        with patch("src.events.candidates.fetch_html", return_value="<p>No events</p>") as fetch:
+            result = inspect_candidates({known_url + "?utm_source=test", annual},
+                                        known=[{"source_url": known_url}, {"source_url": annual}])
+        self.assertEqual([r.url for r in result], [annual])
+        self.assertEqual(fetch.call_count, 1)
+
+    def test_accepted_calendar_still_yields_new_detail_links(self):
+        from src.events.candidates import inspect_candidates
+        root = "https://www.meetup.com/data/events/"
+        child = root + "123456789/"
+        def inspect(url):
+            return CandidateInspection(url, decision="accepted", provenance="platform",
+                                       links=(child,) if url == root else ())
+        with patch("src.events.candidates.inspect_candidate", side_effect=inspect):
+            result = inspect_candidates({root})
+        self.assertEqual([r.url for r in result], [root, child])
+
+    def test_report_excludes_known_big_data_and_duplicates_keeps_next_edition(self):
+        from dataclasses import replace
+        event, _, _ = verify_event(fixture(), URL, NOW)
+        old = replace(event, title="Big Data LDN 2026", source_url="https://www.bigdataldn.com/",
+                      start_at="2026-09-23T09:00:00+01:00")
+        new = replace(old, title="Big Data LDN 2027", start_at="2027-09-22T09:00:00+01:00")
+        report = []
+        counts = summarise_events([CandidateInspection(URL, decision="accepted", provenance="organiser",
+                                                       events=(old, old, new, new))], [old.to_dict()], report)
+        self.assertEqual(counts["already_published"], 1)
+        self.assertEqual(counts["duplicate_records"], 2)
+        self.assertEqual(report, [new])
