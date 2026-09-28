@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-27T10:33:45.265476+00:00",
+  "generated_at": "2026-09-28T11:41:48.636338+00:00",
   "event_count": 14,
   "events": [
     {
@@ -465,6 +465,18 @@
     },
     {
       "at": "2026-09-27T10:33:45.265476+00:00",
+      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
+      "title": "Beyond the Hype: Synthetic Data in Practice",
+      "action": "added"
+    },
+    {
+      "at": "2026-09-28T11:41:48.636338+00:00",
+      "event_id": "measurecamp-london-19-2026",
+      "title": "MeasureCamp London 19",
+      "action": "added"
+    },
+    {
+      "at": "2026-09-28T11:41:48.636338+00:00",
       "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
       "title": "Beyond the Hype: Synthetic Data in Practice",
       "action": "added"
