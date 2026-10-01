@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-30T11:10:50.784367+00:00",
-  "event_count": 13,
+  "generated_at": "2026-10-01T11:37:21.264784+00:00",
+  "event_count": 14,
   "events": [
     {
       "id": "meetup-315974846",
@@ -138,6 +138,26 @@
       "topics": [
         "Data Careers",
         "Career Fairs"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-316567105",
+      "title": "GPU, CUDA, and PyTorch Performance Optimizations",
+      "start_at": "2026-10-19T17:00:00+01:00",
+      "format": "online",
+      "organiser": "AI Performance Engineering Meetup (London)",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/ai-performance-engineering-meetup-london/events/316567105/",
+      "end_at": null,
+      "venue_name": null,
+      "address": null,
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Science"
       ],
       "status": "scheduled",
       "time_tbc": false
@@ -554,6 +574,18 @@
       "event_id": "meetup-316581844",
       "title": "CRAP Talks #35 - Back to School",
       "action": "archived"
+    },
+    {
+      "at": "2026-10-01T11:37:21.264784+00:00",
+      "event_id": "measurecamp-london-19-2026",
+      "title": "MeasureCamp London 19",
+      "action": "added"
+    },
+    {
+      "at": "2026-10-01T11:37:21.264784+00:00",
+      "event_id": "meetup-316567105",
+      "title": "GPU, CUDA, and PyTorch Performance Optimizations",
+      "action": "added"
     }
   ]
 }
