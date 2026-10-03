@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-02T11:06:33.658779+00:00",
-  "event_count": 13,
+  "generated_at": "2026-10-03T10:25:10.247692+00:00",
+  "event_count": 14,
   "events": [
     {
       "id": "meetup-316399210",
@@ -118,6 +118,26 @@
       "topics": [
         "Data Careers",
         "Career Fairs"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-316381511",
+      "title": "GPU, CUDA, and PyTorch Performance Optimizations",
+      "start_at": "2026-10-19T17:00:00+01:00",
+      "format": "online",
+      "organiser": "AI Performance Engineering Meetup (London - Cambridge)",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/ai-performance-engineering-london-cambridge/events/316381511/",
+      "end_at": null,
+      "venue_name": null,
+      "address": null,
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Science"
       ],
       "status": "scheduled",
       "time_tbc": false
@@ -598,6 +618,18 @@
       "event_id": "meetup-315974846",
       "title": "London PyTorch #28",
       "action": "archived"
+    },
+    {
+      "at": "2026-10-03T10:25:10.247692+00:00",
+      "event_id": "measurecamp-london-19-2026",
+      "title": "MeasureCamp London 19",
+      "action": "added"
+    },
+    {
+      "at": "2026-10-03T10:25:10.247692+00:00",
+      "event_id": "meetup-316381511",
+      "title": "GPU, CUDA, and PyTorch Performance Optimizations",
+      "action": "added"
     }
   ]
 }
