@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from src.events.models import Event
-from src.events.sources import career_fairs, dsf, meetup, rss, standalone
+from src.events.sources import career_fairs, dsf, meetup, rss, standalone, reviewed
 from src.events.validation import (
     deduplicate_events,
     validate_events,
@@ -31,6 +31,7 @@ def collect_events() -> tuple[list[Event], list[str]]:
         ("Meetup", meetup.get_events),
         ("Data Science Festival", dsf.get_events),
         ("Career fairs", career_fairs.get_events),
+        ("Reviewed web discoveries", reviewed.get_events),
     )
 
     for source_name, collector in collectors:
@@ -93,17 +94,29 @@ def build_dataset(events: list[Event], previous: dict | None = None,
     upcoming = sorted((item for item in current.values() if not is_past(item, now)),
                       key=lambda item: item["start_at"])
     past = sorted(archived.values(), key=lambda item: item["start_at"], reverse=True)
-    changes = list(previous.get("changes", []))
-    old = {item["id"]: item for item in previous.get("events", [])}
+    # Repair repeated "added" rows produced when archived records were ignored.
+    changes = []
+    seen_additions = set()
+    for change in previous.get("changes", []):
+        event_id = change["event_id"]
+        if change["action"] == "added":
+            if event_id in seen_additions:
+                continue
+            seen_additions.add(event_id)
+        changes.append(change)
+    old = {item["id"]: item for item in previous.get("past_events", [])}
+    old.update({item["id"]: item for item in previous.get("events", [])})
+    old_upcoming = {item["id"]: item for item in previous.get("events", [])}
     for event_id, item in current.items():
         if event_id not in old:
             changes.append({"at": now.isoformat(), "event_id": event_id,
-                            "title": item["title"], "action": "added"})
-        elif old[event_id] != item:
+                            "title": item["title"],
+                            "action": "restored" if event_id in seen_additions else "added"})
+        elif event_id in old and old[event_id] != item:
             changes.append({"at": now.isoformat(), "event_id": event_id,
                             "title": item["title"], "action": "updated"})
-    for event_id, item in old.items():
-        if event_id not in current:
+    for event_id, item in old_upcoming.items():
+        if event_id not in current or is_past(current[event_id], now):
             changes.append({"at": now.isoformat(), "event_id": event_id,
                             "title": item["title"],
                             "action": "archived" if is_past(item, now) else "removed from source"})

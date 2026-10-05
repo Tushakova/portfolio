@@ -262,6 +262,7 @@ def run_target_diagnostics(
 def main() -> None:
     """Run discovery and print aggregate diagnostics."""
     parser = argparse.ArgumentParser(description="Bounded event discovery; no publication or saved search results.")
+    parser.add_argument("--save-candidates", type=Path, help="Save independently fetched, verified new event facts for review (no Brave snippets)")
     parser.add_argument("--diagnostics", action="store_true", help="Use three extra API queries on known-target diagnostics")
     parser.add_argument("--show-events", action="store_true", help="Log source-page facts for new supported events; no search snippets or rejected URLs")
     args = parser.parse_args()
@@ -324,6 +325,12 @@ def main() -> None:
         print(f"  {label:<28} {count}")
     print("Already published = known website/archive records, not new discoveries.")
     print("Duplicate records = repeated copies within this run, not the known-event count.")
+    if args.save_candidates:
+        args.save_candidates.parent.mkdir(parents=True, exist_ok=True)
+        args.save_candidates.write_text(json.dumps(
+            {"events": [event.to_dict() for event in new_events]},
+            indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        print(f"Saved {len(new_events)} new source-supported records for review.")
     if args.show_events:
         print("\nNew source-supported events for review (not published):")
         for event in new_events:
@@ -335,7 +342,7 @@ def main() -> None:
         if not new_events:
             print("None. No new verified events in the assessed sample.")
     print("Only pages within the budget were assessed. Review is not acceptance.")
-    print("Raw search results were not saved. No events were added to the website.")
+    print("Raw search results were not saved. Candidate export contains only independently fetched event facts. No events were added to the website.")
 
     evaluation = evaluate_targets(
         discovered_urls

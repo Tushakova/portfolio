@@ -34,7 +34,14 @@ jobs:
           RUN_DIAGNOSTICS: ${{ inputs.diagnostics }}
         run: |
           if [ "$RUN_DIAGNOSTICS" = "true" ]; then
-            python -u -m src.events.search --diagnostics --show-events
+            python -u -m src.events.search --diagnostics --show-events --save-candidates artifacts/discovery-candidates.json
           else
-            python -u -m src.events.search --show-events
+            python -u -m src.events.search --show-events --save-candidates artifacts/discovery-candidates.json
           fi
+
+      - name: Save verified candidates for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: discovery-candidates
+          path: artifacts/discovery-candidates.json
+          retention-days: 14

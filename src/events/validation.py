@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from datetime import datetime
+import re
+from urllib.parse import urlsplit, parse_qsl, urlencode
 
 from src.events.models import Event
 from src.events.topics import ALL_TOPICS
@@ -114,15 +116,27 @@ def deduplicate_events(events: list[Event]) -> list[Event]:
     """Remove exact URL duplicates while preserving first occurrence."""
 
     unique: list[Event] = []
-    seen_urls: set[str] = set()
+    seen_urls: set[tuple] = set()
+    seen_online: set[tuple] = set()
 
     for event in events:
-        url = event.source_url.rstrip("/").casefold()
-
-        if url in seen_urls:
+        parts = urlsplit(event.source_url)
+        query = urlencode(sorted((k, v) for k, v in parse_qsl(parts.query)
+                                 if not k.lower().startswith("utm_")
+                                 and k.lower() not in {"gclid", "fbclid", "msclkid"}))
+        url = (parts.hostname or "").lower().removeprefix("www.") + parts.path.rstrip("/") + "?" + query
+        instant = datetime.fromisoformat(event.start_at)
+        key = (url, instant)
+        title = re.sub(r"\W+", " ", event.title.casefold()).strip()
+        end = datetime.fromisoformat(event.end_at) if event.end_at else None
+        online_key = (title, instant, end)
+        online_duplicate = event.format == "online" and len(title) >= 20 and online_key in seen_online
+        if key in seen_urls or online_duplicate:
             continue
 
-        seen_urls.add(url)
+        seen_urls.add(key)
+        if event.format == "online" and len(title) >= 20:
+            seen_online.add(online_key)
         unique.append(event)
 
     return unique

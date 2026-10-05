@@ -8,6 +8,7 @@ on:
       - ".github/workflows/refresh-events.yml"
       - "src/events/**"
       - "requirements.txt"
+      - "data/discovered-events.json"
   schedule:
     - cron: "17 6 * * *"
       timezone: "Europe/London"
