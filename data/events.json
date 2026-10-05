@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-05T12:16:31.827557+00:00",
+  "generated_at": "2026-10-05T17:18:15.898458+00:00",
   "event_count": 14,
   "events": [
     {
@@ -123,26 +123,6 @@
       "time_tbc": false
     },
     {
-      "id": "meetup-316381511",
-      "title": "GPU, CUDA, and PyTorch Performance Optimizations",
-      "start_at": "2026-10-19T17:00:00+01:00",
-      "format": "online",
-      "organiser": "AI Performance Engineering Meetup (London - Cambridge)",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/ai-performance-engineering-london-cambridge/events/316381511/",
-      "end_at": null,
-      "venue_name": null,
-      "address": null,
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Science"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
-    {
       "id": "meetup-316567105",
       "title": "GPU, CUDA, and PyTorch Performance Optimizations",
       "start_at": "2026-10-19T17:00:00+01:00",
@@ -158,6 +138,26 @@
       "registration_status": "unknown",
       "topics": [
         "Data Science"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-316647377",
+      "title": "Databricks UK Innovation Hackathon with Colibri Digital",
+      "start_at": "2026-10-21T16:30:00+01:00",
+      "format": "in_person",
+      "organiser": "Databricks UK",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/databricks-uk/events/316647377/",
+      "end_at": null,
+      "venue_name": "Mary Ward House Conference Centre",
+      "address": "Tavistock Pl, London WC1H 9SN, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
       ],
       "status": "scheduled",
       "time_tbc": false
@@ -446,123 +446,9 @@
       "action": "added"
     },
     {
-      "at": "2026-09-25T13:13:03.102029+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-25T13:32:02.405781+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-25T13:35:08.082744+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-25T13:43:05.197399+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-25T13:50:53.398647+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-25T13:51:36.332850+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-25T13:54:47.577404+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-25T14:01:05.793372+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-25T14:05:41.775207+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-25T14:36:11.788226+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-25T15:04:15.966174+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-25T15:19:59.674093+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-26T09:52:06.294134+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-27T10:33:45.265476+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
       "at": "2026-09-28T11:41:48.636338+00:00",
       "event_id": "measurecamp-london-19-2026",
       "title": "MeasureCamp London 19",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-28T11:41:48.636338+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-28T16:10:01.383560+00:00",
-      "event_id": "measurecamp-london-19-2026",
-      "title": "MeasureCamp London 19",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-28T16:10:01.383560+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-29T11:22:12.663603+00:00",
-      "event_id": "measurecamp-london-19-2026",
-      "title": "MeasureCamp London 19",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-29T11:22:12.663603+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
       "action": "added"
     },
     {
@@ -570,18 +456,6 @@
       "event_id": "meetup-316572897",
       "title": "The Friendly Data Meetup September 2026",
       "action": "archived"
-    },
-    {
-      "at": "2026-09-30T11:10:50.784367+00:00",
-      "event_id": "measurecamp-london-19-2026",
-      "title": "MeasureCamp London 19",
-      "action": "added"
-    },
-    {
-      "at": "2026-09-30T11:10:50.784367+00:00",
-      "event_id": "rss-beyond-the-hype-synthetic-data-in-practice",
-      "title": "Beyond the Hype: Synthetic Data in Practice",
-      "action": "added"
     },
     {
       "at": "2026-09-30T11:10:50.784367+00:00",
@@ -597,20 +471,8 @@
     },
     {
       "at": "2026-10-01T11:37:21.264784+00:00",
-      "event_id": "measurecamp-london-19-2026",
-      "title": "MeasureCamp London 19",
-      "action": "added"
-    },
-    {
-      "at": "2026-10-01T11:37:21.264784+00:00",
       "event_id": "meetup-316567105",
       "title": "GPU, CUDA, and PyTorch Performance Optimizations",
-      "action": "added"
-    },
-    {
-      "at": "2026-10-02T11:06:33.658779+00:00",
-      "event_id": "measurecamp-london-19-2026",
-      "title": "MeasureCamp London 19",
       "action": "added"
     },
     {
@@ -621,27 +483,21 @@
     },
     {
       "at": "2026-10-03T10:25:10.247692+00:00",
-      "event_id": "measurecamp-london-19-2026",
-      "title": "MeasureCamp London 19",
-      "action": "added"
-    },
-    {
-      "at": "2026-10-03T10:25:10.247692+00:00",
       "event_id": "meetup-316381511",
       "title": "GPU, CUDA, and PyTorch Performance Optimizations",
       "action": "added"
     },
     {
-      "at": "2026-10-04T11:06:56.485982+00:00",
-      "event_id": "measurecamp-london-19-2026",
-      "title": "MeasureCamp London 19",
+      "at": "2026-10-05T17:18:15.898458+00:00",
+      "event_id": "meetup-316647377",
+      "title": "Databricks UK Innovation Hackathon with Colibri Digital",
       "action": "added"
     },
     {
-      "at": "2026-10-05T12:16:31.827557+00:00",
-      "event_id": "measurecamp-london-19-2026",
-      "title": "MeasureCamp London 19",
-      "action": "added"
+      "at": "2026-10-05T17:18:15.898458+00:00",
+      "event_id": "meetup-316381511",
+      "title": "GPU, CUDA, and PyTorch Performance Optimizations",
+      "action": "removed from source"
     }
   ]
 }
