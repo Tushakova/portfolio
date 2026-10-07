@@ -1,28 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-05T17:18:15.898458+00:00",
-  "event_count": 14,
+  "generated_at": "2026-10-07T11:47:26.351067+00:00",
+  "event_count": 13,
   "events": [
-    {
-      "id": "meetup-316399210",
-      "title": "Bayesian Modelling in Real Life",
-      "start_at": "2026-10-06T18:00:00+01:00",
-      "format": "in_person",
-      "organiser": "Bayesian Mixer London",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/bayesian-mixer-london/events/316399210/",
-      "end_at": null,
-      "venue_name": "Bayes Business School",
-      "address": "106 Bunhill Row, London",
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Statistics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "meetup-316581290",
       "title": "New Postgres Tools for Analytics",
@@ -288,6 +268,26 @@
   ],
   "past_events": [
     {
+      "id": "meetup-316399210",
+      "title": "Bayesian Modelling in Real Life",
+      "start_at": "2026-10-06T18:00:00+01:00",
+      "format": "in_person",
+      "organiser": "Bayesian Mixer London",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/bayesian-mixer-london/events/316399210/",
+      "end_at": null,
+      "venue_name": "Bayes Business School",
+      "address": "106 Bunhill Row, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Statistics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
       "id": "meetup-315974846",
       "title": "London PyTorch #28",
       "start_at": "2026-10-01T18:30:00+01:00",
@@ -498,6 +498,12 @@
       "event_id": "meetup-316381511",
       "title": "GPU, CUDA, and PyTorch Performance Optimizations",
       "action": "removed from source"
+    },
+    {
+      "at": "2026-10-07T11:47:26.351067+00:00",
+      "event_id": "meetup-316399210",
+      "title": "Bayesian Modelling in Real Life",
+      "action": "archived"
     }
   ]
 }
