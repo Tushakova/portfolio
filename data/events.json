@@ -1,28 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-07T11:47:26.351067+00:00",
-  "event_count": 13,
+  "generated_at": "2026-10-08T12:01:53.752329+00:00",
+  "event_count": 12,
   "events": [
-    {
-      "id": "meetup-316581290",
-      "title": "New Postgres Tools for Analytics",
-      "start_at": "2026-10-07T18:30:00+01:00",
-      "format": "in_person",
-      "organiser": "London PostgreSQL Meetup Group",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/london-postgresql-meetup-group/events/316581290/",
-      "end_at": null,
-      "venue_name": "Doggett's Coat and Badge",
-      "address": "1 Blackfriars Bridge, London SE1 9UD, UK, London",
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Analytics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "meetup-316454710",
       "title": "London Analytics Engineering Meetup #26",
@@ -103,13 +83,13 @@
       "time_tbc": false
     },
     {
-      "id": "meetup-316567105",
+      "id": "meetup-316381511",
       "title": "GPU, CUDA, and PyTorch Performance Optimizations",
       "start_at": "2026-10-19T17:00:00+01:00",
       "format": "online",
-      "organiser": "AI Performance Engineering Meetup (London)",
+      "organiser": "AI Performance Engineering Meetup (London - Cambridge)",
       "source": "Meetup",
-      "source_url": "https://www.meetup.com/ai-performance-engineering-meetup-london/events/316567105/",
+      "source_url": "https://www.meetup.com/ai-performance-engineering-london-cambridge/events/316381511/",
       "end_at": null,
       "venue_name": null,
       "address": null,
@@ -267,6 +247,26 @@
     }
   ],
   "past_events": [
+    {
+      "id": "meetup-316581290",
+      "title": "New Postgres Tools for Analytics",
+      "start_at": "2026-10-07T18:30:00+01:00",
+      "format": "in_person",
+      "organiser": "London PostgreSQL Meetup Group",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/london-postgresql-meetup-group/events/316581290/",
+      "end_at": null,
+      "venue_name": "Doggett's Coat and Badge",
+      "address": "1 Blackfriars Bridge, London SE1 9UD, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
     {
       "id": "meetup-316399210",
       "title": "Bayesian Modelling in Real Life",
@@ -504,6 +504,24 @@
       "event_id": "meetup-316399210",
       "title": "Bayesian Modelling in Real Life",
       "action": "archived"
+    },
+    {
+      "at": "2026-10-08T12:01:53.752329+00:00",
+      "event_id": "meetup-316381511",
+      "title": "GPU, CUDA, and PyTorch Performance Optimizations",
+      "action": "restored"
+    },
+    {
+      "at": "2026-10-08T12:01:53.752329+00:00",
+      "event_id": "meetup-316581290",
+      "title": "New Postgres Tools for Analytics",
+      "action": "archived"
+    },
+    {
+      "at": "2026-10-08T12:01:53.752329+00:00",
+      "event_id": "meetup-316567105",
+      "title": "GPU, CUDA, and PyTorch Performance Optimizations",
+      "action": "removed from source"
     }
   ]
 }
