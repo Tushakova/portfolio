@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-09T08:24:07.155529+00:00",
-  "event_count": 11,
+  "generated_at": "2026-10-11T11:24:27.150309+00:00",
+  "event_count": 13,
   "events": [
     {
       "id": "rss-david-hand-what-s-the-question-deciding-what-you-r",
@@ -144,6 +144,26 @@
       "time_tbc": false
     },
     {
+      "id": "meetup-316873995",
+      "title": "Modernize Databases Faster with AI-Assisted Migration and Optimization",
+      "start_at": "2026-10-27T17:00:00+00:00",
+      "format": "online",
+      "organiser": "Microsoft Reactor London",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/microsoft-reactor-london/events/316873995/",
+      "end_at": null,
+      "venue_name": null,
+      "address": null,
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Experimentation"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
       "id": "rss-2026-cathie-marsh-lecture-countering-misinformatio",
       "title": "2026 Cathie Marsh Lecture - Countering Misinformation with Statistics",
       "start_at": "2026-10-29T13:00:00+00:00",
@@ -174,6 +194,26 @@
       "end_at": null,
       "venue_name": "Arcadia Games",
       "address": "Arcadia Games, 46 Essex St, Temple, London WC2R 3JF, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-316927507",
+      "title": "HACKATHON - Agent Eval Harness (by the Friendly Data Meetup)",
+      "start_at": "2026-11-04T17:30:00+00:00",
+      "format": "in_person",
+      "organiser": "The Friendly Data Meetup London",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/the-friendly-data-meetup/events/316927507/",
+      "end_at": "2026-11-04T21:00:00+00:00",
+      "venue_name": "230 Blackfriars Road",
+      "address": "230 Blackfriars Rd, London SE1 8NW, UK, London",
       "is_free": null,
       "price_from_gbp": null,
       "registration_status": "unknown",
@@ -528,6 +568,18 @@
       "event_id": "meetup-316454710",
       "title": "London Analytics Engineering Meetup #26",
       "action": "archived"
+    },
+    {
+      "at": "2026-10-11T11:24:27.150309+00:00",
+      "event_id": "meetup-316927507",
+      "title": "HACKATHON - Agent Eval Harness (by the Friendly Data Meetup)",
+      "action": "added"
+    },
+    {
+      "at": "2026-10-11T11:24:27.150309+00:00",
+      "event_id": "meetup-316873995",
+      "title": "Modernize Databases Faster with AI-Assisted Migration and Optimization",
+      "action": "added"
     }
   ]
 }
