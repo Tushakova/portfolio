@@ -154,7 +154,7 @@
 
     .projects {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 24px;
     }
 
@@ -201,6 +201,12 @@
       font-weight: 650;
       text-decoration: underline;
       text-underline-offset: 4px;
+    }
+
+    .project-source {
+      color: #66717b;
+      font-weight: 500;
+      font-size: 13px;
     }
 
     .project-link:focus-visible {
@@ -384,47 +390,38 @@
 
 
     <section id="work">
-      <div class="section-label">Selected work</div>
+      <div class="section-label">Selected projects</div>
 
       <div class="projects">
 
         <article class="project">
           <div class="project-number">01</div>
-          <h3>Payments Analytics & Data Reliability</h3>
+          <h3><a href="./ab-testing-lab/">The A/B Testing Lab</a></h3>
           <p>
-            Building a reliable view of payment health across fragmented
-            transaction data and multiple systems.
+            An interactive lab for exploring how sample size, effect size
+            and significance shape statistical power and experimental outcomes.
+            Design an experiment, simulate repeated results and interpret the evidence.
           </p>
+          <a class="project-link" href="./ab-testing-lab/">Open the interactive lab ↗</a>
+          <a class="project-link project-source" href="https://github.com/Tushakova/portfolio/blob/main/ab-testing-lab/index.html" target="_blank" rel="noopener noreferrer">View source ↗</a>
           <div class="tags">
-            <span class="tag">Product Analytics</span>
-            <span class="tag">SQL</span>
-            <span class="tag">Python</span>
-            <span class="tag">Data Quality</span>
+            <span class="tag">Experimentation</span>
+            <span class="tag">Statistics</span>
+            <span class="tag">Simulation</span>
+            <span class="tag">Data Visualisation</span>
           </div>
         </article>
 
         <article class="project">
           <div class="project-number">02</div>
-          <h3>Experimentation & Product Decisions</h3>
+          <h3><a href="./events/">London Data Radar</a></h3>
           <p>
-            Designing measurement frameworks that connect product
-            hypotheses to statistically sound decisions.
+            A live data product for discovering analytics and data events
+            across London. Automated collection and refreshes turn public
+            event information into a searchable, useful resource.
           </p>
-          <div class="tags">
-            <span class="tag">Experimentation</span>
-            <span class="tag">Product Analytics</span>
-            <span class="tag">Statistics</span>
-          </div>
-        </article>
-
-        <article class="project">
-          <div class="project-number">03</div>
-          <h3><a href="/events/">London Data Radar</a></h3>
-          <p>
-            A data product for discovering and organising worthwhile
-            analytics and data events across London.
-          </p>
-          <a class="project-link" href="/events/">Explore live events ↗</a>
+          <a class="project-link" href="./events/">Explore live events ↗</a>
+          <a class="project-link project-source" href="https://github.com/Tushakova/portfolio" target="_blank" rel="noopener noreferrer">View source ↗</a>
           <div class="tags">
             <span class="tag">Python</span>
             <span class="tag">Data Pipelines</span>
