@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-13T12:42:56.051649+00:00",
+  "generated_at": "2026-10-15T09:54:09.568775+00:00",
   "event_count": 14,
   "events": [
     {
@@ -164,26 +164,6 @@
       "time_tbc": false
     },
     {
-      "id": "meetup-316873995",
-      "title": "Modernize Databases Faster with AI-Assisted Migration and Optimization",
-      "start_at": "2026-10-27T17:00:00+00:00",
-      "format": "online",
-      "organiser": "Microsoft Reactor London",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/microsoft-reactor-london/events/316873995/",
-      "end_at": null,
-      "venue_name": null,
-      "address": null,
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Experimentation"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
-    {
       "id": "rss-2026-cathie-marsh-lecture-countering-misinformatio",
       "title": "2026 Cathie Marsh Lecture - Countering Misinformation with Statistics",
       "start_at": "2026-10-29T13:00:00+00:00",
@@ -259,6 +239,26 @@
       "registration_status": "open",
       "topics": [
         "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-316972421",
+      "title": "MarTech London: Building Confidence in Data and Experimentation",
+      "start_at": "2026-11-19T18:30:00+00:00",
+      "format": "in_person",
+      "organiser": "Martech London",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/martechlondon/events/316972421/",
+      "end_at": null,
+      "venue_name": "Mercure London Hyde Park Hotel",
+      "address": "8-14 Talbot Square, Tyburnia, London W2 1TS, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Experimentation"
       ],
       "status": "scheduled",
       "time_tbc": false
@@ -606,6 +606,18 @@
       "event_id": "meetup-316957735",
       "title": "AI-built reports to question & comment on with Zebra BI on Fabric & Power BI",
       "action": "added"
+    },
+    {
+      "at": "2026-10-15T09:54:09.568775+00:00",
+      "event_id": "meetup-316972421",
+      "title": "MarTech London: Building Confidence in Data and Experimentation",
+      "action": "added"
+    },
+    {
+      "at": "2026-10-15T09:54:09.568775+00:00",
+      "event_id": "meetup-316873995",
+      "title": "Modernize Databases Faster with AI-Assisted Migration and Optimization",
+      "action": "removed from source"
     }
   ]
 }
