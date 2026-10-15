@@ -80,8 +80,8 @@ nav{margin-bottom:17px}nav button{padding:10px 12px}.section-head{margin-bottom:
 <body><header><a class="portfolio-home" href="https://tushakova.co.uk/" aria-label="Back to Maria Tushakova’s portfolio"><span>← Maria Tushakova</span><small>Back to portfolio</small></a><div class="lab-heading"><h1>The A/B Testing Lab</h1><p>See what actually happens inside an experiment.</p></div><button class="quiet" id="about-btn">About the lab ↗</button></header><main><nav aria-label="Learning path"><button data-tab="design" class="active"><span>01</span> Design <small>Plan your experiment</small></button><button data-tab="simulate"><span>02</span> Simulate <small>Repeat the experiment</small></button><button data-tab="analyse"><span>03</span> Analyse <small>Interpret the evidence</small></button><button data-tab="metrics"><span>04</span> Metrics <small>Look beneath the mean</small></button></nav>
 <div id="error" role="alert" hidden></div>
 <section id="design" class="page"><div class="section-head"><div><div class="eyebrow">01 / DESIGN YOUR EXPERIMENT</div><h2>How much evidence do you need?</h2><p>Start with a checkout conversion experiment. See the trade-offs as you go.</p></div><div class="segmented" role="group" aria-label="Interaction mode"><button id="planning-mode" aria-pressed="true" class="selected">Planning mode</button><button id="fixed-mode" aria-pressed="false">Fixed sample</button></div></div>
-<div id="design-stats" class="stats" aria-live="polite" aria-label="Experiment sample size and duration"></div><div class="design-grid"><article class="card controls"><div class="card-heading"><h3>Your experiment</h3><span class="badge">INPUTS</span></div><p class="muted">One user. One assignment. One outcome.</p>
-<div class="control-heading"><label for="baseline">Baseline conversion</label><div class="number-with-unit"><input id="baseline-number" type="number" min=".01" max="90" step="any" value="20" aria-label="Baseline conversion (%)"><span>%</span></div><output id="baseline-v" hidden></output></div><input id="baseline" type="range" min=".01" max="90" step="any" value="20"><div class="range-ends"><span>0.01%</span><span>90%</span></div>
+<div id="design-stats" class="stats" aria-live="polite" aria-label="Experiment sample size and duration"></div><div class="design-grid"><article class="card controls"><div class="card-heading"><h3>Your experiment</h3><span class="badge">INPUTS</span></div><p class="muted">One user. One assignment. One outcome.</p><p class="hint">Sliders move in 0.5 steps. Type a value for finer precision.</p>
+<div class="control-heading"><label for="baseline">Baseline conversion</label><div class="number-with-unit"><input id="baseline-number" type="number" min=".01" max="90" step="any" value="20" aria-label="Baseline conversion (%)"><span>%</span></div><output id="baseline-v" hidden></output></div><input id="baseline" type="range" min=".01" max="90" step="any" value="20"><div class="range-ends"><span>0.5%</span><span>90%</span></div>
 <div class="control-heading"><label for="effect"><span id="effect-label">Minimum detectable effect</span></label><div class="number-with-unit"><input id="effect-number" type="number" min=".01" max="30" step="any" value="5" aria-label="Minimum detectable effect (% relative)"><span>% relative</span></div><output id="effect-v" hidden></output></div><input id="effect" type="range" min=".01" max="30" step="any" value="5"><p class="hint">Relative uplift · <span id="effect-explain"></span></p>
 <div class="baseline-complement"><div class="mini-labels"><span id="converted-label">Converted: 20%</span><span id="unconverted-label">Did not: 80%</span></div><div class="mini-track"><span id="conversion-fill"></span></div><p class="hint">An exact complement: p + (1 − p) = 100%.</p></div><div class="target"><span>CONTROL <b id="base-target"></b></span><span>→</span><span>TREATMENT TARGET <b id="treat-target"></b></span></div>
 <label for="sample" id="sample-wrap" hidden>Control sample · input<input id="sample" type="number" min="2" max="100000000" value="25583" step="1"></label><details class="advanced-controls"><summary>Traffic & duration</summary><div class="control-heading"><label for="allocation">Treatment traffic</label><div class="number-with-unit"><input id="allocation-number" type="number" min="1" max="99" step="any" value="50" aria-label="Treatment traffic (%)"><span>%</span></div><output id="allocation-v" hidden></output></div><input id="allocation" type="range" min="1" max="99" step="any" value="50">
@@ -259,7 +259,17 @@ window.addEventListener('blur',finishComparison);
 $('explore-error-tradeoff').onclick=()=>setMode('fixed');
 for(const id of ['baseline','effect','allocation']){
  const slider=$(id),field=$(id+'-number');
- slider.addEventListener('input',()=>{field.value=slider.value;});
+ // Keep step=any internally so a typed precise value is never rounded.
+ // Only slider interaction snaps to half-unit steps.
+ const snapSlider=value=>Math.max(Math.ceil(+slider.min*2)/2,Math.min(+slider.max,Math.round(value*2)/2));
+ slider.addEventListener('input',()=>{
+  slider.value=snapSlider(+slider.value).toFixed(1);
+  field.value=(+slider.value).toFixed(1);
+ });
+ slider.addEventListener('keydown',event=>{
+  const direction={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1}[event.key];
+  if(direction){event.preventDefault();slider.value=snapSlider(+slider.value+direction*.5);slider.dispatchEvent(new Event('input',{bubbles:true}));}
+ });
  field.addEventListener('input',guard(()=>{
   const value=number(id+'-number');
   slider.value=value;
