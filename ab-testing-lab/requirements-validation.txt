@@ -1,0 +1,5 @@
+# Reference tools only. The browser app does not import these packages.
+# Tested together on Python 3.12; see validation-results.json for the recorded environment.
+numpy==2.3.5
+scipy==1.17.0
+statsmodels==0.15.0

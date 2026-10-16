@@ -2,7 +2,7 @@
 
 **See what actually happens inside an experiment.**
 
-An interactive educational application connecting experiment design, sampling variability, statistical power, error rates and uncertainty. Built as an analytics portfolio project by Maria Tushakova, with AI-assisted development.
+An interactive educational application connecting experiment design, sampling variability, statistical power, error rates and uncertainty. An analytics portfolio project by Maria Tushakova.
 
 [Open the lab](https://tushakova.github.io/portfolio/ab-testing-lab/) · [Portfolio](https://tushakova.co.uk/) · [Application source](https://github.com/Tushakova/portfolio/blob/main/ab-testing-lab/index.html)
 
@@ -10,9 +10,9 @@ An interactive educational application connecting experiment design, sampling va
 
 | Section | Question | Working features |
 | --- | --- | --- |
-| Design | How much evidence do we need? | Two-proportion sample-size planning; fixed-sample power; complementary α/confidence and β/power controls; positive and negative effects; allocation and duration |
+| Design | How much evidence do we need? | Two-proportion sample-size planning; fixed-sample power; complementary α/confidence and β/power controls; positive and negative effects; shared two-sided/increase/decrease selector; allocation and duration |
 | Simulate | What happens if we repeat the experiment? | Independent binomial experiments; false positives and missed effects; individual estimates, p-values and CSV export |
-| Analyse | What does one experiment tell us? | Conversion rates, absolute and relative changes, two-sided p-value, Newcombe confidence interval, interpretation |
+| Analyse | What does one experiment tell us? | Conversion rates, absolute and relative changes, selected-direction p-value, Newcombe interval or one-sided confidence bound, interpretation |
 | Metrics | Why do metrics behave differently? | Binary versus skewed revenue; synthetic revenue and repeated sample means; central limit theorem demonstration |
 
 Design includes **Separate areas**, **Overlay curves** and **Compare changes**. The comparison view holds the axes fixed during an edit, retains the previous distributions as dotted references and fits both states when the edit ends. It compares model scenarios, not observed experiments.
@@ -21,10 +21,8 @@ Design includes **Separate areas**, **Overlay curves** and **Compare changes**. 
 
 | File | Purpose |
 | --- | --- |
+| [ONE_SIDED_TESTS.md](ONE_SIDED_TESTS.md) | Directional hypotheses, one-sided power, p-values, bounds and pre-specification |
 | [METHODS.md](METHODS.md) | Full statistical specification: formulas, distributions, assumptions, approximations, algorithms and boundaries |
-| [QUESTIONS_AND_ANSWERS.md](QUESTIONS_AND_ANSWERS.md) | Explain and defend the project: conceptual questions, worked examples and practical experiment decisions |
-| [EDITING_AND_DEPLOYMENT.md](EDITING_AND_DEPLOYMENT.md) | How the single HTML file works; safe edits; local preview; GitHub upload; publishing and rollback |
-| [START_HERE_RU.md](START_HERE_RU.md) | Russian guide for Maria: upload instructions, reading order and key distinctions |
 | [VALIDATION.md](VALIDATION.md) | Recorded checks, numerical tolerances, results and remaining coverage gaps |
 | [validate_statistics.py](validate_statistics.py) | Reproducible independent checks of the actual JavaScript statistical engine against SciPy and statsmodels |
 | [requirements-validation.txt](requirements-validation.txt) | Python dependencies for those checks only |
@@ -56,20 +54,23 @@ python -m pip install -r requirements-validation.txt
 python validate_statistics.py --html index.html
 ```
 
-See [EDITING_AND_DEPLOYMENT.md](EDITING_AND_DEPLOYMENT.md) for exact upload steps and a manual interface checklist. The validation dependencies are not required to use or host the app.
+
+The shared hypothesis selector defaults to Two-sided. One-sided modes require a pre-specified direction and are not non-inferiority tests. See [ONE_SIDED_TESTS.md](ONE_SIDED_TESTS.md).
+
+Before publishing, check the four sections in a browser, including positive/negative effects, all hypothesis choices, comparison mode and invalid-input messages. Numerical checks do not certify visual layout.
 
 ## Statistical methods at a glance
 
 | Component | Implemented method |
 | --- | --- |
-| Planning and fixed-sample power | Normal approximation to the difference of independent proportions: pooled null variance and unpooled alternative variance; two-sided rejection region |
+| Planning and fixed-sample power | Normal approximation to the difference of independent proportions: pooled null variance and unpooled alternative variance; two-sided or selected one-sided rejection region |
 | Sample-size search | Integer binary search over control n; treatment n rounded up for the selected allocation |
 | Simulated data | Binomial conversion counts generated independently for each arm |
-| Result p-value | Pooled two-proportion z-test; two-sided Fisher exact fallback if any pooled expected cell is below 5 |
-| Difference CI | Newcombe interval constructed from two Wilson score intervals; no continuity correction |
+| Result p-value | Pooled two-proportion z-test; matching-direction Fisher exact fallback if any pooled expected cell is below 5 |
+| Difference CI | Two-sided Newcombe interval, or directional Wilson-based Newcombe-style bound; no continuity correction |
 | Revenue demo | Known mixture: 80% zero, 19% moderate lognormal, 1% high-spender lognormal |
 
-The p-value test and CI are different constructions. They can disagree near a decision boundary. The app's significance label follows **p < α**, not whether its displayed Newcombe interval contains zero.
+The p-value test and CI are different constructions. They can disagree near a decision boundary. The app's significance label follows the selected test's **p < α**, not whether its displayed Newcombe interval contains zero.
 
 ## Assumptions and scope
 
@@ -79,6 +80,6 @@ MDE is a planning effect, not a minimum observed effect required for significanc
 
 ## Documentation baseline
 
-Prepared on **16 October 2026** for the latest delivered browser edition, including negative-effect planning, compact layout, half-unit sliders, precise manual inputs and comparison mode. [VALIDATION.md](VALIDATION.md) records its SHA-256. A delivered file may differ from the currently deployed website until it is uploaded. This documentation does not certify a deployment.
+Prepared on **16 October 2026** for the documented browser release, including a global two-sided / one-sided increase / one-sided decrease selector, negative-effect planning, compact layout, half-unit sliders, precise manual inputs and comparison mode. [VALIDATION.md](VALIDATION.md) records its SHA-256. The deployed website may run a different release; compare its source with the recorded validation baseline. This documentation does not certify a deployment.
 
 These documentation files belong **inside `portfolio/ab-testing-lab/`**, beside that project's `index.html`. They do not replace the repository's root portfolio homepage or root README. No licence is granted by the mere presence of public source; add a licence separately if reuse rights are intended.

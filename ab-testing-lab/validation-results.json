@@ -1,0 +1,1400 @@
+{
+  "run_at_utc": "2026-10-16T21:22:34.375469+00:00",
+  "html_sha256": "7320b8e3455c7981845e0878c1ac45da8fcd777a90e2a2c6d21718ffe9af1b49",
+  "engine_sha256": "09954f33175a2745e1ee85e1087d6c9969e49646d7c0e33250f7f0333519be0d",
+  "environment": {
+    "python": "3.12.14",
+    "node": "v24.19.0",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "statsmodels": "0.15.0"
+  },
+  "passed": 78,
+  "total": 78,
+  "checks": [
+    {
+      "name": "Normal CDF vs SciPy",
+      "passed": true,
+      "detail": {
+        "max_abs_error": 7.405714547159548e-08,
+        "tolerance": 1e-07
+      }
+    },
+    {
+      "name": "Normal quantile vs SciPy",
+      "passed": true,
+      "detail": {
+        "max_abs_error": 3.319721057426506e-05,
+        "tolerance": 0.0001
+      }
+    },
+    {
+      "name": "Power model 1: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.21,
+          25583,
+          25583,
+          0.05
+        ],
+        "engine": {
+          "effect": 0.009999999999999981,
+          "se0": 0.0035694372970207916,
+          "se1": 0.0035691635146773764,
+          "cutoff": 0.0069959642726608795,
+          "lower": -0.0069959642726608795,
+          "upper": 0.0069959642726608795,
+          "alternative": "two-sided",
+          "power": 0.8000129308669445,
+          "beta": 0.19998706913305553
+        },
+        "scipy": {
+          "se0": 0.0035694372970207916,
+          "se1": 0.0035691635146773764,
+          "cutoff": 0.006995968547234751,
+          "power": 0.8000125404776748
+        },
+        "statsmodels_power": 0.8000125404776746
+      }
+    },
+    {
+      "name": "Power + beta = 1 (1)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 2: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.19,
+          24641,
+          24641,
+          0.05
+        ],
+        "engine": {
+          "effect": -0.010000000000000009,
+          "se0": 0.0035694481629943934,
+          "se1": 0.0035691639146831324,
+          "cutoff": 0.006995985569564783,
+          "lower": -0.006995985569564783,
+          "upper": 0.006995985569564783,
+          "alternative": "two-sided",
+          "power": 0.800011233981818,
+          "beta": 0.19998876601818205
+        },
+        "scipy": {
+          "se0": 0.0035694481629943934,
+          "se1": 0.0035691639146831324,
+          "cutoff": 0.006995989844151667,
+          "power": 0.8000108435880425
+        },
+        "statsmodels_power": 0.8000108435880425
+      }
+    },
+    {
+      "name": "Power + beta = 1 (2)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 3: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.23,
+          0.2484,
+          15000,
+          9000,
+          0.01
+        ],
+        "engine": {
+          "effect": 0.0184,
+          "se0": 0.005669072273700914,
+          "se1": 0.00570533317753369,
+          "cutoff": 0.014602574016992395,
+          "lower": -0.014602574016992395,
+          "upper": 0.014602574016992395,
+          "alternative": "two-sided",
+          "power": 0.747164217776075,
+          "beta": 0.252835782223925
+        },
+        "scipy": {
+          "se0": 0.005669072273700914,
+          "se1": 0.00570533317753369,
+          "cutoff": 0.014602562486535407,
+          "power": 0.7471647934596845
+        },
+        "statsmodels_power": 0.7471647934596845
+      }
+    },
+    {
+      "name": "Power + beta = 1 (3)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 4: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.02,
+          0.025,
+          10000,
+          5000,
+          0.05
+        ],
+        "engine": {
+          "effect": 0.005000000000000001,
+          "se0": 0.002521738818090935,
+          "se1": 0.0026143832924802744,
+          "cutoff": 0.004942514241970586,
+          "lower": -0.004942514241970586,
+          "upper": 0.004942514241970586,
+          "alternative": "two-sided",
+          "power": 0.5088428861699479,
+          "beta": 0.4911571138300521
+        },
+        "scipy": {
+          "se0": 0.002521738818090935,
+          "se1": 0.0026143832924802744,
+          "cutoff": 0.004942517261874836,
+          "power": 0.5088423571196422
+        },
+        "statsmodels_power": 0.5088423571196421
+      }
+    },
+    {
+      "name": "Power + beta = 1 (4)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 5: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.8,
+          0.76,
+          3000,
+          9000,
+          0.2
+        ],
+        "engine": {
+          "effect": -0.040000000000000036,
+          "se0": 0.00887192826341101,
+          "se1": 0.008579044235810887,
+          "cutoff": 0.011369836865794078,
+          "lower": -0.011369836865794078,
+          "upper": 0.011369836865794078,
+          "alternative": "two-sided",
+          "power": 0.9995768413528691,
+          "beta": 0.000423158647130939
+        },
+        "scipy": {
+          "se0": 0.00887192826341101,
+          "se1": 0.008579044235810887,
+          "cutoff": 0.011369833555373767,
+          "power": 0.9995768978745195
+        },
+        "statsmodels_power": 0.9995768978745195
+      }
+    },
+    {
+      "name": "Power + beta = 1 (5)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 6: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.2,
+          10000,
+          10000,
+          0.05
+        ],
+        "engine": {
+          "effect": 0,
+          "se0": 0.005656854249492381,
+          "se1": 0.005656854249492381,
+          "cutoff": 0.011087223820440752,
+          "lower": -0.011087223820440752,
+          "upper": 0.011087223820440752,
+          "alternative": "two-sided",
+          "power": 0.05000000000000018,
+          "beta": 0.9499999999999998
+        },
+        "scipy": {
+          "se0": 0.005656854249492381,
+          "se1": 0.005656854249492381,
+          "cutoff": 0.011087230594797425,
+          "power": 0.05
+        },
+        "statsmodels_power": 0.049999999999999954
+      }
+    },
+    {
+      "name": "Power + beta = 1 (6)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 7: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.21,
+          20000,
+          20000,
+          0.01
+        ],
+        "engine": {
+          "effect": 0.009999999999999981,
+          "se0": 0.00403701622488689,
+          "se1": 0.004036706578387882,
+          "cutoff": 0.010398672901946519,
+          "lower": -0.010398672901946519,
+          "upper": 0.010398672901946519,
+          "alternative": "two-sided",
+          "power": 0.4606638088852176,
+          "beta": 0.5393361911147825
+        },
+        "scipy": {
+          "se0": 0.00403701622488689,
+          "se1": 0.004036706578387882,
+          "cutoff": 0.01039866469096601,
+          "power": 0.4606646757290269
+        },
+        "statsmodels_power": 0.46066467572902675
+      }
+    },
+    {
+      "name": "Power + beta = 1 (7)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 8: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.21,
+          20000,
+          20000,
+          0.05
+        ],
+        "engine": {
+          "effect": 0.009999999999999981,
+          "se0": 0.00403701622488689,
+          "se1": 0.004036706578387882,
+          "cutoff": 0.007912401571259895,
+          "lower": -0.007912401571259895,
+          "upper": 0.007912401571259895,
+          "alternative": "two-sided",
+          "power": 0.6974801969999558,
+          "beta": 0.3025198030000442
+        },
+        "scipy": {
+          "se0": 0.00403701622488689,
+          "se1": 0.004036706578387882,
+          "cutoff": 0.007912406405782156,
+          "power": 0.6974797594506038
+        },
+        "statsmodels_power": 0.6974797594506036
+      }
+    },
+    {
+      "name": "Power + beta = 1 (8)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 9: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.21,
+          20000,
+          20000,
+          0.05,
+          "greater"
+        ],
+        "engine": {
+          "effect": 0.009999999999999981,
+          "se0": 0.00403701622488689,
+          "se1": 0.004036706578387882,
+          "cutoff": 0.006640300166774061,
+          "lower": null,
+          "upper": 0.006640300166774061,
+          "alternative": "greater",
+          "power": 0.7973766729591558,
+          "beta": 0.20262332704084418
+        },
+        "scipy": {
+          "se0": 0.00403701622488689,
+          "se1": 0.004036706578387882,
+          "cutoff": 0.006640300779567142,
+          "power": 0.7973765734470871
+        },
+        "statsmodels_power": 0.7973765734470869
+      }
+    },
+    {
+      "name": "Power + beta = 1 (9)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 10: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.19,
+          20000,
+          20000,
+          0.05,
+          "less"
+        ],
+        "engine": {
+          "effect": -0.010000000000000009,
+          "se0": 0.003962007067131506,
+          "se1": 0.003961691557908062,
+          "cutoff": 0.006516921092971448,
+          "lower": -0.006516921092971448,
+          "upper": null,
+          "alternative": "less",
+          "power": 0.8103508612312222,
+          "beta": 0.18964913876877776
+        },
+        "scipy": {
+          "se0": 0.003962007067131506,
+          "se1": 0.003961691557908062,
+          "cutoff": 0.0065169216943786225,
+          "power": 0.8103507786021427
+        },
+        "statsmodels_power": 0.8103507786021424
+      }
+    },
+    {
+      "name": "Power + beta = 1 (10)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 11: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.19,
+          20000,
+          10000,
+          0.01,
+          "greater"
+        ],
+        "engine": {
+          "effect": -0.010000000000000009,
+          "se0": 0.004868093398172773,
+          "se1": 0.004836320915737499,
+          "cutoff": 0.011324874470613235,
+          "lower": null,
+          "upper": 0.011324874470613235,
+          "alternative": "greater",
+          "power": 5.1891183849759156e-06,
+          "beta": 0.999994810881615
+        },
+        "scipy": {
+          "se0": 0.004868093398172773,
+          "se1": 0.004836320915737499,
+          "cutoff": 0.011324878727471482,
+          "power": 5.184823957928182e-06
+        },
+        "statsmodels_power": 5.184823957928192e-06
+      }
+    },
+    {
+      "name": "Power + beta = 1 (11)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 12: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.21,
+          10000,
+          20000,
+          0.8,
+          "less"
+        ],
+        "engine": {
+          "effect": 0.009999999999999981,
+          "se0": 0.004959166596650423,
+          "se1": 0.004928995840939613,
+          "cutoff": -0.004173738953344712,
+          "lower": 0.004173738953344712,
+          "upper": null,
+          "alternative": "less",
+          "power": 0.11859534388055035,
+          "beta": 0.8814046561194496
+        },
+        "scipy": {
+          "se0": 0.004959166596650423,
+          "se1": 0.004928995840939613,
+          "cutoff": -0.00417373990856652,
+          "power": 0.11859532347710378
+        },
+        "statsmodels_power": 0.11859532347710383
+      }
+    },
+    {
+      "name": "Power + beta = 1 (12)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 13: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.2,
+          10000,
+          10000,
+          0.05,
+          "greater"
+        ],
+        "engine": {
+          "effect": 0,
+          "se0": 0.005656854249492381,
+          "se1": 0.005656854249492381,
+          "cutoff": 0.009304696370739322,
+          "lower": null,
+          "upper": 0.009304696370739322,
+          "alternative": "greater",
+          "power": 0.0500000000000001,
+          "beta": 0.95
+        },
+        "scipy": {
+          "se0": 0.005656854249492381,
+          "se1": 0.005656854249492381,
+          "cutoff": 0.009304697229413392,
+          "power": 0.050000000000000024
+        },
+        "statsmodels_power": 0.049999999999999975
+      }
+    },
+    {
+      "name": "Power + beta = 1 (13)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Power model 14: SciPy and statsmodels",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.2,
+          10000,
+          10000,
+          0.05,
+          "less"
+        ],
+        "engine": {
+          "effect": 0,
+          "se0": 0.005656854249492381,
+          "se1": 0.005656854249492381,
+          "cutoff": 0.009304696370739322,
+          "lower": -0.009304696370739322,
+          "upper": null,
+          "alternative": "less",
+          "power": 0.0500000000000001,
+          "beta": 0.95
+        },
+        "scipy": {
+          "se0": 0.005656854249492381,
+          "se1": 0.005656854249492381,
+          "cutoff": 0.009304697229413392,
+          "power": 0.050000000000000024
+        },
+        "statsmodels_power": 0.049999999999999975
+      }
+    },
+    {
+      "name": "Power + beta = 1 (14)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Alpha and nominal confidence complement",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Integer sample-size minimality 1",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.05,
+          0.05,
+          0.8,
+          0.5
+        ],
+        "n": [
+          25583,
+          25583
+        ],
+        "model": {
+          "effect": 0.010000000000000009,
+          "se0": 0.0035694372970207916,
+          "se1": 0.003569163514677377,
+          "cutoff": 0.0069959642726608795,
+          "lower": -0.0069959642726608795,
+          "upper": 0.0069959642726608795,
+          "alternative": "two-sided",
+          "power": 0.8000129308669466,
+          "beta": 0.19998706913305342
+        },
+        "previous": 0.7999976008761569
+      }
+    },
+    {
+      "name": "Integer sample-size minimality 2",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.05,
+          0.05,
+          0.9,
+          0.5
+        ],
+        "n": [
+          34247,
+          34247
+        ],
+        "model": {
+          "effect": 0.010000000000000009,
+          "se0": 0.0030850643399267103,
+          "se1": 0.0030848277098715266,
+          "cutoff": 0.006046611301731368,
+          "lower": -0.006046611301731368,
+          "upper": 0.006046611301731368,
+          "alternative": "two-sided",
+          "power": 0.9000013371704109,
+          "beta": 0.09999866282958914
+        },
+        "previous": 0.8999930310065785
+      }
+    },
+    {
+      "name": "Integer sample-size minimality 3",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.025,
+          0.05,
+          0.8,
+          0.5
+        ],
+        "n": [
+          101403,
+          101403
+        ],
+        "model": {
+          "effect": 0.004999999999999977,
+          "se0": 0.0017847091720479412,
+          "se1": 0.0017846746365310874,
+          "cutoff": 0.0034979635628166763,
+          "lower": -0.0034979635628166763,
+          "upper": 0.0034979635628166763,
+          "alternative": "two-sided",
+          "power": 0.8000035829297029,
+          "beta": 0.19999641707029714
+        },
+        "previous": 0.7999997155082628
+      }
+    },
+    {
+      "name": "Integer sample-size minimality 4",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          -0.05,
+          0.05,
+          0.8,
+          0.5
+        ],
+        "n": [
+          24641,
+          24641
+        ],
+        "model": {
+          "effect": -0.010000000000000009,
+          "se0": 0.0035694481629943934,
+          "se1": 0.0035691639146831324,
+          "cutoff": 0.006995985569564783,
+          "lower": -0.006995985569564783,
+          "upper": 0.006995985569564783,
+          "alternative": "two-sided",
+          "power": 0.800011233981818,
+          "beta": 0.19998876601818205
+        },
+        "previous": 0.7999953178419167
+      }
+    },
+    {
+      "name": "Integer sample-size minimality 5",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.23,
+          0.08,
+          0.01,
+          0.8,
+          0.3725
+        ],
+        "n": [
+          16793,
+          9969
+        ],
+        "model": {
+          "effect": 0.018400000000000027,
+          "se0": 0.0053754346499570275,
+          "se1": 0.005410532417355141,
+          "cutoff": 0.013846213023892084,
+          "lower": -0.013846213023892084,
+          "upper": 0.013846213023892084,
+          "alternative": "two-sided",
+          "power": 0.8000087484916717,
+          "beta": 0.1999912515083283
+        },
+        "previous": 0.7999980072606094
+      }
+    },
+    {
+      "name": "Integer sample-size minimality 6",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.05,
+          0.05,
+          0.8,
+          0.5,
+          "greater"
+        ],
+        "n": [
+          20151,
+          20151
+        ],
+        "model": {
+          "effect": 0.010000000000000009,
+          "se0": 0.004021862244267625,
+          "se1": 0.004021553760106537,
+          "cutoff": 0.0066153740890899865,
+          "lower": null,
+          "upper": 0.0066153740890899865,
+          "alternative": "greater",
+          "power": 0.8000001148005228,
+          "beta": 0.1999998851994772
+        },
+        "previous": 0.7999828407334767
+      }
+    },
+    {
+      "name": "Integer sample-size minimality 7",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          -0.05,
+          0.05,
+          0.8,
+          0.5,
+          "less"
+        ],
+        "n": [
+          19410,
+          19410
+        ],
+        "model": {
+          "effect": -0.010000000000000009,
+          "se0": 0.004021772276138075,
+          "se1": 0.004021452007590791,
+          "cutoff": 0.006615226104699442,
+          "lower": -0.006615226104699442,
+          "upper": null,
+          "alternative": "less",
+          "power": 0.8000163784384541,
+          "beta": 0.19998362156154592
+        },
+        "previous": 0.7999984453099923
+      }
+    },
+    {
+      "name": "Integer sample-size minimality 8",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.23,
+          0.08,
+          0.01,
+          0.8,
+          0.3725,
+          "greater"
+        ],
+        "n": [
+          14434,
+          8569
+        ],
+        "model": {
+          "effect": 0.018400000000000027,
+          "se0": 0.005797999707783571,
+          "se1": 0.00583585317342517,
+          "cutoff": 0.013488159223885698,
+          "lower": null,
+          "upper": 0.013488159223885698,
+          "alternative": "greater",
+          "power": 0.8000126623191526,
+          "beta": 0.19998733768084742
+        },
+        "previous": 0.7999690743394332
+      }
+    },
+    {
+      "name": "One-sided increase needs fewer users",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "One-sided decrease needs fewer users",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Higher desired power requires more users",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Smaller effect magnitude requires more users",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Lower alpha lowers fixed-n power",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Observed test and CI 1",
+      "passed": true,
+      "detail": {
+        "input": [
+          5200,
+          26000,
+          5460,
+          26000,
+          0.05
+        ],
+        "engine_p": 0.0047384914914869415,
+        "reference_p": 0.004738366879924281,
+        "engine_ci": [
+          0.0030603753040513576,
+          0.01693865118532472
+        ],
+        "reference_ci": [
+          0.003060371063561206,
+          0.016938655424625138
+        ],
+        "method": "pooled z"
+      }
+    },
+    {
+      "name": "Observed test and CI 2",
+      "passed": true,
+      "detail": {
+        "input": [
+          0,
+          20,
+          0,
+          20,
+          0.05
+        ],
+        "engine_p": 1,
+        "reference_p": 1.0,
+        "engine_ci": [
+          -0.16112499288118984,
+          0.16112499288118984
+        ],
+        "reference_ci": [
+          -0.1611251580528194,
+          0.1611251580528194
+        ],
+        "method": "Fisher"
+      }
+    },
+    {
+      "name": "Zero baseline relative change is undefined (2)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Observed test and CI 3",
+      "passed": true,
+      "detail": {
+        "input": [
+          20,
+          20,
+          20,
+          20,
+          0.05
+        ],
+        "engine_p": 1,
+        "reference_p": 1.0,
+        "engine_ci": [
+          -0.16112499288118987,
+          0.16112499288118987
+        ],
+        "reference_ci": [
+          -0.16112515805281957,
+          0.16112515805281957
+        ],
+        "method": "Fisher"
+      }
+    },
+    {
+      "name": "Observed test and CI 4",
+      "passed": true,
+      "detail": {
+        "input": [
+          0,
+          12,
+          4,
+          13,
+          0.05
+        ],
+        "engine_p": 0.09565217391304297,
+        "reference_p": 0.09565217391304347,
+        "engine_ci": [
+          0.005165133918833664,
+          0.576306416779977
+        ],
+        "reference_ci": [
+          0.005164912937109023,
+          0.5763065681945096
+        ],
+        "method": "Fisher"
+      }
+    },
+    {
+      "name": "Zero baseline relative change is undefined (4)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Observed test and CI 5",
+      "passed": true,
+      "detail": {
+        "input": [
+          1,
+          100,
+          6,
+          100,
+          0.01
+        ],
+        "engine_p": 0.1184053810638615,
+        "reference_p": 0.11840538106385107,
+        "engine_ci": [
+          -0.02941825174984184,
+          0.14305571215108134
+        ],
+        "reference_ci": [
+          -0.02941816332438394,
+          0.14305561507780512
+        ],
+        "method": "Fisher"
+      }
+    },
+    {
+      "name": "Observed test and CI 6",
+      "passed": true,
+      "detail": {
+        "input": [
+          150,
+          500,
+          90,
+          400,
+          0.05
+        ],
+        "engine_p": 0.01146332672467584,
+        "reference_p": 0.011463286182235907,
+        "engine_ci": [
+          -0.13145136250501926,
+          -0.0169522304477797
+        ],
+        "reference_ci": [
+          -0.13145139640859896,
+          -0.01695219461803653
+        ],
+        "method": "pooled z"
+      }
+    },
+    {
+      "name": "Observed test and CI 7",
+      "passed": true,
+      "detail": {
+        "input": [
+          1,
+          2,
+          0,
+          2,
+          0.05
+        ],
+        "engine_p": 1,
+        "reference_p": 1.0,
+        "engine_ci": [
+          -0.9054687094432139,
+          0.2725725063918927
+        ],
+        "reference_ci": [
+          -0.9054687942657693,
+          0.2725727851131816
+        ],
+        "method": "Fisher"
+      }
+    },
+    {
+      "name": "Observed test and CI 8",
+      "passed": true,
+      "detail": {
+        "input": [
+          0,
+          1000,
+          1,
+          1000,
+          0.05
+        ],
+        "engine_p": 0.9999999999998276,
+        "reference_p": 1.0,
+        "engine_ci": [
+          -0.002914348028004328,
+          0.005642553797817796
+        ],
+        "reference_ci": [
+          -0.0029143526139704433,
+          0.005642558597957937
+        ],
+        "method": "Fisher"
+      }
+    },
+    {
+      "name": "Zero baseline relative change is undefined (8)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Observed test and CI 9",
+      "passed": true,
+      "detail": {
+        "input": [
+          5200,
+          26000,
+          5460,
+          26000,
+          0.05,
+          "greater"
+        ],
+        "engine_p": 0.0023692457457434707,
+        "reference_p": 0.0023691834399621405,
+        "engine_ci": [
+          0.004176154692118941,
+          1
+        ],
+        "reference_ci": [
+          0.004176154154636059,
+          1.0
+        ],
+        "method": "pooled z"
+      }
+    },
+    {
+      "name": "Observed test and CI 10",
+      "passed": true,
+      "detail": {
+        "input": [
+          5200,
+          26000,
+          5460,
+          26000,
+          0.05,
+          "less"
+        ],
+        "engine_p": 0.9976307542542565,
+        "reference_p": 0.9976308165600378,
+        "engine_ci": [
+          -1,
+          0.01582315967733936
+        ],
+        "reference_ci": [
+          -1.0,
+          0.01582316021469566
+        ],
+        "method": "pooled z"
+      }
+    },
+    {
+      "name": "Observed test and CI 11",
+      "passed": true,
+      "detail": {
+        "input": [
+          0,
+          12,
+          4,
+          13,
+          0.05,
+          "greater"
+        ],
+        "engine_p": 0.0565217391304345,
+        "reference_p": 0.05652173913043479,
+        "engine_ci": [
+          0.06303067967644582,
+          1
+        ],
+        "reference_ci": [
+          0.0630306521024579,
+          1.0
+        ],
+        "method": "Fisher"
+      }
+    },
+    {
+      "name": "Zero baseline relative change is undefined (11)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Observed test and CI 12",
+      "passed": true,
+      "detail": {
+        "input": [
+          0,
+          12,
+          4,
+          13,
+          0.05,
+          "less"
+        ],
+        "engine_p": 0.9999999999999936,
+        "reference_p": 1.0,
+        "engine_ci": [
+          -1,
+          0.535225664934737
+        ],
+        "reference_ci": [
+          -1.0,
+          0.5352256852769854
+        ],
+        "method": "Fisher"
+      }
+    },
+    {
+      "name": "Zero baseline relative change is undefined (12)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Observed test and CI 13",
+      "passed": true,
+      "detail": {
+        "input": [
+          0,
+          20,
+          0,
+          20,
+          0.05,
+          "greater"
+        ],
+        "engine_p": 1,
+        "reference_p": 1.0,
+        "engine_ci": [
+          -0.11915781798886041,
+          1
+        ],
+        "reference_ci": [
+          -0.11915783736096455,
+          1.0
+        ],
+        "method": "Fisher"
+      }
+    },
+    {
+      "name": "Zero baseline relative change is undefined (13)",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Observed test and CI 14",
+      "passed": true,
+      "detail": {
+        "input": [
+          20,
+          20,
+          20,
+          20,
+          0.05,
+          "less"
+        ],
+        "engine_p": 1,
+        "reference_p": 1.0,
+        "engine_ci": [
+          -1,
+          0.11915781798886038
+        ],
+        "reference_ci": [
+          -1.0,
+          0.11915783736096452
+        ],
+        "method": "Fisher"
+      }
+    },
+    {
+      "name": "Observed test and CI 15",
+      "passed": true,
+      "detail": {
+        "input": [
+          150,
+          500,
+          90,
+          400,
+          0.8,
+          "less"
+        ],
+        "engine_p": 0.00573166336233792,
+        "reference_p": 0.005731643091117953,
+        "engine_ci": [
+          -1,
+          -0.09946686521470435
+        ],
+        "reference_ci": [
+          -1.0,
+          -0.09946687077711772
+        ],
+        "method": "pooled z"
+      }
+    },
+    {
+      "name": "Long-run simulated rejection rate 1",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.2,
+          5000,
+          5000,
+          0.05,
+          20000
+        ],
+        "observed": 0.0512,
+        "reference": 0.05,
+        "tolerance": 0.01070551750371122,
+        "sparse_tables": 0
+      }
+    },
+    {
+      "name": "Long-run simulated rejection rate 2",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.21,
+          25583,
+          25583,
+          0.05,
+          20000
+        ],
+        "observed": 0.8003,
+        "reference": 0.8000125404776748,
+        "tolerance": 0.01714180308324099,
+        "sparse_tables": 0
+      }
+    },
+    {
+      "name": "Long-run simulated rejection rate 3",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.19,
+          24641,
+          24641,
+          0.05,
+          20000
+        ],
+        "observed": 0.7987,
+        "reference": 0.8000108435880425,
+        "tolerance": 0.017141848081562355,
+        "sparse_tables": 0
+      }
+    },
+    {
+      "name": "Long-run simulated rejection rate 4",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.2,
+          5000,
+          5000,
+          0.05,
+          10000,
+          "greater"
+        ],
+        "observed": 0.048,
+        "reference": 0.05,
+        "tolerance": 0.013897247358851682,
+        "sparse_tables": 0
+      }
+    },
+    {
+      "name": "Long-run simulated rejection rate 5",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.2,
+          5000,
+          5000,
+          0.05,
+          10000,
+          "less"
+        ],
+        "observed": 0.0516,
+        "reference": 0.05,
+        "tolerance": 0.013897247358851682,
+        "sparse_tables": 0
+      }
+    },
+    {
+      "name": "Long-run simulated rejection rate 6",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.21,
+          20000,
+          20000,
+          0.05,
+          10000,
+          "greater"
+        ],
+        "observed": 0.7928,
+        "reference": 0.7973765734470871,
+        "tolerance": 0.023097709668322232,
+        "sparse_tables": 0
+      }
+    },
+    {
+      "name": "Long-run simulated rejection rate 7",
+      "passed": true,
+      "detail": {
+        "input": [
+          0.2,
+          0.19,
+          20000,
+          20000,
+          0.05,
+          10000,
+          "less"
+        ],
+        "observed": 0.8054,
+        "reference": 0.8103507786021427,
+        "tolerance": 0.022601173065727714,
+        "sparse_tables": 0
+      }
+    },
+    {
+      "name": "Binomial generator mean/variance 1",
+      "passed": true,
+      "detail": {
+        "n": 10,
+        "p": 0.2,
+        "R": 20000,
+        "mean": 2.004,
+        "variance": 1.5919635981799087,
+        "reference_mean": 2.0,
+        "reference_variance": 1.6
+      }
+    },
+    {
+      "name": "Binomial generator mean/variance 2",
+      "passed": true,
+      "detail": {
+        "n": 1000,
+        "p": 0.02,
+        "R": 20000,
+        "mean": 19.9443,
+        "variance": 19.399267473373662,
+        "reference_mean": 20.0,
+        "reference_variance": 19.6
+      }
+    },
+    {
+      "name": "Binomial generator mean/variance 3",
+      "passed": true,
+      "detail": {
+        "n": 100000,
+        "p": 0.6,
+        "R": 20000,
+        "mean": 60000.7253,
+        "variance": 23781.677723729936,
+        "reference_mean": 60000.0,
+        "reference_variance": 24000.0
+      }
+    },
+    {
+      "name": "Invalid inputs rejected by engine",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Binomial boundaries 0 and 1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Synthetic revenue mean and zero mass",
+      "passed": true,
+      "detail": {
+        "R": 200000,
+        "mean": 11.92968074651588,
+        "zeroRate": 0.799925,
+        "reference_mean": 12.015572630216095
+      }
+    }
+  ],
+  "limitations": [
+    "No real-browser rendering or accessibility checks",
+    "Finite selected cases, not exhaustive validation",
+    "Simulation tolerance includes Monte Carlo and planning approximation",
+    "No production experiment validity audit"
+  ],
+  "post_run_ui_changes": "Simulator preset highlighting, CSV alpha/test metadata and conditional graph wording; statistical engine unchanged. DOM interaction checks rerun."
+}

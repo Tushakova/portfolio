@@ -1,12 +1,12 @@
 # Validation record
 
-Validated on **16 October 2026**. **47/47 automated checks passed.** These are assertions across selected numerical scenarios, not 47 independent experiments or an exhaustive proof.
+Validated on **16 October 2026**. **78/78 automated checks passed.** These are assertions across selected numerical scenarios, not 78 independent experiments or an exhaustive proof.
 
 ## Exact documented baseline
 
-- Application: latest delivered single-file browser edition with negative-effect planning, half-unit sliders, precise number entry, compact layout and three chart views.
-- HTML SHA-256: `686ca74c8d3c327d1b44b62dc72b66d316ed7808b7c999b2484c51bb77f3d6cd`
-- Statistical-script SHA-256 (the text between its script tags): `e2536629b640131cd9dac9885a89e10a21c7e7956aca2885882ac9f54a6a6a56`
+- Application: documented single-file browser release with shared two-sided/one-sided selection, directional bounds, negative-effect planning, half-unit sliders, precise number entry, compact layout and three chart views.
+- HTML SHA-256: `7320b8e3455c7981845e0878c1ac45da8fcd777a90e2a2c6d21718ffe9af1b49`
+- Statistical-script SHA-256 (the text between its script tags): `09954f33175a2745e1ee85e1087d6c9969e49646d7c0e33250f7f0333519be0d`
 - This documentation package contains no replacement app file. The hash identifies the HTML used for validation, not a verified current deployment.
 - Full machine-readable output: [validation-results.json](validation-results.json).
 
@@ -28,16 +28,16 @@ Node executes the actual inline `lab-statistics` source extracted from the chose
 | --- | --- |
 | Normal CDF | 321 z-values from −8 to +8, maximum absolute error < 1e−7 against SciPy |
 | Normal inverse CDF | 13 probabilities from .0005 to .9995; maximum absolute error < 1e−4 in z units |
-| Planning power | Eight scenarios: positive/negative/zero effects, unequal n, low rates, different α; absolute power difference < 2e−6 against SciPy and statsmodels |
+| Planning power | Fourteen scenarios: both directional alternatives and two-sided, positive/negative/zero effects, opposite directions, unequal n, low rates, different α; absolute power difference < 2e−6 against SciPy and statsmodels |
 | Standard errors and cutoffs | SE difference < 1e−12; absolute cutoff difference < 1e−7 in proportion units |
 | Complements | Calculated power + β = 1; α/confidence algebraic identity |
-| Planning | Five designs meet desired power; immediately smaller candidate control n fails under the same rounded allocation rule |
+| Planning | Eight designs meet desired power; immediately smaller candidate control n fails under the same rounded allocation rule |
 | Relationships | Higher desired power and smaller effect magnitude increase n; stricter α reduces fixed-n power |
-| Observed analysis | Eight tables, including normal and sparse cases, both-zero and both-all-event counts, zero control and tiny n |
-| Test references | Pooled z versus statsmodels; Fisher versus SciPy; absolute p difference < 2e−6 |
-| CI reference | Wilson-based Newcombe difference interval versus statsmodels, absolute endpoint difference < 2e−6 in proportion units |
+| Observed analysis | Fifteen tables, including directional alternatives, normal and sparse cases, both-zero and both-all-event counts, zero control and tiny n |
+| Test references | Selected-direction pooled z versus statsmodels; matching-tail Fisher versus SciPy; absolute p difference < 2e−6 |
+| CI reference | Central Newcombe intervals and ordinary one-sided finite bounds versus statsmodels, absolute endpoint difference < 2e−6; unusual confidence ≤50% uses an independently calculated signed-Wilson formula, not a library coverage guarantee |
 | Binomial random generator | Empirical means/variances for n=10, 1,000 and 100,000, 20,000 draws each; count validity and p=0/1 boundaries |
-| Long-run calibration | 20,000 experiments each under H₀, positive H₁ and negative H₁ |
+| Long-run calibration | 100,000 total: 20,000 each in three two-sided scenarios; 10,000 each in four directional null/alternative scenarios |
 | Revenue generator | 200,000 synthetic users: mean agrees within 5 theoretical Monte Carlo SEs and zero mass within .01 |
 | Invalid engine inputs | Negative/excess/fractional counts, n<2, invalid planning rates, zero planning effect |
 
@@ -47,13 +47,17 @@ The α/confidence identity is an algebra check, not an automated test of slider 
 
 All scenarios below use α = 5% and baseline 20%. Simulations use deterministic validation seeds; the interactive app's simulation uses unseeded `Math.random()`.
 
-| Scenario | Control / treatment n | Repetitions | Nominal/reference rejection rate | Observed rejection rate |
+| Test / scenario | Control / treatment n | Repetitions | Nominal/reference rejection rate | Observed rejection rate |
 | --- | --- | --- | --- | --- |
-| No true effect | 5,000 / 5,000 | 20,000 | 5.0000% | 5.12% |
-| +5% relative | 25,583 / 25,583 | 20,000 | 80.0013% | 80.03% |
-| −5% relative | 24,641 / 24,641 | 20,000 | 80.0011% | 79.87% |
+| two-sided / null boundary | 5,000 / 5,000 | 20,000 | 5.0000% | 5.12% |
+| two-sided / +5% relative | 25,583 / 25,583 | 20,000 | 80.0013% | 80.03% |
+| two-sided / −5% relative | 24,641 / 24,641 | 20,000 | 80.0011% | 79.87% |
+| greater / null boundary | 5,000 / 5,000 | 10,000 | 5.0000% | 4.80% |
+| less / null boundary | 5,000 / 5,000 | 10,000 | 5.0000% | 5.16% |
+| greater / +5% relative | 20,000 / 20,000 | 10,000 | 79.7377% | 79.28% |
+| less / −5% relative | 20,000 / 20,000 | 10,000 | 81.0351% | 80.54% |
 
-At H₀ the reference is nominal α. At H₁ it is the SciPy normal-model power approximation. The tolerance is five Monte Carlo SEs plus .003 absolute probability to allow for a modest planning-versus-observed-test discrepancy. This is a sanity check, not proof that rejection is exact at every event rate or tiny sample. No sparse tables occurred in these three large-sample scenarios; exact-test correctness is checked separately on selected sparse tables.
+At H₀ the reference is nominal α. At H₁ it is the SciPy normal-model power approximation. The tolerance is five Monte Carlo SEs plus .003 absolute probability to allow for a modest planning-versus-observed-test discrepancy. This is a sanity check, not proof that rejection is exact at every event rate or tiny sample. No sparse tables occurred in these seven large-sample scenarios; exact-test correctness is checked separately on selected sparse tables.
 
 The recorded CDF error is about 7.41e−8. The recorded inverse-CDF error is about 3.32e−5 in z units. These explain why browser outputs need not match a reference calculator in every last digit. Floating-point tolerances are explicit; tests should not be loosened silently after a failure.
 
@@ -72,7 +76,7 @@ The runner prints PASS/FAIL lines and returns a non-zero exit code for failed ch
 
 ## Not established by these checks
 
-- Real-browser rendering, screenshot appearance, pointer events, mobile layout, chart overlap, keyboard accessibility, contrast or screen-reader usability. Use the manual checklist in [EDITING_AND_DEPLOYMENT.md](EDITING_AND_DEPLOYMENT.md).
+- Real-browser rendering, screenshot appearance, pointer events, mobile layout, chart overlap, keyboard accessibility, contrast or screen-reader usability. Manual browser checks should cover all four tabs, positive/negative effects, all test directions, comparison mode, keyboard and number inputs, chart labels, simulation reruns and invalid-input messages.
 - Whether the newest HTML is currently published, DNS/hosting health or external Plotly CDN availability.
 - Exact binomial power, correct calibration at all sparse/extreme settings, exhaustive Fisher enumeration or CI coverage over all parameters.
 - Valid randomisation, outcome measurement, no interference, appropriate stopping rules or business value for a real experiment.
@@ -83,9 +87,15 @@ The runner prints PASS/FAIL lines and returns a non-zero exit code for failed ch
 
 1. Planning uses fixed normal-model variances; observed z/Fisher procedures differ in finite samples.
 2. Newcombe CI and z/Fisher p-values are not method inverses; their decisions can differ near a boundary.
-3. Fixed-sample zero effect is accepted but generic detect/miss wording remains; interpret the values as null rejection/non-rejection there.
+3. Dynamic cards qualify zero/opposite-direction effects, but some generic power/β controls and the static dependency map remain framed for a true alternative. Read the warning and ONE_SIDED_TESTS.md.
 4. Invalid Design input may leave previous valid outputs visible beneath an alert.
 5. Fisher enumeration and large synthetic samples can be slow on extreme inputs or less powerful devices.
 6. Comparison curves and shaded areas are educational model scenarios, not empirical evidence or posterior probabilities.
 
 The result supports the documented MVP within these limits. It does not convert an educational tool into a production experimentation platform.
+
+## Directional release notes
+
+The shared selector, one/two rejection lines, shaded-area integrals, exact input precision, fixed-n opposite effects, directional p-values and confidence-bound labels, unchanged Analyse counts, pending-simulation cancellation and all three chart views also passed DOM interaction checks with Plotly rendering stubbed. These do not certify real-browser visual layout.
+
+After the numerical run, simulator-preset highlighting, CSV test/alpha metadata and conditional graph wording were refined. The statistical script hash was verified unchanged; DOM checks were rerun, and the HTML hash above records the validated release file. See the machine report for this provenance.

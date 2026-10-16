@@ -1,6 +1,6 @@
 # Statistical methods and assumptions
 
-This is the specification of the **browser edition** in `index.html`, not a generic description of every A/B testing method. Function names refer to the inline script `lab-statistics` unless otherwise stated. Read [README.md](README.md) first; use [QUESTIONS_AND_ANSWERS.md](QUESTIONS_AND_ANSWERS.md) for conversational explanations.
+This is the specification of the **browser edition** in `index.html`, not a generic description of every A/B testing method. Function names refer to the inline script `lab-statistics` unless otherwise stated. The project overview is in [README.md](README.md); directional hypotheses are covered in [ONE_SIDED_TESTS.md](ONE_SIDED_TESTS.md).
 
 ## 1. Data model and notation
 
@@ -33,11 +33,11 @@ The interface accepts a percentage R and sets r = R/100, p₁ = p₀(1+r). An ab
 | 20% | −5% relative | 19% | −1 percentage point |
 | 23% | +8% relative | 24.84% | +1.84 percentage points |
 
-Strictly, MDE describes the magnitude of a planning alternative. The signed control combines **magnitude and direction**. A negative value is not a different test. The application remains two-sided and does not implement non-inferiority, equivalence or a directional business-success test.
+Strictly, MDE describes the magnitude of a planning alternative. The signed control combines **magnitude and direction**. A negative value is not a different test. The global test selector separately chooses two-sided, one-sided increase or one-sided decrease. A signed effect alone does not change the test. Non-inferiority, equivalence and a business-success rule remain outside scope.
 
 ## 2. Hypotheses and the two curves
 
-The tested null is H₀: p₁ − p₀ = 0. The two-sided alternative is H₁: p₁ − p₀ ≠ 0. To calculate power we select one specific alternative δ, even though the test can reject in either direction.
+In the default two-sided mode, the tested null is H₀: p₁ − p₀ = 0. The two-sided alternative is H₁: p₁ − p₀ ≠ 0. To calculate power we select one specific alternative δ, even though the test can reject in either direction.
 
 Each curve represents possible **estimates D̂ across repeated experiments**, not individual users, treatment-only outcomes, posterior probabilities or uncertainty over which hypothesis is true.
 
@@ -49,6 +49,8 @@ Each curve represents possible **estimates D̂ across repeated experiments**, no
 For a normal curve with mean μ and standard deviation s, the density is f(x) = exp(−(x−μ)²/(2s²))/(s√(2π)). Each full curve has area 1. Narrower distributions have higher peaks to preserve area. The plotted range truncates far tails; its numerical shaded areas are visual approximations. Calculated probabilities use the CDF, not the drawn pixels. Plotting percentage points rather than proportions also requires dividing the original density by 100, which the chart does, so areas remain probabilities.
 
 ## 3. Planning approximation: `model`
+
+The equations and α/2 areas below describe the default **two-sided** mode. [ONE_SIDED_TESTS.md](ONE_SIDED_TESTS.md) extends them to the two directional modes: one threshold, z(1−α), one selected rejection tail and a half-line non-rejection region. Its null curve is the boundary of a composite null, not the entire null.
 
 Under a specified alternative, the allocation-weighted pooled rate is
 
@@ -85,13 +87,13 @@ This pooled-null/unpooled-alternative approach is also documented by [statsmodel
 
 ## 4. Planning versus fixed sample: `plan`
 
-**Planning mode:** p₀, signed r, α, desired power and q are inputs; n₀ and n₁ are outputs. The power/β bar specifies desired power. Calculated achieved power is displayed separately and may be slightly higher after rounding.
+**Planning mode:** test direction, p₀, signed r, α, desired power and q are inputs; n₀ and n₁ are outputs. The power/β bar specifies desired power. Calculated achieved power is displayed separately and may be slightly higher after rounding.
 
 The treatment/control ratio is k = q/(1−q). For a candidate integer n₀, the code sets n₁ = max(2, ceil(k n₀)). Starting at n₀ = 2, it doubles the upper bound until achieved power meets the target, then binary-searches for the smallest integer control n that meets it under this allocation rule. This is not a closed-form sample-size formula and not an optimisation over all possible allocations. The doubling search stops with an error once its upper bound exceeds 100 million; this is a practical computational guard and can reject cases near that limit.
 
-**Fixed-sample mode:** p₀, signed r, α, n₀ and q are inputs; n₁ follows the allocation, and power and β are outputs. The β bar is disabled. This avoids a circular dependency in which both sample size and desired power independently control the same model.
+**Fixed-sample mode:** test direction, p₀, signed r, α, n₀ and q are inputs; n₁ follows the allocation, and power and β are outputs. The β bar is disabled. This avoids a circular dependency in which both sample size and desired power independently control the same model.
 
-At fixed rates and allocation, more users reduce SE and generally raise power for a non-zero effect. At fixed sample sizes and rates, reducing α moves thresholds outwards and reduces power. In planning mode stricter α instead increases n to preserve target power. A smaller **effect magnitude**, closer to zero, needs more users for the same target power. Do not interpret “smaller effect” as “more negative effect”.
+At fixed rates and allocation, more users reduce SE and generally raise power for a non-zero effect in the selected alternative. A fixed effect in the opposite direction of a one-sided test makes rejection less likely as n grows; it lies within that test's null. Planning rejects contradictory effect directions; choosing a directional test or re-entering Planning aligns the planning-effect sign and announces the adjustment. At fixed sample sizes and rates, reducing α moves thresholds outwards and reduces power. In planning mode stricter α instead increases n to preserve target power. A smaller **effect magnitude**, closer to zero, needs more users for the same target power. Do not interpret “smaller effect” as “more negative effect”.
 
 At δ = 0 the probability of rejection is approximately α, not useful ability to detect a real effect. The planning UI requires a non-zero effect; zero can be explored at fixed n or in Simulate. If desired power ≤ α, the minimum n may already exceed the target. Extreme α/β settings are educational settings, not recommended experiment designs. The normal approximation may be poor there.
 
@@ -105,19 +107,19 @@ Each repetition independently draws X₀ and X₁ from their binomial distributi
 
 For small n (<64), the random generator sums Bernoulli draws. For larger n it uses recursive beta splitting: a beta draw is constructed as Gₐ/(Gₐ+Gᵦ) from independent gamma draws; conditional splitting reduces the binomial problem recursively. This is distributional binomial generation, not a normal approximation to counts. Gamma generation uses a rejection sampler; normal draws use Box–Muller. These are custom browser routines and are validated empirically, not formally proven by this repository's tests.
 
-The interactive simulator uses `Math.random()`; repeated clicks are not seeded or replayable. Validation uses the supplied seeded PRNG. No cryptographic randomness is needed or claimed. The metrics demo uses fixed seeds and caches results.
+The interactive simulator uses `Math.random()`; repeated clicks are not seeded or replayable. Validation uses the built-in seeded PRNG. No cryptographic randomness is needed or claimed. The metrics demo uses fixed seeds and caches results.
 
 For R independent repetitions with rejection probability θ, K ~ Binomial(R, θ) and SD(K/R) = sqrt(θ(1−θ)/R). At R = 100, the expected rate's Monte Carlo SE is about 2.18 percentage points for θ=.05 and 4 percentage points for θ=.8. A batch need not contain exactly five false positives or exactly eighty detections. The simulator's displayed Monte Carlo SE uses the nominal/planning rate, not an estimated CI for the observed rate.
 
-Under H₀ a rejection is a false positive. Under the chosen non-zero H₁ a rejection is labelled detected, regardless of sign; otherwise it is a missed effect. Finite-sample discreteness, the estimated pooled variance and the exact-test fallback cause departures from the planning approximation.
+Under the selected H₀ a rejection is a false positive. At the null boundary its reference rate is α; a specified truth strictly within a one-sided null has its own, generally smaller, model rejection rate. Under a specified truth in H₁ a rejection is a detection; non-rejection is a missed effect. Two-sided detection includes either tail, while one-sided detection only uses the pre-specified direction. Finite-sample discreteness, the estimated pooled variance and the exact-test fallback cause departures from the planning approximation.
 
 ## 6. Analysis: `analyse`
 
 Inputs must be integer counts, nⱼ ≥ 2 and 0 ≤ Xⱼ ≤ nⱼ. Compute p̂ⱼ = Xⱼ/nⱼ, D̂ = p̂₁−p̂₀ and relative estimate D̂/p̂₀. If control has zero events, relative change is undefined; the absolute difference remains defined.
 
-The pooled observed rate is p̂ = (X₀+X₁)/(n₀+n₁). The pooled test SE is sqrt(p̂(1−p̂)(1/n₀+1/n₁)). When expected cells are adequate, Z = D̂/SE and p-value = 2Φ(−|Z|). There is no continuity correction.
+The pooled observed rate is p̂ = (X₀+X₁)/(n₀+n₁). The pooled test SE is sqrt(p̂(1−p̂)(1/n₀+1/n₁)). When expected cells are adequate, Z = D̂/SE. The two-sided p-value is 2Φ(−|Z|), the increase p-value is Φ(−Z), and the decrease p-value is Φ(Z). There is no continuity correction.
 
-Expected cells are n₀p̂, n₁p̂, n₀(1−p̂), n₁(1−p̂). If **any is below 5**, the implementation uses two-sided Fisher's exact test. For fixed row/column margins it sums hypergeometric probabilities of tables with probability no greater than the observed table. Log probabilities are used for numerical stability; code includes a 1e−7 tolerance on the log-probability comparison for nearly equal tables. This follows the probability-ordering two-sided convention, which is not generally twice a one-sided Fisher p-value. See [SciPy fisher_exact](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.fisher_exact.html).
+Expected cells are n₀p̂, n₁p̂, n₀(1−p̂), n₁(1−p̂). If **any is below 5**, the implementation uses Fisher's exact test with the selected two-sided or one-sided alternative. For a two-sided test with fixed row/column margins it sums hypergeometric probabilities of tables with probability no greater than the observed table. A one-sided test instead sums treatment-event-count probabilities at least as large (increase) or at most as large (decrease) as observed. Log probabilities are used for numerical stability; code includes a 1e−7 tolerance on the log-probability comparison for nearly equal tables. This follows the probability-ordering two-sided convention, which is not generally twice a one-sided Fisher p-value. See [SciPy fisher_exact](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.fisher_exact.html).
 
 The strict decision is **p < α**. p = α is not labelled significant. Both-zero or both-all-event cases enter the exact-test branch, avoiding a zero-SE division. Fisher calculation enumerates feasible tables: very large pathological inputs can be slow. The sparse-cell threshold is a practical rule, not a guarantee that every z-test above it is accurate.
 
@@ -126,6 +128,8 @@ The strict decision is **p < α**. p = α is not labelled significant. Both-zero
 It measures how unusual a result at least as extreme would be under H₀ and the specified sampling procedure. It is not P(H₀ true | data), P(result due to chance), an effect size or the chance that a rollout will succeed. Under an exactly calibrated continuous null test, p-values are uniform; for discrete tests they are typically conservative rather than exactly uniform. The finite-sample z-test is approximate.
 
 ## 7. Confidence interval: Wilson + Newcombe
+
+The central interval below is the **two-sided** result. A one-sided selection instead returns a Wilson-based Newcombe-style lower or upper bound at z(1−α), with the other endpoint at the physical difference limit ±1. See [ONE_SIDED_TESTS.md](ONE_SIDED_TESTS.md) for formulas, arrow display and unusual-confidence settings.
 
 For one observed proportion p̂ = X/n, put z = Φ⁻¹(1−α/2), A = 1+z²/n,
 
