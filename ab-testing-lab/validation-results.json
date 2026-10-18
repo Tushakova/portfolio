@@ -1,6 +1,6 @@
 {
   "run_at_utc": "2026-10-16T21:22:34.375469+00:00",
-  "html_sha256": "7320b8e3455c7981845e0878c1ac45da8fcd777a90e2a2c6d21718ffe9af1b49",
+  "html_sha256": "4b8e17aa7ce8119526593871f2e949016e223494c9b5e9cc2d181b76a3e4c1a6",
   "engine_sha256": "09954f33175a2745e1ee85e1087d6c9969e49646d7c0e33250f7f0333519be0d",
   "environment": {
     "python": "3.12.14",
@@ -1396,5 +1396,11 @@
     "Simulation tolerance includes Monte Carlo and planning approximation",
     "No production experiment validity audit"
   ],
-  "post_run_ui_changes": "Simulator preset highlighting, CSV alpha/test metadata and conditional graph wording; statistical engine unchanged. DOM interaction checks rerun."
+  "post_run_ui_changes": "Simulator preset highlighting, CSV alpha/test metadata and conditional graph wording; statistical engine unchanged. DOM interaction checks rerun.",
+  "ui_followup_2026_10_18": {
+    "change": "Planning MDE slider constrained to selected one-sided direction; wrong-sign/zero manual entries rejected before slider assignment; Fixed sample retains either true-effect direction.",
+    "checks": "DOM checks passed for slider limits, zero exclusion, manual warning/recovery, preserved last valid calculations, exact decimals, half steps, keyboard, mode/test changes, chart views, Analyse and 100 simulations. Plotly rendering stubbed.",
+    "engine_unchanged": true,
+    "numerical_checks_rerun": false
+  }
 }

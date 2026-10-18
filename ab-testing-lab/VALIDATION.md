@@ -5,7 +5,7 @@ Validated on **16 October 2026**. **78/78 automated checks passed.** These are a
 ## Exact documented baseline
 
 - Application: documented single-file browser release with shared two-sided/one-sided selection, directional bounds, negative-effect planning, half-unit sliders, precise number entry, compact layout and three chart views.
-- HTML SHA-256: `7320b8e3455c7981845e0878c1ac45da8fcd777a90e2a2c6d21718ffe9af1b49`
+- HTML SHA-256: `4b8e17aa7ce8119526593871f2e949016e223494c9b5e9cc2d181b76a3e4c1a6`
 - Statistical-script SHA-256 (the text between its script tags): `09954f33175a2745e1ee85e1087d6c9969e49646d7c0e33250f7f0333519be0d`
 - This documentation package contains no replacement app file. The hash identifies the HTML used for validation, not a verified current deployment.
 - Full machine-readable output: [validation-results.json](validation-results.json).
@@ -99,3 +99,9 @@ The result supports the documented MVP within these limits. It does not convert 
 The shared selector, one/two rejection lines, shaded-area integrals, exact input precision, fixed-n opposite effects, directional p-values and confidence-bound labels, unchanged Analyse counts, pending-simulation cancellation and all three chart views also passed DOM interaction checks with Plotly rendering stubbed. These do not certify real-browser visual layout.
 
 After the numerical run, simulator-preset highlighting, CSV test/alpha metadata and conditional graph wording were refined. The statistical script hash was verified unchanged; DOM checks were rerun, and the HTML hash above records the validated release file. See the machine report for this provenance.
+
+## Planning-input update — 18 October 2026
+
+The effect slider now enforces the chosen one-sided direction in Planning. DOM interaction checks passed for both sign restrictions, zero exclusion, wrong-sign/zero manual input, clear warnings, unchanged last-valid outputs, exact manual precision, half-unit slider/keyboard steps, test/mode changes, all chart views, Analyse and 100 simulated experiments. Fixed-sample true-effect exploration still permits either sign.
+
+The inline statistical engine was compared by SHA-256 and is byte-identical to the preceding numerically validated release. The 78 numerical checks above were not rerun for this interface-only change. The HTML hash records the updated interface; the numerical run timestamp and engine hash retain their original provenance. Plotly was stubbed in DOM checks; these are not real-browser visual checks.

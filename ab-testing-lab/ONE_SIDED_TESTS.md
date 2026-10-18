@@ -28,7 +28,7 @@ The chart uses one threshold and one α region in one-sided mode, and fills the 
 
 ## Planning and simulation behaviour
 
-Selecting a directional test while in Planning adjusts the planning effect sign to match and announces this next to the selector; it preserves the effect magnitude. Switching from Fixed sample to Planning also aligns the sign. Typing a contradictory planning effect produces a message rather than searching for an unattainable power target. A fixed-n model accepts opposite-direction effects to illustrate the consequences.
+Selecting a directional test while in Planning adjusts the planning effect sign to match and announces this next to the selector; it preserves the effect magnitude. Switching from Fixed sample to Planning also aligns the sign. The Planning slider cannot select an effect in the contradictory direction or exact zero. Manual values must be strictly positive for increase and strictly negative for decrease; incompatible entries are highlighted and produce a warning while the previous valid calculation is retained. Precise compatible values are preserved, including magnitudes smaller than the slider step. A fixed-n model accepts opposite-direction effects to illustrate the consequences.
 
 More users increase power for a fixed non-zero effect **in the selected alternative**. When a fixed effect is opposite to that alternative, more users generally reduce the probability of rejection in the selected direction. Do not apply the ordinary “n up, power up” statement without its directional condition.
 

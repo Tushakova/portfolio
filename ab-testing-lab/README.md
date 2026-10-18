@@ -80,6 +80,8 @@ MDE is a planning effect, not a minimum observed effect required for significanc
 
 ## Documentation baseline
 
+UI update, **18 October 2026**: one-sided Planning MDE sliders are restricted to the selected direction. Invalid signed or zero manual inputs show a warning and do not replace the last valid calculation. Fixed-sample true-effect exploration remains unrestricted by test direction. The statistical engine is unchanged from the recorded numerical validation baseline.
+
 Prepared on **16 October 2026** for the documented browser release, including a global two-sided / one-sided increase / one-sided decrease selector, negative-effect planning, compact layout, half-unit sliders, precise manual inputs and comparison mode. [VALIDATION.md](VALIDATION.md) records its SHA-256. The deployed website may run a different release; compare its source with the recorded validation baseline. This documentation does not certify a deployment.
 
 These documentation files belong **inside `portfolio/ab-testing-lab/`**, beside that project's `index.html`. They do not replace the repository's root portfolio homepage or root README. No licence is granted by the mere presence of public source; add a licence separately if reuse rights are intended.
