@@ -1,29 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-16T09:48:26.248308+00:00",
-  "event_count": 14,
+  "generated_at": "2026-10-18T09:37:23.087321+00:00",
+  "event_count": 13,
   "events": [
-    {
-      "id": "london-job-show-2026-16-october",
-      "title": "London Job Show (general careers fair, including data roles)",
-      "start_at": "2026-10-16T11:00:00+01:00",
-      "format": "in_person",
-      "organiser": "London Job Show",
-      "source": "London Job Show",
-      "source_url": "https://www.londonjobshow.co.uk/shepherdsbush/want-to-visit/",
-      "end_at": "2026-10-17T17:00:00+01:00",
-      "venue_name": "Westfield London, Shepherd's Bush",
-      "address": null,
-      "is_free": true,
-      "price_from_gbp": 0.0,
-      "registration_status": "open",
-      "topics": [
-        "Data Careers",
-        "Career Fairs"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "meetup-316381511",
       "title": "GPU, CUDA, and PyTorch Performance Optimizations",
@@ -289,6 +268,27 @@
     }
   ],
   "past_events": [
+    {
+      "id": "london-job-show-2026-16-october",
+      "title": "London Job Show (general careers fair, including data roles)",
+      "start_at": "2026-10-16T11:00:00+01:00",
+      "format": "in_person",
+      "organiser": "London Job Show",
+      "source": "London Job Show",
+      "source_url": "https://www.londonjobshow.co.uk/shepherdsbush/want-to-visit/",
+      "end_at": "2026-10-17T17:00:00+01:00",
+      "venue_name": "Westfield London, Shepherd's Bush",
+      "address": null,
+      "is_free": true,
+      "price_from_gbp": 0.0,
+      "registration_status": "open",
+      "topics": [
+        "Data Careers",
+        "Career Fairs"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
     {
       "id": "meetup-316602218",
       "title": "Databricks London Meetup - Data & Spritz - Databricks Genie",
@@ -693,6 +693,12 @@
       "at": "2026-10-16T09:48:26.248308+00:00",
       "event_id": "meetup-316602218",
       "title": "Databricks London Meetup - Data & Spritz - Databricks Genie",
+      "action": "archived"
+    },
+    {
+      "at": "2026-10-18T09:37:23.087321+00:00",
+      "event_id": "london-job-show-2026-16-october",
+      "title": "London Job Show (general careers fair, including data roles)",
       "action": "archived"
     }
   ]
