@@ -1,28 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-19T10:46:26.584490+00:00",
-  "event_count": 13,
+  "generated_at": "2026-10-20T10:03:43.470280+00:00",
+  "event_count": 12,
   "events": [
-    {
-      "id": "meetup-316381511",
-      "title": "GPU, CUDA, and PyTorch Performance Optimizations",
-      "start_at": "2026-10-19T17:00:00+01:00",
-      "format": "online",
-      "organiser": "AI Performance Engineering Meetup (London - Cambridge)",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/ai-performance-engineering-london-cambridge/events/316381511/",
-      "end_at": null,
-      "venue_name": null,
-      "address": null,
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Science"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "meetup-316647377",
       "title": "Databricks UK Innovation Hackathon with Colibri Digital",
@@ -269,6 +249,26 @@
     }
   ],
   "past_events": [
+    {
+      "id": "meetup-316381511",
+      "title": "GPU, CUDA, and PyTorch Performance Optimizations",
+      "start_at": "2026-10-19T17:00:00+01:00",
+      "format": "online",
+      "organiser": "AI Performance Engineering Meetup (London - Cambridge)",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/ai-performance-engineering-london-cambridge/events/316381511/",
+      "end_at": null,
+      "venue_name": null,
+      "address": null,
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Science"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
     {
       "id": "london-job-show-2026-16-october",
       "title": "London Job Show (general careers fair, including data roles)",
@@ -713,6 +713,12 @@
       "event_id": "meetup-316873995",
       "title": "Modernize Databases Faster with AI-Assisted Migration and Optimization",
       "action": "removed from source"
+    },
+    {
+      "at": "2026-10-20T10:03:43.470280+00:00",
+      "event_id": "meetup-316381511",
+      "title": "GPU, CUDA, and PyTorch Performance Optimizations",
+      "action": "archived"
     }
   ]
 }
