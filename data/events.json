@@ -1,48 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-20T10:03:43.470280+00:00",
-  "event_count": 12,
+  "generated_at": "2026-10-22T10:10:40.656605+00:00",
+  "event_count": 13,
   "events": [
-    {
-      "id": "meetup-316647377",
-      "title": "Databricks UK Innovation Hackathon with Colibri Digital",
-      "start_at": "2026-10-21T16:30:00+01:00",
-      "format": "in_person",
-      "organiser": "Databricks UK",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/databricks-uk/events/316647377/",
-      "end_at": null,
-      "venue_name": "Mary Ward House Conference Centre",
-      "address": "Tavistock Pl, London WC1H 9SN, UK, London",
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Analytics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
-    {
-      "id": "meetup-316511066",
-      "title": "dbt Global Circuit: London",
-      "start_at": "2026-10-21T18:00:00+01:00",
-      "format": "in_person",
-      "organiser": "London dbt Meetup",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/london-dbt-meetup/events/316511066/",
-      "end_at": "2026-10-21T20:00:00+01:00",
-      "venue_name": "The Information Lab",
-      "address": "25 Watling St, City of London, London EC4M 9BR, London",
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Analytics Engineering"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "meetup-316957735",
       "title": "AI-built reports to question & comment on with Zebra BI on Fabric & Power BI",
@@ -59,6 +19,26 @@
       "registration_status": "unknown",
       "topics": [
         "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-316873995",
+      "title": "Modernize Databases Faster with AI-Assisted Migration and Optimization",
+      "start_at": "2026-10-27T17:00:00+00:00",
+      "format": "online",
+      "organiser": "Microsoft Reactor London",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/microsoft-reactor-london/events/316873995/",
+      "end_at": null,
+      "venue_name": null,
+      "address": null,
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Experimentation"
       ],
       "status": "scheduled",
       "time_tbc": false
@@ -99,6 +79,26 @@
       "registration_status": "unknown",
       "topics": [
         "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-317075400",
+      "title": "IBM Bob TV episode 3: Benchmarking optimization tasks, cost & quality with Bob",
+      "start_at": "2026-11-04T10:00:00+00:00",
+      "format": "online",
+      "organiser": "Data, Cloud and AI in London",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/big-data-developers-in-london/events/317075400/",
+      "end_at": null,
+      "venue_name": null,
+      "address": null,
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Experimentation"
       ],
       "status": "scheduled",
       "time_tbc": false
@@ -185,6 +185,26 @@
       "time_tbc": false
     },
     {
+      "id": "meetup-317070814",
+      "title": "Databricks London - Nov 2026",
+      "start_at": "2026-11-26T17:30:00+00:00",
+      "format": "in_person",
+      "organiser": "Databricks London Meetup",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/databricks-london/events/317070814/",
+      "end_at": null,
+      "venue_name": "Databricks",
+      "address": "11-14 Windmill St, London W1T 2JG, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
       "id": "meetup-316997928",
       "title": "Fireside: AI with Prod Data - Hype vs Reality",
       "start_at": "2026-11-26T19:00:00+00:00",
@@ -249,6 +269,46 @@
     }
   ],
   "past_events": [
+    {
+      "id": "meetup-316511066",
+      "title": "dbt Global Circuit: London",
+      "start_at": "2026-10-21T18:00:00+01:00",
+      "format": "in_person",
+      "organiser": "London dbt Meetup",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/london-dbt-meetup/events/316511066/",
+      "end_at": "2026-10-21T20:00:00+01:00",
+      "venue_name": "The Information Lab",
+      "address": "25 Watling St, City of London, London EC4M 9BR, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Analytics Engineering"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-316647377",
+      "title": "Databricks UK Innovation Hackathon with Colibri Digital",
+      "start_at": "2026-10-21T16:30:00+01:00",
+      "format": "in_person",
+      "organiser": "Databricks UK",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/databricks-uk/events/316647377/",
+      "end_at": null,
+      "venue_name": "Mary Ward House Conference Centre",
+      "address": "Tavistock Pl, London WC1H 9SN, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
     {
       "id": "meetup-316381511",
       "title": "GPU, CUDA, and PyTorch Performance Optimizations",
@@ -718,6 +778,36 @@
       "at": "2026-10-20T10:03:43.470280+00:00",
       "event_id": "meetup-316381511",
       "title": "GPU, CUDA, and PyTorch Performance Optimizations",
+      "action": "archived"
+    },
+    {
+      "at": "2026-10-22T10:10:40.656605+00:00",
+      "event_id": "meetup-317070814",
+      "title": "Databricks London - Nov 2026",
+      "action": "added"
+    },
+    {
+      "at": "2026-10-22T10:10:40.656605+00:00",
+      "event_id": "meetup-317075400",
+      "title": "IBM Bob TV episode 3: Benchmarking optimization tasks, cost & quality with Bob",
+      "action": "added"
+    },
+    {
+      "at": "2026-10-22T10:10:40.656605+00:00",
+      "event_id": "meetup-316873995",
+      "title": "Modernize Databases Faster with AI-Assisted Migration and Optimization",
+      "action": "restored"
+    },
+    {
+      "at": "2026-10-22T10:10:40.656605+00:00",
+      "event_id": "meetup-316647377",
+      "title": "Databricks UK Innovation Hackathon with Colibri Digital",
+      "action": "archived"
+    },
+    {
+      "at": "2026-10-22T10:10:40.656605+00:00",
+      "event_id": "meetup-316511066",
+      "title": "dbt Global Circuit: London",
       "action": "archived"
     }
   ]
