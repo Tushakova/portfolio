@@ -1,28 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-22T10:10:40.656605+00:00",
-  "event_count": 13,
+  "generated_at": "2026-10-23T10:03:21.380697+00:00",
+  "event_count": 12,
   "events": [
-    {
-      "id": "meetup-316957735",
-      "title": "AI-built reports to question & comment on with Zebra BI on Fabric & Power BI",
-      "start_at": "2026-10-22T18:30:00+01:00",
-      "format": "in_person",
-      "organiser": "London Microsoft Fabric & Power BI User Group",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/london-fabug/events/316957735/",
-      "end_at": null,
-      "venue_name": "Tenth Revolution",
-      "address": "Aldgate House, 33 Aldgate High St, London, EC3N 1DL, London",
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Analytics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "meetup-316873995",
       "title": "Modernize Databases Faster with AI-Assisted Migration and Optimization",
@@ -269,6 +249,26 @@
     }
   ],
   "past_events": [
+    {
+      "id": "meetup-316957735",
+      "title": "AI-built reports to question & comment on with Zebra BI on Fabric & Power BI",
+      "start_at": "2026-10-22T18:30:00+01:00",
+      "format": "in_person",
+      "organiser": "London Microsoft Fabric & Power BI User Group",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/london-fabug/events/316957735/",
+      "end_at": null,
+      "venue_name": "Tenth Revolution",
+      "address": "Aldgate House, 33 Aldgate High St, London, EC3N 1DL, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
     {
       "id": "meetup-316511066",
       "title": "dbt Global Circuit: London",
@@ -808,6 +808,12 @@
       "at": "2026-10-22T10:10:40.656605+00:00",
       "event_id": "meetup-316511066",
       "title": "dbt Global Circuit: London",
+      "action": "archived"
+    },
+    {
+      "at": "2026-10-23T10:03:21.380697+00:00",
+      "event_id": "meetup-316957735",
+      "title": "AI-built reports to question & comment on with Zebra BI on Fabric & Power BI",
       "action": "archived"
     }
   ]
