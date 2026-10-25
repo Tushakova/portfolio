@@ -117,6 +117,7 @@ def deduplicate_events(events: list[Event]) -> list[Event]:
 
     unique: list[Event] = []
     seen_urls: set[tuple] = set()
+    seen_ids: set[str] = set()
     seen_online: set[tuple] = set()
 
     for event in events:
@@ -131,9 +132,10 @@ def deduplicate_events(events: list[Event]) -> list[Event]:
         end = datetime.fromisoformat(event.end_at) if event.end_at else None
         online_key = (title, instant, end)
         online_duplicate = event.format == "online" and len(title) >= 20 and online_key in seen_online
-        if key in seen_urls or online_duplicate:
+        if event.id in seen_ids or key in seen_urls or online_duplicate:
             continue
 
+        seen_ids.add(event.id)
         seen_urls.add(key)
         if event.format == "online" and len(title) >= 20:
             seen_online.add(online_key)

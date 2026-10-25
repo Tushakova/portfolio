@@ -13,7 +13,7 @@ SEARCH_QUERIES = (
     "site:meetup.com London data analytics engineering events",
     "data science events London",
     "data engineering events London",
-    "experimentation analytics events London",
+    'London experimentation "A/B testing" CRO meetup events',
     "site:eventbrite.co.uk London data science analytics events",
     "statistics events London",
     "data conference London",
