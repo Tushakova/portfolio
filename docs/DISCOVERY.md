@@ -81,3 +81,7 @@ This establishes a working human-reviewed publication route. Brave discovery its
 ## Change-log identity
 
 Upcoming and archived records are both considered known. A past event still listed by an organiser is not newly added on every check. The transition from Upcoming to Past is logged once. Repeated historical `added` entries from the earlier bug are removed while retaining the earliest entry and actual updates. Exact online cross-posts with the same long title, start instant and end time are displayed once even when Meetup group links differ; different dates remain distinct.
+
+## October 2026: experimentation coverage
+
+The daily, API-free Meetup collector now searches explicitly for experimentation, A/B testing, conversion rate optimisation and product analytics. Experimentation London is monitored as a recurring community source; no particular edition, date or event ID is inserted into production configuration. Listings with missing venues can be corroborated using their explicitly linked event website, requiring matching structured title/start and a London venue. Stable Meetup IDs prevent duplicates between the platform and organiser URLs. Generic optimisation titles no longer receive Experimentation by themselves. The manual Brave query budget remains twelve; no paid daily search has been enabled by this change.
