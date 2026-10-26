@@ -179,6 +179,12 @@
       gap: 8px;
     }
 
+    .filter-controls { min-width: 0; }
+    .filter-options { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 14px; font-size: 13px; }
+    .filter-options label { display: inline-flex; align-items: center; gap: 6px; }
+    .filter-options [hidden] { display: none; }
+    .filter-options input { accent-color: var(--text); }
+
     .filter-button {
       appearance: none;
       padding: 9px 14px;
@@ -591,62 +597,17 @@
     <section class="controls-section">
       <div class="container controls">
 
-        <div
-          class="filters"
-          role="group"
-          aria-label="Filter events"
-        >
-          <button
-            class="filter-button active"
-            data-filter="all"
-            type="button"
-          >
-            All
-          </button>
-
-          <button
-            class="filter-button"
-            data-filter="free"
-            type="button"
-          >
-            Free
-          </button>
-
-          <button
-            class="filter-button"
-            data-filter="careers"
-            type="button"
-          >
-            Data careers
-          </button>
-
-          <button class="filter-button" data-filter="fairs" type="button">
-            Career fairs
-          </button>
-
-          <button
-            class="filter-button"
-            data-filter="data"
-            type="button"
-          >
-            Data & Analytics
-          </button>
-
-          <button
-            class="filter-button"
-            data-filter="ai"
-            type="button"
-          >
-            AI & ML
-          </button>
-
-          <button
-            class="filter-button"
-            data-filter="statistics"
-            type="button"
-          >
-            Statistics
-          </button>
+        <div class="filter-controls">
+          <div id="topic-filters" class="filters" role="group" aria-label="Topic"></div>
+          <div class="filter-options">
+            <label><input id="free-only" type="checkbox"> Free only</label>
+            <label><input id="careers-only" type="checkbox"> Careers only</label>
+            <label id="other-topics-label" hidden>More topics
+              <select id="other-topics" class="format-select" aria-label="More topics">
+                <option value="">Choose a topic</option>
+              </select>
+            </label>
+          </div>
         </div>
 
         <div
@@ -771,9 +732,35 @@
     const lastUpdated = document.getElementById("last-updated");
     const eventSearch = document.getElementById("event-search");
     const formatFilter = document.getElementById("format-filter");
-    const filterButtons = document.querySelectorAll(
-      ".filter-button"
-    );
+    const topicFilters = document.getElementById("topic-filters");
+    const freeOnly = document.getElementById("free-only");
+    const careersOnly = document.getElementById("careers-only");
+    const otherTopics = document.getElementById("other-topics");
+    const mainTopics = ["Analytics", "Experimentation", "Data Science", "Statistics"];
+    const careerTopics = new Set(["Data Careers", "Career Fairs", "Careers"]);
+    const topicAliases = { "Data Analytics": "Analytics", "Product Analytics": "Analytics" };
+
+    // Cards and filters share this one presentation taxonomy. Raw data stays intact.
+    function eventTopics(event) {
+      return [...new Set((event.topics || []).filter(t => !careerTopics.has(t))
+        .map(t => topicAliases[t] || t))];
+    }
+
+    function isCareerEvent(event) {
+      return (event.topics || []).some(t => careerTopics.has(t));
+    }
+
+    function renderTopicControls() {
+      topicFilters.innerHTML = ["all", ...mainTopics].map(topic =>
+        `<button class="filter-button${activeFilter === topic ? " active" : ""}" data-filter="${escapeHtml(topic)}" type="button" aria-pressed="${activeFilter === topic}">${topic === "all" ? "All" : escapeHtml(topic)}</button>`
+      ).join("");
+      const extras = [...new Set([...events, ...pastEvents].flatMap(eventTopics))]
+        .filter(t => !mainTopics.includes(t)).sort();
+      otherTopics.innerHTML = '<option value="">Choose a topic</option>' + extras.map(t =>
+        `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
+      otherTopics.value = extras.includes(activeFilter) ? activeFilter : "";
+      document.getElementById("other-topics-label").hidden = !extras.length;
+    }
 
     let events = [];
     let pastEvents = [];
@@ -913,60 +900,22 @@
       const query = eventSearch.value.trim().toLocaleLowerCase("en-GB");
       if (query && ![
         event.title, event.organiser, event.venue_name,
-        ...(event.topics || [])
+        ...eventTopics(event), ...(event.topics || [])
       ].some(value => String(value || "").toLocaleLowerCase("en-GB").includes(query))) {
         return false;
       }
 
-      if (activeFilter === "all") {
-        return true;
-      }
-
-      if (activeFilter === "free") {
-        return event.is_free === true;
-      }
-
-      if (activeFilter === "careers") {
-        return (event.topics || []).includes("Data Careers");
-      }
-      if (activeFilter === "fairs") {
-        return (event.topics || []).includes("Career Fairs");
-      }
-
-      const topics = event.topics || [];
-
-      if (activeFilter === "data") {
-        return topics.some(
-          topic =>
-            topic === "Data Analytics" ||
-            topic === "Product Analytics" ||
-            topic === "Data Science" ||
-            topic === "Data Engineering" ||
-            topic === "Analytics Engineering" ||
-            topic === "Experimentation" ||
-            topic === "Data Visualisation"
-        );
-      }
-
-      if (activeFilter === "ai") {
-        return topics.includes(
-          "AI & Machine Learning"
-        );
-      }
-
-      if (activeFilter === "statistics") {
-        return topics.includes(
-          "Statistics"
-        );
-      }
-
-      return true;
+      if (freeOnly.checked && event.is_free !== true) return false;
+      if (careersOnly.checked && !isCareerEvent(event)) return false;
+      return activeFilter === "all" || eventTopics(event).includes(activeFilter);
     }
 
     function eventCard(event, historical = false) {
       const date = formatEventDate(event);
 
-      const topics = (event.topics || [])
+      const labels = eventTopics(event);
+      if (isCareerEvent(event)) labels.push((event.topics || []).includes("Career Fairs") ? "Career fair" : "Career event");
+      const topics = labels
         .map(
           topic =>
             `<span class="topic">${escapeHtml(topic)}</span>`
@@ -1100,26 +1049,17 @@
     function setActiveFilter(filter) {
       activeFilter = filter;
 
-      filterButtons.forEach(button => {
-        button.classList.toggle(
-          "active",
-          button.dataset.filter === filter
-        );
-      });
-
+      renderTopicControls();
       renderEvents();
     }
 
-    filterButtons.forEach(button => {
-      button.addEventListener(
-        "click",
-        () => {
-          setActiveFilter(
-            button.dataset.filter
-          );
-        }
-      );
+    topicFilters.addEventListener("click", e => {
+      const button = e.target.closest("[data-filter]");
+      if (button) setActiveFilter(button.dataset.filter);
     });
+    otherTopics.addEventListener("change", () => setActiveFilter(otherTopics.value || "all"));
+    freeOnly.addEventListener("change", renderEvents);
+    careersOnly.addEventListener("change", renderEvents);
 
     periodButtons.forEach(button => button.addEventListener("click", () => {
       activePeriod = button.dataset.period;
@@ -1155,6 +1095,7 @@
 
         events = dataset.events;
         pastEvents = Array.isArray(dataset.past_events) ? dataset.past_events : [];
+        renderTopicControls();
         const changes = Array.isArray(dataset.changes) ? dataset.changes.slice(-20).reverse() : [];
         changeLog.hidden = !changes.length;
         changeList.innerHTML = changes.map(change =>
@@ -1209,6 +1150,7 @@
       }
     }
 
+    renderTopicControls();
     loadEvents();
   </script>
 
