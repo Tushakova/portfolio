@@ -4,27 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>London Data Radar — Maria Tushakova</title>
-
+  <title>Maria Tushakova | Product Data Analyst</title>
   <meta
     name="description"
-    content="A live radar for worthwhile data, analytics and experimentation events in London."
+    content="Maria Tushakova — Product Data Analyst specialising in product analytics, experimentation and customer behaviour."
   >
 
   <style>
-    :root {
-      --background: #ffffff;
-      --surface: #f7f7f5;
-      --surface-hover: #f2f2ef;
-      --text: #171717;
-      --muted: #6b6b66;
-      --border: #e5e5df;
-      --accent: #171717;
-      --max-width: 1120px;
-    }
-
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     html {
@@ -32,515 +22,327 @@
     }
 
     body {
-      margin: 0;
-      background: var(--background);
-      color: var(--text);
-      font-family:
-        Inter,
-        ui-sans-serif,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-      line-height: 1.5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      color: #17202a;
+      background: #ffffff;
+      line-height: 1.6;
     }
 
     a {
       color: inherit;
+      text-decoration: none;
     }
 
     .container {
-      width: min(
-        calc(100% - 40px),
-        var(--max-width)
-      );
+      width: min(1120px, calc(100% - 48px));
       margin: 0 auto;
     }
 
     /* Navigation */
 
-    .site-header {
-      border-bottom: 1px solid var(--border);
+    nav {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #edf0f2;
     }
 
-    .nav {
-      min-height: 72px;
+    .nav-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 32px;
+      width: 100%;
     }
 
-    .brand {
-      font-size: 16px;
-      font-weight: 650;
-      text-decoration: none;
-      letter-spacing: -0.01em;
+    .name {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.02em;
     }
 
     .nav-links {
       display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-
-    .nav-links a {
-      color: var(--muted);
+      gap: 32px;
       font-size: 14px;
-      text-decoration: none;
+      color: #56616c;
     }
 
-    .nav-links a:hover,
-    .nav-links a[aria-current="page"] {
-      color: var(--text);
+    .nav-links a:hover {
+      color: #111820;
     }
 
     /* Hero */
 
     .hero {
-      padding: 88px 0 58px;
-      border-bottom: 1px solid var(--border);
+      padding: 120px 0 110px;
+      max-width: 850px;
     }
 
     .eyebrow {
-      margin: 0 0 18px;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 650;
-      letter-spacing: 0.08em;
       text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 13px;
+      font-weight: 600;
+      color: #65717c;
+      margin-bottom: 22px;
     }
 
     h1 {
-      max-width: 850px;
-      margin: 0;
-      font-size: clamp(42px, 7vw, 76px);
-      font-weight: 600;
-      letter-spacing: -0.055em;
-      line-height: 0.98;
+      font-size: clamp(48px, 7vw, 78px);
+      line-height: 1.02;
+      letter-spacing: -0.045em;
+      margin-bottom: 30px;
+      font-weight: 700;
     }
 
-    .hero-copy {
+    .hero-text {
+      font-size: 22px;
+      color: #56616c;
       max-width: 690px;
-      margin: 28px 0 0;
-      color: var(--muted);
-      font-size: 18px;
-      line-height: 1.65;
+      margin-bottom: 38px;
     }
 
-    .hero-meta {
-      margin-top: 32px;
+    .hero-links {
       display: flex;
+      gap: 14px;
       flex-wrap: wrap;
-      align-items: center;
-      gap: 10px 20px;
-      color: var(--muted);
-      font-size: 13px;
     }
 
-    .live-indicator {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+    .button {
+      display: inline-block;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid #17202a;
     }
 
-    .live-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #a1a1a1;
-    }
-
-    .live-indicator.fresh .live-dot { background: #29844a; }
-    .event-card.past { opacity: 0.62; }
-    .event-card.past .event-title a { color: var(--text); }
-    .archive-controls { display: flex; gap: 8px; margin-bottom: 12px; }
-    .change-log { margin-top: 42px; color: var(--muted); font-size: 14px; }
-    .change-log summary { cursor: pointer; }
-    .change-log li { margin: 8px 0; }
-
-    /* Controls */
-
-    .controls-section {
-      padding: 30px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .filter-controls { min-width: 0; }
-    .filter-options { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 14px; font-size: 13px; }
-    .filter-options label { display: inline-flex; align-items: center; gap: 6px; }
-    .filter-options [hidden] { display: none; }
-    .filter-options input { accent-color: var(--text); }
-
-    .filter-button {
-      appearance: none;
-      padding: 9px 14px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: var(--background);
-      color: var(--muted);
-      cursor: pointer;
-      font: inherit;
-      font-size: 13px;
-      transition:
-        background 120ms ease,
-        border-color 120ms ease,
-        color 120ms ease;
-    }
-
-    .filter-button:hover {
-      border-color: #c9c9c2;
-      color: var(--text);
-    }
-
-    .filter-button.active {
-      border-color: var(--text);
-      background: var(--text);
+    .button-primary {
+      background: #17202a;
       color: #ffffff;
     }
 
-    .result-count {
-      flex-shrink: 0;
-      color: var(--muted);
-      font-size: 13px;
+    .button-secondary {
+      background: #ffffff;
+      color: #17202a;
     }
 
-    .search-row {
-      margin-top: 20px;
+    /* Sections */
+
+    section {
+      padding: 90px 0;
+      border-top: 1px solid #edf0f2;
     }
 
-    .search-controls {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .event-search {
-      width: min(100%, 440px);
-      box-sizing: border-box;
-      padding: 11px 14px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--background);
-      color: var(--text);
-      font: inherit;
-      font-size: 14px;
-    }
-
-    .format-select {
-      padding: 11px 14px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--background);
-      color: var(--text);
-      font: inherit;
-      font-size: 14px;
-    }
-
-    .event-search:focus-visible,
-    .format-select:focus-visible,
-    .filter-button:focus-visible {
-      outline: 2px solid var(--text);
-      outline-offset: 2px;
-    }
-
-    .search-note {
-      margin: 9px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    /* Events */
-
-    .events-section {
-      padding: 18px 0 96px;
-    }
-
-    .event-card {
-      display: grid;
-      grid-template-columns: 150px minmax(0, 1fr) auto;
-      gap: 32px;
-      padding: 34px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .event-date {
-      padding-top: 3px;
-    }
-
-    .event-day {
-      display: block;
-      font-size: 30px;
-      font-weight: 600;
-      letter-spacing: -0.04em;
-      line-height: 1;
-    }
-
-    .event-month {
-      display: block;
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 13px;
+    .section-label {
       text-transform: uppercase;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      font-weight: 700;
+      color: #78838d;
+      margin-bottom: 45px;
     }
 
-    .event-time {
-      display: block;
-      margin-top: 14px;
-      color: var(--muted);
+    h2 {
+      font-size: 38px;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+
+    /* Projects */
+
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .project {
+      border: 1px solid #e2e6e9;
+      border-radius: 10px;
+      padding: 30px;
+      min-height: 310px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .project:hover {
+      transform: translateY(-3px);
+      border-color: #aab2b9;
+    }
+
+    .project-number {
+      color: #89939c;
       font-size: 13px;
+      margin-bottom: 42px;
     }
 
-    .event-title {
-      margin: 0;
-      font-size: 24px;
-      font-weight: 600;
-      letter-spacing: -0.025em;
-      line-height: 1.2;
+    .project h3 {
+      font-size: 22px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
     }
 
-    .event-title a {
-      text-decoration: none;
+    .project p {
+      color: #66717b;
+      font-size: 15px;
+      margin-bottom: 24px;
     }
 
-    .event-title a:hover {
+    .project-link {
+      display: inline-block;
+      align-self: flex-start;
+      margin-bottom: 20px;
+      color: #17202a;
+      font-size: 14px;
+      font-weight: 650;
       text-decoration: underline;
-      text-decoration-thickness: 1px;
       text-underline-offset: 4px;
     }
 
-    .event-location {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 14px;
+    .project-source {
+      color: #66717b;
+      font-weight: 500;
+      font-size: 13px;
     }
 
-    .event-topics {
+    .project-link:focus-visible {
+      outline: 2px solid #17202a;
+      outline-offset: 4px;
+    }
+
+    .tags {
+      margin-top: auto;
       display: flex;
       flex-wrap: wrap;
       gap: 7px;
-      margin-top: 18px;
     }
 
-    .topic {
-      padding: 5px 9px;
-      border-radius: 4px;
-      background: var(--surface);
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .event-format {
-      padding: 5px 9px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      color: var(--text);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .event-side {
-      min-width: 120px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-    }
-
-    .price {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .status {
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: capitalize;
-    }
-
-    .status.waitlist,
-    .status.sold-out {
+    .tag {
+      font-size: 11px;
       padding: 5px 8px;
-      border: 1px solid var(--border);
+      background: #f3f5f6;
       border-radius: 4px;
-    }
-
-    .source-link {
-      margin-top: auto;
-      color: var(--muted);
-      font-size: 13px;
-      text-decoration: none;
-    }
-
-    .source-link:hover {
-      color: var(--text);
-    }
-
-    /* States */
-
-    .state {
-      padding: 72px 0;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    .state strong {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--text);
-      font-size: 18px;
+      color: #56616c;
     }
 
     /* About */
 
-    .about-radar {
-      padding: 72px 0;
-      background: var(--surface);
-    }
-
     .about-grid {
       display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 64px;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 90px;
     }
 
-    .about-radar h2 {
-      margin: 0;
-      font-size: 22px;
-      letter-spacing: -0.025em;
+    .about-text {
+      font-size: 19px;
+      color: #4f5a64;
     }
 
-    .about-copy {
-      max-width: 680px;
+    .about-text p + p {
+      margin-top: 20px;
     }
 
-    .about-copy p {
-      margin: 0 0 16px;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.7;
+    /* Experience */
+
+    .experience-item {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      padding: 26px 0;
+      border-top: 1px solid #edf0f2;
     }
 
-    .about-copy p:last-child {
-      margin-bottom: 0;
+    .experience-item:last-child {
+      border-bottom: 1px solid #edf0f2;
     }
 
-    .discovery-credit {
-  font-size: 13px !important;
-}
+    .company {
+      font-weight: 650;
+    }
 
-.discovery-credit a {
-  color: var(--text);
-  text-underline-offset: 3px;
-}
+    .role {
+      color: #56616c;
+    }
 
     /* Footer */
 
     footer {
-      padding: 32px 0;
-      border-top: 1px solid var(--border);
+      padding: 55px 0;
+      color: #6e7881;
+      font-size: 13px;
     }
 
     .footer-inner {
       display: flex;
       justify-content: space-between;
-      gap: 24px;
-      color: var(--muted);
-      font-size: 13px;
+      align-items: center;
     }
 
-    .footer-inner a {
-      text-decoration: none;
+    .footer-links {
+      display: flex;
+      gap: 22px;
     }
 
-    .footer-inner a:hover {
-      color: var(--text);
+    .footer-links a:hover {
+      color: #17202a;
     }
 
-    @media (max-width: 760px) {
+    /* Mobile */
+
+    @media (max-width: 800px) {
       .container {
-        width: min(
-          calc(100% - 28px),
-          var(--max-width)
-        );
+        width: min(100% - 32px, 1120px);
       }
 
-      .nav {
-        min-height: 64px;
+      nav {
+        height: 68px;
       }
 
       .nav-links {
         gap: 16px;
       }
 
-      .nav-links a:not([aria-current="page"]) {
+      .nav-links a:nth-child(2) {
         display: none;
       }
 
       .hero {
-        padding: 64px 0 42px;
+        padding: 80px 0 75px;
       }
 
-      h1 {
-        font-size: clamp(42px, 14vw, 64px);
+      .hero-text {
+        font-size: 19px;
       }
 
-      .hero-copy {
-        font-size: 16px;
+      section {
+        padding: 65px 0;
       }
 
-      .controls {
-        align-items: flex-start;
-        flex-direction: column;
+      .projects {
+        grid-template-columns: 1fr;
       }
 
-      .event-card {
-        grid-template-columns: 74px minmax(0, 1fr);
-        gap: 20px;
-      }
-
-      .event-day {
-        font-size: 26px;
-      }
-
-      .event-title {
-        font-size: 20px;
-      }
-
-      .event-side {
-        grid-column: 2;
-        min-width: 0;
-        align-items: flex-start;
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-
-      .source-link {
-        margin: 0 0 0 auto;
+      .project {
+        min-height: 260px;
       }
 
       .about-grid {
         grid-template-columns: 1fr;
-        gap: 24px;
+        gap: 25px;
+      }
+
+      .experience-item {
+        grid-template-columns: 1fr;
+        gap: 5px;
       }
 
       .footer-inner {
         flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
       }
     }
   </style>
@@ -548,611 +350,184 @@
 
 <body>
 
-  <header class="site-header">
-    <div class="container nav">
-      <a class="brand" href="/">
-        Maria Tushakova
-      </a>
+  <nav>
+    <div class="container nav-inner">
+      <a class="name" href="#">Maria Tushakova</a>
 
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="/">Portfolio</a>
-        <a href="/events/" aria-current="page">
-          London Data Radar
-        </a>
-      </nav>
+      <div class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+      </div>
     </div>
-  </header>
+  </nav>
 
-  <main>
+  <main class="container">
 
-    <section class="hero">
-      <div class="container">
-        <p class="eyebrow">
-          Live data product
-        </p>
+    <header class="hero">
+      <div class="eyebrow">Product Data Analyst · London</div>
 
-        <h1>
-          London Data Radar
-        </h1>
+      <h1>Turning product data into better decisions.</h1>
 
-        <p class="hero-copy">
-          Worthwhile data, analytics and experimentation events
-          happening in London — collected from multiple sources
-          and refreshed automatically.
-        </p>
+      <p class="hero-text">
+        I work at the intersection of product analytics, experimentation
+        and customer behaviour — helping teams turn complex data into
+        clear, measurable product decisions.
+      </p>
 
-        <div class="hero-meta">
-          <span class="live-indicator" id="refresh-indicator">
-            <span class="live-dot"></span>
-            <span id="last-checked">Checking refresh status…</span>
-          </span>
+      <div class="hero-links">
+        <a class="button button-primary" href="#work">View selected work</a>
+        <a
+          class="button button-secondary"
+          href="https://www.linkedin.com/in/tushakova/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          LinkedIn
+        </a>
+      </div>
+    </header>
 
-          <span id="last-updated">
-            Loading latest data…
-          </span>
-        </div>
+
+    <section id="work">
+      <div class="section-label">Selected projects</div>
+
+      <div class="projects">
+
+        <article class="project">
+          <div class="project-number">01</div>
+          <h3><a href="./ab-testing-lab/">The A/B Testing Lab</a></h3>
+          <p>
+            An interactive lab for exploring how sample size, effect size
+            and significance shape statistical power and experimental outcomes.
+            Design an experiment, simulate repeated results and interpret the evidence.
+          </p>
+          <a class="project-link" href="./ab-testing-lab/">Open the interactive lab ↗</a>
+          <a class="project-link project-source" href="https://github.com/Tushakova/portfolio/blob/main/ab-testing-lab/index.html" target="_blank" rel="noopener noreferrer">View source ↗</a>
+          <div class="tags">
+            <span class="tag">Experimentation</span>
+            <span class="tag">Statistics</span>
+            <span class="tag">Simulation</span>
+            <span class="tag">Data Visualisation</span>
+          </div>
+        </article>
+
+        <article class="project">
+          <div class="project-number">02</div>
+          <h3><a href="./events/">London Data Radar</a></h3>
+          <p>
+            A live data product for discovering analytics and data events
+            across London. Automated collection and refreshes turn public
+            event information into a searchable, useful resource.
+          </p>
+          <a class="project-link" href="./events/">Explore live events ↗</a>
+          <a class="project-link project-source" href="https://github.com/Tushakova/portfolio" target="_blank" rel="noopener noreferrer">View source ↗</a>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">Data Pipelines</span>
+            <span class="tag">Automation</span>
+          </div>
+        </article>
+
       </div>
     </section>
 
-    <section class="controls-section">
-      <div class="container controls">
 
-        <div class="filter-controls">
-          <div id="topic-filters" class="filters" role="group" aria-label="Topic"></div>
-          <div class="filter-options">
-            <label><input id="free-only" type="checkbox"> Free only</label>
-            <label><input id="careers-only" type="checkbox"> Careers only</label>
-            <label id="other-topics-label" hidden>More topics
-              <select id="other-topics" class="format-select" aria-label="More topics">
-                <option value="">Choose a topic</option>
-              </select>
-            </label>
+    <section id="about">
+      <div class="about-grid">
+
+        <div>
+          <div class="section-label">About</div>
+          <h2>Product thinking, grounded in data.</h2>
+        </div>
+
+        <div class="about-text">
+          <p>
+            I'm a Product Data Analyst with experience working across
+            customer-facing digital products, experimentation and
+            personalisation.
+          </p>
+
+          <p>
+            At British Airways, I partner with product teams to define
+            hypotheses, design measurement approaches, analyse customer
+            behaviour and translate evidence into product decisions.
+          </p>
+
+          <p>
+            My background combines economics and business analytics,
+            with a particular interest in product measurement,
+            experimentation and building reliable analytical foundations.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section id="experience">
+      <div class="section-label">Experience</div>
+
+      <div class="experience-item">
+        <div class="company">British Airways</div>
+        <div>
+          <strong>Digital Experimentation Specialist</strong>
+          <div class="role">
+            Product analytics · Experimentation · Personalisation
           </div>
         </div>
-
-        <div
-          class="result-count"
-          id="result-count"
-          aria-live="polite"
-        ></div>
-
       </div>
-      <div class="container search-row">
-        <div class="search-controls">
-          <input class="event-search" id="event-search" type="search"
-            placeholder="Search events, organisers or topics"
-            aria-label="Search events, organisers or topics" />
-          <select id="format-filter" class="format-select" aria-label="Event format">
-            <option value="all">All formats</option>
-            <option value="in_person">In person (incl. hybrid)</option>
-            <option value="online">Online (incl. hybrid)</option>
-            <option value="hybrid">Hybrid only</option>
-          </select>
-        </div>
-        <p class="search-note">
-          Searches events listed here only.
-          <a href="https://www.google.com/search?q=London+%22data+science%22+OR+%22data+analytics%22+%22career+fair%22+OR+%22career+day%22+events" target="_blank" rel="noopener noreferrer">Search the wider web ↗</a>
-        </p>
-      </div>
-    </section>
 
-    <section class="events-section">
-      <div class="container">
-        <div class="archive-controls" role="group" aria-label="Event period">
-          <button class="filter-button active" data-period="upcoming" type="button">Upcoming</button>
-          <button class="filter-button" data-period="past" type="button">Past events</button>
-        </div>
-        <div id="events-list">
-          <div class="state">
-            Loading events…
+      <div class="experience-item">
+        <div class="company">Sberbank</div>
+        <div>
+          <strong>Product & Analytics</strong>
+          <div class="role">
+            Product management · Analytics · Digital transformation
           </div>
         </div>
-        <details class="change-log" id="change-log" hidden>
-          <summary>Event change log</summary>
-          <ol id="change-list"></ol>
-        </details>
       </div>
-    </section>
 
-    <section class="about-radar">
-      <div class="container about-grid">
-
-        <h2>
-          About the project
-        </h2>
-
-        <div class="about-copy">
-          <p>
-            London Data Radar is a small data product built to solve
-            a practical discovery problem: useful analytics events
-            are fragmented across organisers, communities and event
-            websites.
-          </p>
-
-          <p>
-            A Python ingestion pipeline collects events from multiple
-            public sources, normalises them into a common schema,
-            validates the resulting dataset and publishes refreshed
-            data automatically.
-          </p>
-
-          <p class="discovery-credit">
-  Experimental web discovery powered by
-  <a
-    href="https://brave.com/search/api/"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Brave Search API
-  </a>.
-</p>
-          
-          <p>
-            Search and filters cover the events already collected here.
-            Discovery covers selected organisers and public Meetup search listings,
-            including a targeted search for data career events. It does not cover
-            every independent event website;
-            <a href="mailto:marie.tsh@gmail.com?subject=London%20Data%20Radar%20event%20suggestion">suggest its link</a>
-            to have its organiser considered as a source.
-          </p>
-          <p>
-            <a href="https://github.com/Tushakova/portfolio/blob/main/docs/HOW_IT_WORKS.md"
-               target="_blank" rel="noopener noreferrer">How London Data Radar works ↗</a>
-          </p>
+      <div class="experience-item">
+        <div class="company">Bayes Business School</div>
+        <div>
+          <strong>MSc Business Analytics · Distinction</strong>
+          <div class="role">London</div>
         </div>
-
       </div>
+
     </section>
 
   </main>
 
+
   <footer>
     <div class="container footer-inner">
-      <span>
-        © 2026 Maria Tushakova
-      </span>
 
-      <a href="/">
-        Back to portfolio
-      </a>
+      <div>© 2026 Maria Tushakova</div>
+
+      <div class="footer-links">
+        <a
+          href="https://www.linkedin.com/in/tushakova/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          LinkedIn
+        </a>
+
+        <a
+          href="https://github.com/Tushakova"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub
+        </a>
+
+        <a href="mailto:marie.tsh@gmail.com">Email</a>
+      </div>
+
     </div>
   </footer>
-
-  <script>
-    const DATA_URL = "/data/events.json";
-    const STATUS_URL = "/data/refresh-status.json";
-    const refreshIndicator = document.getElementById("refresh-indicator");
-    const lastChecked = document.getElementById("last-checked");
-    const changeLog = document.getElementById("change-log");
-    const changeList = document.getElementById("change-list");
-    const periodButtons = document.querySelectorAll("[data-period]");
-
-    const eventsList = document.getElementById("events-list");
-    const resultCount = document.getElementById("result-count");
-    const lastUpdated = document.getElementById("last-updated");
-    const eventSearch = document.getElementById("event-search");
-    const formatFilter = document.getElementById("format-filter");
-    const topicFilters = document.getElementById("topic-filters");
-    const freeOnly = document.getElementById("free-only");
-    const careersOnly = document.getElementById("careers-only");
-    const otherTopics = document.getElementById("other-topics");
-    const mainTopics = ["Analytics", "Experimentation", "Data Science", "Statistics"];
-    const careerTopics = new Set(["Data Careers", "Career Fairs", "Careers"]);
-    const topicAliases = { "Data Analytics": "Analytics", "Product Analytics": "Analytics" };
-
-    // Cards and filters share this one presentation taxonomy. Raw data stays intact.
-    function eventTopics(event) {
-      return [...new Set((event.topics || []).filter(t => !careerTopics.has(t))
-        .map(t => topicAliases[t] || t))];
-    }
-
-    function isCareerEvent(event) {
-      return (event.topics || []).some(t => careerTopics.has(t));
-    }
-
-    function renderTopicControls() {
-      topicFilters.innerHTML = ["all", ...mainTopics].map(topic =>
-        `<button class="filter-button${activeFilter === topic ? " active" : ""}" data-filter="${escapeHtml(topic)}" type="button" aria-pressed="${activeFilter === topic}">${topic === "all" ? "All" : escapeHtml(topic)}</button>`
-      ).join("");
-      const extras = [...new Set([...events, ...pastEvents].flatMap(eventTopics))]
-        .filter(t => !mainTopics.includes(t)).sort();
-      otherTopics.innerHTML = '<option value="">Choose a topic</option>' + extras.map(t =>
-        `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
-      otherTopics.value = extras.includes(activeFilter) ? activeFilter : "";
-      document.getElementById("other-topics-label").hidden = !extras.length;
-    }
-
-    let events = [];
-    let pastEvents = [];
-    let activePeriod = "upcoming";
-    let activeFilter = "all";
-
-    function londonDayKey(date) {
-      const parts = new Intl.DateTimeFormat("en-GB", {
-        year: "numeric", month: "2-digit", day: "2-digit",
-        timeZone: "Europe/London"
-      }).formatToParts(date);
-      const value = type => parts.find(part => part.type === type).value;
-      return `${value("year")}-${value("month")}-${value("day")}`;
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function formatDateParts(isoDate) {
-      const date = new Date(isoDate);
-
-      return {
-        day: new Intl.DateTimeFormat(
-          "en-GB",
-          {
-            day: "2-digit",
-            timeZone: "Europe/London"
-          }
-        ).format(date),
-
-        month: new Intl.DateTimeFormat(
-          "en-GB",
-          {
-            month: "short",
-            year: "numeric",
-            timeZone: "Europe/London"
-          }
-        ).format(date),
-
-        time: new Intl.DateTimeFormat(
-          "en-GB",
-          {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-            timeZone: "Europe/London"
-          }
-        ).format(date)
-      };
-    }
-
-    function formatEventDate(event) {
-      const start = formatDateParts(event.start_at);
-      if (!event.end_at) return start;
-
-      const end = formatDateParts(event.end_at);
-      if (londonDayKey(new Date(event.start_at)) ===
-          londonDayKey(new Date(event.end_at))) return start;
-
-      if (start.month === end.month) {
-        return { ...start, day: `${start.day}–${end.day}` };
-      }
-
-      return { ...start, month: `${start.month} – ${end.day} ${end.month}` };
-    }
-
-    function formatUpdated(isoDate) {
-      const date = new Date(isoDate);
-
-      return new Intl.DateTimeFormat(
-        "en-GB",
-        {
-          day: "numeric",
-          month: "short",
-          hour: "2-digit",
-          minute: "2-digit",
-          timeZone: "Europe/London"
-        }
-      ).format(date);
-    }
-
-    function formatPrice(event) {
-      if (event.is_free === true) {
-        return "Free";
-      }
-
-      if (
-        event.price_from_gbp !== null &&
-        event.price_from_gbp !== undefined
-      ) {
-        return `From £${Number(
-          event.price_from_gbp
-        ).toLocaleString("en-GB")}`;
-      }
-
-      return "Price unknown";
-    }
-
-    function formatStatus(status) {
-      const labels = {
-        open: "Registration open",
-        waitlist: "Waitlist",
-        sold_out: "Sold out",
-        closed: "Registration closed",
-        unknown: ""
-      };
-
-      return labels[status] || "";
-    }
-
-    function isUpcoming(event) {
-      if (
-        event.status === "cancelled" ||
-        event.status === "postponed"
-      ) {
-        return false;
-      }
-
-      if (event.end_at) {
-        return new Date(event.end_at) >= new Date();
-      }
-
-      // Unknown end time: show the event for its whole London calendar day.
-      return londonDayKey(new Date(event.start_at)) >= londonDayKey(new Date());
-    }
-
-    function matchesFilter(event) {
-      if (formatFilter.value !== "all" &&
-          event.format !== formatFilter.value &&
-          event.format !== "hybrid") return false;
-      const query = eventSearch.value.trim().toLocaleLowerCase("en-GB");
-      if (query && ![
-        event.title, event.organiser, event.venue_name,
-        ...eventTopics(event), ...(event.topics || [])
-      ].some(value => String(value || "").toLocaleLowerCase("en-GB").includes(query))) {
-        return false;
-      }
-
-      if (freeOnly.checked && event.is_free !== true) return false;
-      if (careersOnly.checked && !isCareerEvent(event)) return false;
-      return activeFilter === "all" || eventTopics(event).includes(activeFilter);
-    }
-
-    function eventCard(event, historical = false) {
-      const date = formatEventDate(event);
-
-      const labels = eventTopics(event);
-      if (isCareerEvent(event)) labels.push((event.topics || []).includes("Career Fairs") ? "Career fair" : "Career event");
-      const topics = labels
-        .map(
-          topic =>
-            `<span class="topic">${escapeHtml(topic)}</span>`
-        )
-        .join("");
-
-      const status = formatStatus(
-        event.registration_status
-      );
-
-      const statusClass =
-        event.registration_status === "sold_out"
-          ? "sold-out"
-          : event.registration_status;
-
-      const venue =
-        (event.format === "online" ? "Online" : null) ||
-        event.venue_name ||
-        event.address ||
-        "London";
-
-      return `
-        <article class="event-card ${historical ? "past" : ""}">
-
-          <div class="event-date">
-            <span class="event-day">
-              ${escapeHtml(date.day)}
-            </span>
-
-            <span class="event-month">
-              ${escapeHtml(date.month)}
-            </span>
-
-            <span class="event-time">
-              ${event.time_tbc ? "Time TBC" : escapeHtml(date.time)}
-            </span>
-          </div>
-
-          <div class="event-main">
-            <h2 class="event-title">
-              <a
-                href="${escapeHtml(event.source_url)}"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                ${escapeHtml(event.title)}
-              </a>
-            </h2>
-
-            <p class="event-location">
-              ${escapeHtml(venue)}
-              ·
-              ${escapeHtml(event.organiser)}
-            </p>
-
-            ${
-              topics
-                ? `
-                  <div class="event-topics">
-                    ${topics}
-                  </div>
-                `
-                : ""
-            }
-          </div>
-
-          <div class="event-side">
-            <span class="event-format">
-              ${escapeHtml({in_person: "In person", online: "Online", hybrid: "Hybrid"}[event.format] || "Format unknown")}
-            </span>
-            ${historical ? "" : `<span class="price">${escapeHtml(formatPrice(event))}</span>`}
-
-            ${
-              status && !historical
-                ? `
-                  <span
-                    class="status ${escapeHtml(statusClass)}"
-                  >
-                    ${escapeHtml(status)}
-                  </span>
-                `
-                : ""
-            }
-
-            <a
-              class="source-link"
-              href="${escapeHtml(event.source_url)}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View event ↗
-            </a>
-          </div>
-
-        </article>
-      `;
-    }
-
-    function renderEvents() {
-      const historical = activePeriod === "past";
-      const visibleEvents = (historical ? pastEvents : events)
-        .filter(event => historical ? !isUpcoming(event) : isUpcoming(event))
-        .filter(matchesFilter)
-        .sort((a, b) => historical
-          ? new Date(b.start_at) - new Date(a.start_at)
-          : new Date(a.start_at) - new Date(b.start_at));
-
-      resultCount.textContent =
-        `${visibleEvents.length} ${
-          visibleEvents.length === 1
-            ? "event"
-            : "events"
-        }`;
-
-      if (!visibleEvents.length) {
-        eventsList.innerHTML = `
-          <div class="state">
-            <strong>No matching events</strong>
-            ${historical ? "No past events saved yet, or try another filter." : "Try another filter or search term."}
-          </div>
-        `;
-
-        return;
-      }
-
-      eventsList.innerHTML = visibleEvents
-        .map(event => eventCard(event, historical))
-        .join("");
-    }
-
-    function setActiveFilter(filter) {
-      activeFilter = filter;
-
-      renderTopicControls();
-      renderEvents();
-    }
-
-    topicFilters.addEventListener("click", e => {
-      const button = e.target.closest("[data-filter]");
-      if (button) setActiveFilter(button.dataset.filter);
-    });
-    otherTopics.addEventListener("change", () => setActiveFilter(otherTopics.value || "all"));
-    freeOnly.addEventListener("change", renderEvents);
-    careersOnly.addEventListener("change", renderEvents);
-
-    periodButtons.forEach(button => button.addEventListener("click", () => {
-      activePeriod = button.dataset.period;
-      periodButtons.forEach(other => other.classList.toggle("active", other === button));
-      renderEvents();
-    }));
-
-    eventSearch.addEventListener("input", renderEvents);
-    formatFilter.addEventListener("change", renderEvents);
-
-    async function loadEvents() {
-      try {
-        const response = await fetch(
-          DATA_URL,
-          {
-            cache: "no-store"
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(
-            `HTTP ${response.status}`
-          );
-        }
-
-        const dataset = await response.json();
-
-        if (!Array.isArray(dataset.events)) {
-          throw new Error(
-            "Invalid event dataset"
-          );
-        }
-
-        events = dataset.events;
-        pastEvents = Array.isArray(dataset.past_events) ? dataset.past_events : [];
-        renderTopicControls();
-        const changes = Array.isArray(dataset.changes) ? dataset.changes.slice(-20).reverse() : [];
-        changeLog.hidden = !changes.length;
-        changeList.innerHTML = changes.map(change =>
-          `<li>${escapeHtml(formatUpdated(change.at))}: ${escapeHtml(change.title)} — ${escapeHtml(change.action)}</li>`
-        ).join("");
-        try {
-          const statusResponse = await fetch(STATUS_URL, { cache: "no-store" });
-          if (!statusResponse.ok) throw new Error("Refresh status unavailable");
-          const status = await statusResponse.json();
-          const checked = new Date(status.last_successful_check);
-          if (Number.isNaN(checked.getTime())) throw new Error("Invalid refresh status");
-          const recent = Date.now() - checked.getTime() >= 0 &&
-            Date.now() - checked.getTime() < 36 * 60 * 60 * 1000;
-          refreshIndicator.classList.toggle("fresh", recent);
-          lastChecked.textContent = `Last successful check ${formatUpdated(status.last_successful_check)}`
-            + (recent ? "" : " · check overdue");
-        } catch (statusError) {
-          lastChecked.textContent = "Last successful check unavailable";
-        }
-
-        if (dataset.generated_at) {
-          lastUpdated.textContent =
-            `Event details updated ${formatUpdated(
-              dataset.generated_at
-            )}`;
-        } else {
-          lastUpdated.textContent =
-            "Refresh time unavailable";
-        }
-
-        renderEvents();
-
-      } catch (error) {
-        console.error(
-          "Could not load events:",
-          error
-        );
-
-        lastUpdated.textContent =
-          "Data temporarily unavailable";
-
-        resultCount.textContent = "";
-
-        eventsList.innerHTML = `
-          <div class="state">
-            <strong>
-              Events couldn't be loaded
-            </strong>
-            Please try again later.
-          </div>
-        `;
-      }
-    }
-
-    renderTopicControls();
-    loadEvents();
-  </script>
 
 </body>
 </html>
