@@ -1,8 +1,28 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-25T23:56:45.507464+00:00",
-  "event_count": 13,
+  "generated_at": "2026-10-27T12:09:55.042969+00:00",
+  "event_count": 14,
   "events": [
+    {
+      "id": "meetup-317144899",
+      "title": "Ask Your Data Anything: Databricks Genie",
+      "start_at": "2026-10-28T11:45:00+00:00",
+      "format": "online",
+      "organiser": "UK Databricks User Group | Powered by Champions & Unifeye",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/databricks-practitioners-uk/events/317144899/",
+      "end_at": null,
+      "venue_name": null,
+      "address": null,
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
     {
       "id": "rss-2026-cathie-marsh-lecture-countering-misinformatio",
       "title": "2026 Cathie Marsh Lecture - Countering Misinformation with Statistics",
@@ -146,7 +166,7 @@
     },
     {
       "id": "meetup-316972421",
-      "title": "MarTech London: Building Confidence in Data and Experimentation",
+      "title": "MarTech London: Building an Experimentation Practice That Delivers Value",
       "start_at": "2026-11-19T18:30:00+00:00",
       "format": "in_person",
       "organiser": "Martech London",
@@ -859,6 +879,18 @@
       "event_id": "meetup-317075400",
       "title": "IBM Bob TV episode 3: Benchmarking optimization tasks, cost & quality with Bob",
       "action": "updated"
+    },
+    {
+      "at": "2026-10-27T12:09:55.042969+00:00",
+      "event_id": "meetup-316972421",
+      "title": "MarTech London: Building an Experimentation Practice That Delivers Value",
+      "action": "updated"
+    },
+    {
+      "at": "2026-10-27T12:09:55.042969+00:00",
+      "event_id": "meetup-317144899",
+      "title": "Ask Your Data Anything: Databricks Genie",
+      "action": "added"
     }
   ]
 }
