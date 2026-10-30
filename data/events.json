@@ -1,48 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-29T12:59:08.672511+00:00",
-  "event_count": 15,
+  "generated_at": "2026-10-30T12:53:37.683971+00:00",
+  "event_count": 14,
   "events": [
-    {
-      "id": "rss-2026-cathie-marsh-lecture-countering-misinformatio",
-      "title": "2026 Cathie Marsh Lecture - Countering Misinformation with Statistics",
-      "start_at": "2026-10-29T13:00:00+00:00",
-      "format": "in_person",
-      "organiser": "Royal Statistical Society",
-      "source": "Royal Statistical Society",
-      "source_url": "https://rss.org.uk/training-events/events/events-2026/section-groups/2026-cathie-marsh-lecture-countering-misinformatio/",
-      "end_at": "2026-10-29T15:00:00+00:00",
-      "venue_name": "London",
-      "address": "London",
-      "is_free": true,
-      "price_from_gbp": 0.0,
-      "registration_status": "open",
-      "topics": [
-        "Statistics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
-    {
-      "id": "meetup-316749006",
-      "title": "Omni AI Analytics Meetup London #2",
-      "start_at": "2026-10-29T18:30:00+00:00",
-      "format": "in_person",
-      "organiser": "Omni AI Analytics Meetup",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/omni-ai-analytics/events/316749006/",
-      "end_at": null,
-      "venue_name": "Arcadia Games",
-      "address": "Arcadia Games, 46 Essex St, Temple, London WC2R 3JF, UK, London",
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Analytics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "meetup-317075400",
       "title": "IBM Bob TV episode 3: Benchmarking optimization tasks, cost & quality with Bob",
@@ -145,13 +105,33 @@
       "time_tbc": false
     },
     {
-      "id": "meetup-316978174",
+      "id": "meetup-317204471",
+      "title": "The Product-Market Fit Journey: Market Signals, Analytics & Tech Decisions",
+      "start_at": "2026-11-11T17:00:00+00:00",
+      "format": "online",
+      "organiser": "London Startup Founder 101",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/london-startup-founder-101/events/317204471/",
+      "end_at": null,
+      "venue_name": null,
+      "address": null,
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-316622426",
       "title": "GPU Detective Stories: PyTorch Recompiles & Hidden Bottlenecks",
       "start_at": "2026-11-16T17:00:00+00:00",
       "format": "online",
-      "organiser": "AI Performance Engineering Meetup (UK)",
+      "organiser": "AI Performance Engineering Meetup (London - Cambridge)",
       "source": "Meetup",
-      "source_url": "https://www.meetup.com/ai-performance-engineering-meetup-uk/events/316978174/",
+      "source_url": "https://www.meetup.com/ai-performance-engineering-london-cambridge/events/316622426/",
       "end_at": null,
       "venue_name": null,
       "address": null,
@@ -309,6 +289,46 @@
     }
   ],
   "past_events": [
+    {
+      "id": "meetup-316749006",
+      "title": "Omni AI Analytics Meetup London #2",
+      "start_at": "2026-10-29T18:30:00+00:00",
+      "format": "in_person",
+      "organiser": "Omni AI Analytics Meetup",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/omni-ai-analytics/events/316749006/",
+      "end_at": null,
+      "venue_name": "Arcadia Games",
+      "address": "Arcadia Games, 46 Essex St, Temple, London WC2R 3JF, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "rss-2026-cathie-marsh-lecture-countering-misinformatio",
+      "title": "2026 Cathie Marsh Lecture - Countering Misinformation with Statistics",
+      "start_at": "2026-10-29T13:00:00+00:00",
+      "format": "in_person",
+      "organiser": "Royal Statistical Society",
+      "source": "Royal Statistical Society",
+      "source_url": "https://rss.org.uk/training-events/events/events-2026/section-groups/2026-cathie-marsh-lecture-countering-misinformatio/",
+      "end_at": null,
+      "venue_name": "London",
+      "address": "London",
+      "is_free": true,
+      "price_from_gbp": 0.0,
+      "registration_status": "unknown",
+      "topics": [
+        "Statistics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
     {
       "id": "meetup-317144899",
       "title": "Ask Your Data Anything: Databricks Genie",
@@ -949,6 +969,42 @@
       "event_id": "meetup-317144899",
       "title": "Ask Your Data Anything: Databricks Genie",
       "action": "archived"
+    },
+    {
+      "at": "2026-10-30T12:53:37.683971+00:00",
+      "event_id": "rss-2026-cathie-marsh-lecture-countering-misinformatio",
+      "title": "2026 Cathie Marsh Lecture - Countering Misinformation with Statistics",
+      "action": "updated"
+    },
+    {
+      "at": "2026-10-30T12:53:37.683971+00:00",
+      "event_id": "meetup-316622426",
+      "title": "GPU Detective Stories: PyTorch Recompiles & Hidden Bottlenecks",
+      "action": "added"
+    },
+    {
+      "at": "2026-10-30T12:53:37.683971+00:00",
+      "event_id": "meetup-317204471",
+      "title": "The Product-Market Fit Journey: Market Signals, Analytics & Tech Decisions",
+      "action": "added"
+    },
+    {
+      "at": "2026-10-30T12:53:37.683971+00:00",
+      "event_id": "rss-2026-cathie-marsh-lecture-countering-misinformatio",
+      "title": "2026 Cathie Marsh Lecture - Countering Misinformation with Statistics",
+      "action": "archived"
+    },
+    {
+      "at": "2026-10-30T12:53:37.683971+00:00",
+      "event_id": "meetup-316749006",
+      "title": "Omni AI Analytics Meetup London #2",
+      "action": "archived"
+    },
+    {
+      "at": "2026-10-30T12:53:37.683971+00:00",
+      "event_id": "meetup-316978174",
+      "title": "GPU Detective Stories: PyTorch Recompiles & Hidden Bottlenecks",
+      "action": "removed from source"
     }
   ]
 }
