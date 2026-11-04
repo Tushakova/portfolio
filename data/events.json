@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-30T12:53:37.683971+00:00",
+  "generated_at": "2026-11-04T14:30:21.745786+00:00",
   "event_count": 14,
   "events": [
     {
@@ -65,7 +65,7 @@
     },
     {
       "id": "meetup-312536046",
-      "title": "London Data Intelligence Network | Meetup | Oct 2026",
+      "title": "London Data Intelligence Network | Meetup | Nov 2026",
       "start_at": "2026-11-05T18:00:00+00:00",
       "format": "in_person",
       "organiser": "London: Data Intelligence Network",
@@ -1005,6 +1005,12 @@
       "event_id": "meetup-316978174",
       "title": "GPU Detective Stories: PyTorch Recompiles & Hidden Bottlenecks",
       "action": "removed from source"
+    },
+    {
+      "at": "2026-11-04T14:30:21.745786+00:00",
+      "event_id": "meetup-312536046",
+      "title": "London Data Intelligence Network | Meetup | Nov 2026",
+      "action": "updated"
     }
   ]
 }
