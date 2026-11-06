@@ -1,29 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-05T14:38:16.197774+00:00",
+  "generated_at": "2026-11-06T14:15:30.471791+00:00",
   "event_count": 12,
   "events": [
-    {
-      "id": "meetup-312536046",
-      "title": "London Data Intelligence Network | Meetup | Nov 2026",
-      "start_at": "2026-11-05T18:00:00+00:00",
-      "format": "in_person",
-      "organiser": "London: Data Intelligence Network",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/london-data-intelligence-network/events/312536046/",
-      "end_at": "2026-11-05T20:00:00+00:00",
-      "venue_name": "Incubeta",
-      "address": "14th Floor, The Bower, 207-211 Old St, London EC1V 9NR, London",
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Analytics",
-        "Data Science"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "rss-survey-futures-ecr-impact-awards",
       "title": "Survey Futures ECR Impact Awards",
@@ -120,6 +99,26 @@
       "registration_status": "unknown",
       "topics": [
         "Experimentation"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-317299189",
+      "title": "Databricks London Meetup - Data & Spritz",
+      "start_at": "2026-11-25T17:30:00+00:00",
+      "format": "in_person",
+      "organiser": "Databricks Community UK",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/databricks-community-uk/events/317299189/",
+      "end_at": null,
+      "venue_name": "Databricks",
+      "address": "11-14 Windmill St, London W1T 2JG, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
       ],
       "status": "scheduled",
       "time_tbc": false
@@ -249,6 +248,27 @@
     }
   ],
   "past_events": [
+    {
+      "id": "meetup-312536046",
+      "title": "London Data Intelligence Network | Meetup | Nov 2026",
+      "start_at": "2026-11-05T18:00:00+00:00",
+      "format": "in_person",
+      "organiser": "London: Data Intelligence Network",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/london-data-intelligence-network/events/312536046/",
+      "end_at": "2026-11-05T20:00:00+00:00",
+      "venue_name": "Incubeta",
+      "address": "14th Floor, The Bower, 207-211 Old St, London EC1V 9NR, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics",
+        "Data Science"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
     {
       "id": "meetup-316927507",
       "title": "HACKATHON - Agent Eval Harness (by the Friendly Data Meetup)",
@@ -1054,6 +1074,18 @@
       "at": "2026-11-05T14:38:16.197774+00:00",
       "event_id": "meetup-317054890",
       "title": "PyData London - 111th Meetup",
+      "action": "archived"
+    },
+    {
+      "at": "2026-11-06T14:15:30.471791+00:00",
+      "event_id": "meetup-317299189",
+      "title": "Databricks London Meetup - Data & Spritz",
+      "action": "added"
+    },
+    {
+      "at": "2026-11-06T14:15:30.471791+00:00",
+      "event_id": "meetup-312536046",
+      "title": "London Data Intelligence Network | Meetup | Nov 2026",
       "action": "archived"
     }
   ]
