@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-06T14:15:30.471791+00:00",
-  "event_count": 12,
+  "generated_at": "2026-11-07T12:58:36.111850+00:00",
+  "event_count": 13,
   "events": [
     {
       "id": "rss-survey-futures-ecr-impact-awards",
@@ -119,6 +119,26 @@
       "registration_status": "unknown",
       "topics": [
         "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-317313443",
+      "title": "London Analytics Engineering Christmas Jumper Meet-up #27",
+      "start_at": "2026-11-25T18:00:00+00:00",
+      "format": "in_person",
+      "organiser": "London Analytics Engineering Meetup",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/london-analytics-engineering-meetup/events/317313443/",
+      "end_at": "2026-11-25T21:00:00+00:00",
+      "venue_name": "Zopa Bank",
+      "address": "Level 12, 20 Water St, Canary Wharf Estate, London E14 5GX, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Analytics Engineering"
       ],
       "status": "scheduled",
       "time_tbc": false
@@ -1087,6 +1107,12 @@
       "event_id": "meetup-312536046",
       "title": "London Data Intelligence Network | Meetup | Nov 2026",
       "action": "archived"
+    },
+    {
+      "at": "2026-11-07T12:58:36.111850+00:00",
+      "event_id": "meetup-317313443",
+      "title": "London Analytics Engineering Christmas Jumper Meet-up #27",
+      "action": "added"
     }
   ]
 }
