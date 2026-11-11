@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-07T12:58:36.111850+00:00",
-  "event_count": 13,
+  "generated_at": "2026-11-11T14:20:29.754515+00:00",
+  "event_count": 14,
   "events": [
     {
       "id": "rss-survey-futures-ecr-impact-awards",
@@ -220,6 +220,24 @@
       "topics": [
         "Data Science"
       ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "rss-advances-in-causal-inference-for-healthcare-an-(1)",
+      "title": "Advances in Causal Inference for Healthcare and Society (In person)",
+      "start_at": "2026-12-11T14:00:00+00:00",
+      "format": "in_person",
+      "organiser": "Royal Statistical Society",
+      "source": "Royal Statistical Society",
+      "source_url": "https://rss.org.uk/training-events/events/events-2026/section-groups/advances-in-causal-inference-for-healthcare-an-(1)/",
+      "end_at": "2026-12-11T17:00:00+00:00",
+      "venue_name": "Department of Mathematics, Imperial College London",
+      "address": "Department of Mathematics, Imperial College London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "open",
+      "topics": [],
       "status": "scheduled",
       "time_tbc": false
     },
@@ -1112,6 +1130,12 @@
       "at": "2026-11-07T12:58:36.111850+00:00",
       "event_id": "meetup-317313443",
       "title": "London Analytics Engineering Christmas Jumper Meet-up #27",
+      "action": "added"
+    },
+    {
+      "at": "2026-11-11T14:20:29.754515+00:00",
+      "event_id": "rss-advances-in-causal-inference-for-healthcare-an-(1)",
+      "title": "Advances in Causal Inference for Healthcare and Society (In person)",
       "action": "added"
     }
   ]
