@@ -1,28 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-14T13:29:43.356176+00:00",
-  "event_count": 13,
+  "generated_at": "2026-11-17T15:58:21.574993+00:00",
+  "event_count": 12,
   "events": [
-    {
-      "id": "meetup-316622426",
-      "title": "GPU Detective Stories: PyTorch Recompiles & Hidden Bottlenecks",
-      "start_at": "2026-11-16T17:00:00+00:00",
-      "format": "online",
-      "organiser": "AI Performance Engineering Meetup (London - Cambridge)",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/ai-performance-engineering-london-cambridge/events/316622426/",
-      "end_at": null,
-      "venue_name": null,
-      "address": null,
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Science"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "meetup-317291179",
       "title": "CRAP Talks #36 - Moonpig.com",
@@ -65,7 +45,7 @@
     },
     {
       "id": "meetup-317299189",
-      "title": "Databricks London Meetup - Data & Spritz",
+      "title": "Databricks UK Meetup - Data & Spritz",
       "start_at": "2026-11-25T17:30:00+00:00",
       "format": "in_person",
       "organiser": "Databricks Community UK",
@@ -266,6 +246,26 @@
     }
   ],
   "past_events": [
+    {
+      "id": "meetup-316622426",
+      "title": "GPU Detective Stories: PyTorch Recompiles & Hidden Bottlenecks",
+      "start_at": "2026-11-16T17:00:00+00:00",
+      "format": "online",
+      "organiser": "AI Performance Engineering Meetup (London - Cambridge)",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/ai-performance-engineering-london-cambridge/events/316622426/",
+      "end_at": null,
+      "venue_name": null,
+      "address": null,
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Science"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
     {
       "id": "meetup-317204471",
       "title": "The Product-Market Fit Journey: Market Signals, Analytics & Tech Decisions",
@@ -1181,6 +1181,18 @@
       "event_id": "meetup-317422766",
       "title": "London PyTorch #29",
       "action": "added"
+    },
+    {
+      "at": "2026-11-17T15:58:21.574993+00:00",
+      "event_id": "meetup-317299189",
+      "title": "Databricks UK Meetup - Data & Spritz",
+      "action": "updated"
+    },
+    {
+      "at": "2026-11-17T15:58:21.574993+00:00",
+      "event_id": "meetup-316622426",
+      "title": "GPU Detective Stories: PyTorch Recompiles & Hidden Bottlenecks",
+      "action": "archived"
     }
   ]
 }
