@@ -1,28 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-17T15:58:21.574993+00:00",
+  "generated_at": "2026-11-18T15:38:36.050313+00:00",
   "event_count": 12,
   "events": [
-    {
-      "id": "meetup-317291179",
-      "title": "CRAP Talks #36 - Moonpig.com",
-      "start_at": "2026-11-17T18:00:00+00:00",
-      "format": "in_person",
-      "organiser": "CRAP Talks: CRO, Analytics & Product - London",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/crap-talks-cro-analytics-product-london/events/317291179/",
-      "end_at": "2026-11-17T21:00:00+00:00",
-      "venue_name": "10 Back Hill",
-      "address": "10 Back Hill, London EC1R 5EN, UK, London",
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Analytics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "meetup-316972421",
       "title": "MarTech London: Building an Experimentation Practice That Delivers Value",
@@ -184,6 +164,26 @@
       "time_tbc": false
     },
     {
+      "id": "rss-rss-teaching-statistics-section-agm-2026-(in-perso",
+      "title": "RSS Teaching Statistics Section AGM 2026 (In person)",
+      "start_at": "2026-12-11T12:00:00+00:00",
+      "format": "in_person",
+      "organiser": "Royal Statistical Society",
+      "source": "Royal Statistical Society",
+      "source_url": "https://rss.org.uk/training-events/events/events-2026/section-groups/rss-teaching-statistics-section-agm-2026-(in-perso/",
+      "end_at": "2026-12-11T14:00:00+00:00",
+      "venue_name": "Imperial College London",
+      "address": "Imperial College London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "open",
+      "topics": [
+        "Statistics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
       "id": "rss-advances-in-causal-inference-for-healthcare-an-(1)",
       "title": "Advances in Causal Inference for Healthcare and Society (In person)",
       "start_at": "2026-12-11T14:00:00+00:00",
@@ -246,6 +246,26 @@
     }
   ],
   "past_events": [
+    {
+      "id": "meetup-317291179",
+      "title": "CRAP Talks #36 - Moonpig.com",
+      "start_at": "2026-11-17T18:00:00+00:00",
+      "format": "in_person",
+      "organiser": "CRAP Talks: CRO, Analytics & Product - London",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/crap-talks-cro-analytics-product-london/events/317291179/",
+      "end_at": "2026-11-17T21:00:00+00:00",
+      "venue_name": "10 Back Hill",
+      "address": "10 Back Hill, London EC1R 5EN, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
     {
       "id": "meetup-316622426",
       "title": "GPU Detective Stories: PyTorch Recompiles & Hidden Bottlenecks",
@@ -1192,6 +1212,18 @@
       "at": "2026-11-17T15:58:21.574993+00:00",
       "event_id": "meetup-316622426",
       "title": "GPU Detective Stories: PyTorch Recompiles & Hidden Bottlenecks",
+      "action": "archived"
+    },
+    {
+      "at": "2026-11-18T15:38:36.050313+00:00",
+      "event_id": "rss-rss-teaching-statistics-section-agm-2026-(in-perso",
+      "title": "RSS Teaching Statistics Section AGM 2026 (In person)",
+      "action": "added"
+    },
+    {
+      "at": "2026-11-18T15:38:36.050313+00:00",
+      "event_id": "meetup-317291179",
+      "title": "CRAP Talks #36 - Moonpig.com",
       "action": "archived"
     }
   ]
