@@ -1,0 +1,478 @@
+diff --git a/.github/workflows/refresh-events.yml b/.github/workflows/refresh-events.yml
+index 477acb9..2609099 100644
+--- a/.github/workflows/refresh-events.yml
++++ b/.github/workflows/refresh-events.yml
+@@ -2,6 +2,11 @@ name: Refresh events
+ 
+ on:
+   workflow_dispatch:
++    inputs:
++      discover_new:
++        description: "Also search for and automatically publish eligible new events"
++        type: boolean
++        default: false
+   push:
+     branches: [main]
+     paths:
+@@ -12,6 +17,8 @@ on:
+   schedule:
+     - cron: "17 6 * * *"
+       timezone: "Europe/London"
++    - cron: "23 9 * * *"
++      timezone: "Europe/London"
+ 
+ permissions:
+   contents: write
+@@ -41,11 +48,22 @@ jobs:
+         run: python -m unittest discover -s tests
+ 
+       - name: Build events dataset
++        if: github.event.schedule != '23 9 * * *' && inputs.discover_new != true
+         run: python -m src.events.build
+ 
++      - name: Discover, verify and build events dataset
++        if: github.event.schedule == '23 9 * * *' || inputs.discover_new == true
++        env:
++          BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
++        run: python -m src.events.build --discover-new
++
+       - name: Commit updated dataset
+         run: |
+-          if [ -z "$(git status --porcelain -- data/events.json data/refresh-status.json)" ]; then
++          files=(data/events.json data/refresh-status.json)
++          if [ -f data/auto-discovered-events.json ]; then
++            files+=(data/auto-discovered-events.json)
++          fi
++          if [ -z "$(git status --porcelain -- "${files[@]}")" ]; then
+             echo "No event data changes to commit."
+             exit 0
+           fi
+@@ -53,6 +71,6 @@ jobs:
+           git config user.name "github-actions[bot]"
+           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+ 
+-          git add data/events.json data/refresh-status.json
++          git add "${files[@]}"
+           git commit -m "Refresh event data"
+           git push
+diff --git a/README.md b/README.md
+index 87ca60d..76ec5ad 100644
+--- a/README.md
++++ b/README.md
+@@ -25,6 +25,8 @@ Upcoming events are separated from the Past events tab. On each successful build
+ 
+ ## Refresh and deployment
+ 
++Every day at 09:23 London time, the same **Refresh events** workflow also searches for new events and publishes only those that pass the [automatic discovery checks](docs/DISCOVERY.md#automatic-publication). No manual review or approval is required. The 06:17 event refresh does not call Brave.
++
+ `.github/workflows/refresh-events.yml` runs daily at 06:17 Europe/London (including summer/winter clock changes), on changes to ingestion code or this workflow on main, and can also be started manually from GitHub Actions. Scheduled runs may be delayed by GitHub; Codespaces does not need to be running. It validates events and commits `data/events.json` only when event facts change; it also commits `data/refresh-status.json` after every successful check. The dot is green when the last successful check was less than 36 hours ago, otherwise grey, with an explicit check time. The event-details timestamp changes only when event facts change. Missing Big Data LDN ticket prices remain unknown and do not block refreshes. If a source fails, it keeps the previously published dataset and marks the workflow failed so incomplete data are not silently published; the last successful check time then grows stale.
+ 
+ An isolated RSS event detail page can be temporarily unavailable even while the calendar works. In that case the refresh logs a warning, preserves that event's last verified details if already published, and continues with the other pages. If the entire RSS calendar or every detail page fails, the refresh still fails rather than silently clearing the source.
+diff --git a/docs/DISCOVERY.md b/docs/DISCOVERY.md
+index acd66c0..5148845 100644
+--- a/docs/DISCOVERY.md
++++ b/docs/DISCOVERY.md
+@@ -1,5 +1,17 @@
+ # Web search: discovery and verification
+ 
++## Automatic publication
++
++**Refresh events** searches and automatically publishes eligible discoveries every day at 09:23 London time. To run it on demand, select **Discover new** when starting **Refresh events**. The separate **Test event discovery** workflow is a diagnostic and is not needed for publication.
++
++The automatic path uses the existing Brave secret and up to 12 queries per run, or 372 scheduled queries in a 31-day month. Manual discovery and diagnostics are additional. Results are leads: it checks up to 24 direct listings on recognised booking platforms or configured organiser sites. Each new record needs an unambiguous structured event on the listing itself, an exact future start time, a named venue in London, UK, a recognised topic and an in-stock or limited-availability offer linking to a verified type of booking page. Redirects, catalogues, unknown domains, online-only events, incomplete details and restricted-audience listings are skipped. An independent organiser can qualify through its Eventbrite, Luma or Ticket Tailor listing.
++
++The same build checks current feeds, published and archived events, and its own discovery history. It blocks duplicate IDs, matching source URLs or listing IDs, and matching titles on the same London date. The default limit is five new and 20 active automatic listings. A run can correctly publish zero. GitHub Actions logs the counts and skip reasons; no approval step is required.
++
++Daily runs recheck active automatic listings directly without calling Brave. If a page no longer verifies, its listing is omitted on the next successful refresh; if the original event verifies again it can reappear. Completed events follow the normal archive process. The production workflow commits the event dataset and the discovery history together. If the Brave request fails, that discovery run leaves the last publication in place; normal daily runs use no Brave credentials.
++
++The sections below describe the separate discovery diagnostic and its legacy import path.
++
+ There are three different kinds of search in London Data Radar:
+ 
+ | Feature | What it does | When it runs |
+@@ -76,7 +88,7 @@ The import re-fetches every selected page and requires a currently accepted reco
+ 4. Inspect `git diff -- data/discovered-events.json data/events.json data/refresh-status.json`, then commit and push those files. A change to `data/discovered-events.json` triggers the ordinary refresh workflow.
+ 5. Approved sources are checked daily without calling Brave. At most 30 approved event pages are supported. Past approved records remain in the archive and are no longer fetched. Prune their registry entries when approaching the cap; the archive is unaffected. A source that can no longer confirm an approved upcoming event fails the refresh and preserves the last publication rather than silently deleting it. Investigate the warning and remove cancelled records from the registry after review.
+ 
+-This establishes a working human-reviewed publication route. Brave discovery itself remains manual; daily API searches and automatic publication are not enabled. Use a few real runs to measure relevant-event yield before deciding whether a weekly discovery schedule is worthwhile. No new paid API queries are introduced into the daily refresh.
++This legacy route is available for separately reviewed candidates. The scheduled automatic path is described above; it does not require this import or manual approval.
+ 
+ ## Change-log identity
+ 
+diff --git a/src/events/auto_discovery.py b/src/events/auto_discovery.py
+new file mode 100644
+index 0000000..42535fd
+--- /dev/null
++++ b/src/events/auto_discovery.py
+@@ -0,0 +1,176 @@
++"""Conservative unattended discovery. Only direct, verified listings qualify."""
++
++from collections import Counter
++from concurrent.futures import ThreadPoolExecutor
++from datetime import datetime
++import json
++from pathlib import Path
++import re
++from urllib.parse import urljoin, urlsplit
++
++from src.events.candidates import (
++    LONDON, MAX_EVENTS_PER_PAGE, canonical_url, public_url, verify_event,
++)
++from src.events.http import FetchError, fetch_html
++from src.events.models import Event
++from src.events.source_policy import source_kind
++from src.events.structured_data import extract_schema_events
++
++REGISTRY = Path("data/auto-discovered-events.json")
++MAX_SEARCH_PAGES = 24
++MAX_ACTIVE = 20
++MAX_NEW_PER_RUN = 5
++RESTRICTED_AUDIENCE = re.compile(
++    r"\b(?:employees?|staff|members?|students?|graduates?|alumni|partners?|customers?)\s+only\b"
++    r"|\b(?:by invitation|private event|internal event|closed to the public)\b", re.I,
++)
++
++
++def detail_page(url: str) -> bool:
++    if not public_url(url) or urlsplit(url).scheme != "https":
++        return False
++    page = urlsplit(url)
++    host = (page.hostname or "").removeprefix("www.")
++    path = page.path.rstrip("/")
++    # Registration links to existing Meetup groups belong to the daily collector.
++    if host in {"eventbrite.com", "eventbrite.co.uk"}:
++        return bool(re.fullmatch(r"/e/[^/]+-tickets-\d+", path))
++    if host in {"luma.com", "lu.ma"}:
++        return bool(re.fullmatch(r"/[a-z0-9-]{5,}", path, re.I))
++    if host == "tickettailor.com":
++        return bool(re.fullmatch(r"/events/[^/]+/\d+", path))
++    return source_kind(url) == "organiser" and len(path.strip("/").split("/")) >= 2
++
++
++def same_listing(first: str, second: str) -> bool:
++    return canonical_url(first) == canonical_url(second)
++
++
++def has_booking_evidence(item: dict, url: str) -> bool:
++    offers = item.get("offers", [])
++    if not isinstance(offers, list):
++        offers = [offers]
++    for offer in offers:
++        if not isinstance(offer, dict) or not isinstance(offer.get("url"), str):
++            continue
++        booking = urljoin(url, offer["url"])
++        status = str(offer.get("availability", "")).split("/")[-1]
++        if (status in {"InStock", "LimitedAvailability"} and detail_page(booking)
++                and (same_listing(booking, url)
++                     or (source_kind(url) == "organiser" and source_kind(booking) == "platform"))):
++            return True
++    return False
++
++
++def has_uk_venue(item: dict) -> bool:
++    locations = item.get("location", [])
++    if not isinstance(locations, list):
++        locations = [locations]
++    for location in locations:
++        address = location.get("address") if isinstance(location, dict) else None
++        if not isinstance(address, dict):
++            continue
++        locality = str(address.get("addressLocality", "")).strip().casefold()
++        country = address.get("addressCountry", "")
++        if isinstance(country, dict):
++            country = country.get("name") or country.get("identifier", "")
++        if locality in {"london", "greater london"} and str(country).strip().casefold() in {
++            "gb", "gbr", "uk", "united kingdom", "great britain", "england",
++        }:
++            return True
++    return False
++
++
++def verify_page(url: str, now: datetime, *, require_future: bool = True) -> tuple[Event | None, str]:
++    if not detail_page(url):
++        return None, "unsupported listing"
++    try:
++        html = fetch_html(url, timeout=8, attempts=1, max_bytes=2_000_000, allow_redirects=False)
++        structured = extract_schema_events(html)
++        if len(structured) > MAX_EVENTS_PER_PAGE:
++            return None, "too many records"
++        matches = []
++        for item in structured:
++            raw_url = item.get("url")
++            if not isinstance(raw_url, str) or not same_listing(urljoin(url, raw_url), url):
++                continue
++            state = str(item.get("eventStatus", "")).split("/")[-1]
++            if state not in ("", "EventScheduled") or RESTRICTED_AUDIENCE.search(
++                f"{item.get('name', '')} {item.get('description', '')}"
++            ):
++                continue
++            event, _, _ = verify_event(item, url, now)
++            if (event and event.topics and event.format in {"in_person", "hybrid"}
++                    and event.venue_name and not event.time_tbc
++                    and (not require_future or datetime.fromisoformat(event.start_at) > now)
++                    and has_uk_venue(item) and has_booking_evidence(item, url)):
++                matches.append(event)
++        if len(matches) == 1:
++            return matches[0], "verified"
++        return None, "missing or ambiguous event evidence"
++    except (FetchError, ValueError, TypeError, UnicodeError, OSError, LookupError):
++        return None, "page unavailable or invalid"
++
++
++def identity(item: dict) -> set[tuple[str, ...]]:
++    title = " ".join(re.findall(r"\w+", item["title"].casefold()))
++    local_day = datetime.fromisoformat(item["start_at"]).astimezone(LONDON).date().isoformat()
++    url = canonical_url(item["source_url"])
++    p = urlsplit(url)
++    keys = {("id", item["id"]), ("url-day", url, local_day), ("title-day", title, local_day)}
++    # Booking page IDs stay stable even when marketing slugs or tracking change.
++    if detail_page(url):
++        keys.add(("listing", p.netloc, p.path))
++        if p.netloc in {"eventbrite.com", "eventbrite.co.uk"}:
++            keys.add(("eventbrite", p.path.rsplit("-", 1)[-1]))
++    return keys
++
++
++def collect(base: list[Event], previous: dict, now: datetime, *, discover_new: bool
++            ) -> tuple[list[Event], list[dict] | None]:
++    from src.events.build import is_past
++
++    history = json.loads(REGISTRY.read_text(encoding="utf-8"))["events"] if REGISTRY.exists() else []
++    current_keys = {k for event in base for k in identity(event.to_dict())}
++    known = previous.get("events", []) + previous.get("past_events", [])
++    seen = current_keys | {k for item in known + history for k in identity(item)}
++    # The bounded change log also remembers IDs for records removed from their sources.
++    seen.update(("id", row["event_id"]) for row in previous.get("changes", []))
++    active = [r for r in history if not is_past(r, now)][:MAX_ACTIVE]
++    verified = []
++    with ThreadPoolExecutor(max_workers=4) as pool:
++        checks = pool.map(lambda r: verify_page(r["source_url"], now, require_future=False), active)
++        for old, (event, _) in zip(active, checks):
++            if event and event.id == old["id"] and not identity(event.to_dict()) & current_keys:
++                verified.append(event)
++                current_keys.update(identity(event.to_dict()))
++        if not discover_new or len(active) >= MAX_ACTIVE:
++            return verified, None
++        from src.events.search import discover
++
++        urls, search = discover()
++        pages = sorted({url for url in urls if detail_page(url)})[:MAX_SEARCH_PAGES]
++        reasons: Counter[str] = Counter()
++        added = []
++        capacity = min(MAX_NEW_PER_RUN, MAX_ACTIVE - len(active))
++        for event, reason in pool.map(lambda url: verify_page(url, now), pages):
++            if event is None:
++                reasons[reason] += 1
++            else:
++                keys = identity(event.to_dict())
++                if keys & seen:
++                    reasons["already known"] += 1
++                elif len(added) < capacity:
++                    seen.update(keys)
++                    added.append(event)
++                else:
++                    reasons["run limit reached"] += 1
++        print(f"Automatic discovery: {search.query_count} searches, {len(pages)} pages checked, "
++              f"{len(added)} newly verified; skipped: {dict(sorted(reasons.items()))}")
++    return verified + added, history + [event.to_dict() for event in added] if added else None
++
++
++def save(history: list[dict]) -> None:
++    tmp = REGISTRY.with_suffix(".json.tmp")
++    tmp.write_text(json.dumps({"events": history}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
++    tmp.replace(REGISTRY)
+diff --git a/src/events/build.py b/src/events/build.py
+index 20f9ada..c28197a 100644
+--- a/src/events/build.py
++++ b/src/events/build.py
+@@ -2,11 +2,13 @@
+ 
+ from __future__ import annotations
+ 
++import argparse
+ import json
+ from datetime import datetime, timezone
+ from pathlib import Path
+ 
+ from src.events.models import Event
++from src.events import auto_discovery
+ from src.events.sources import career_fairs, dsf, meetup, rss, standalone, reviewed
+ from src.events.validation import (
+     deduplicate_events,
+@@ -172,7 +174,7 @@ def events_unchanged(dataset: dict) -> bool:
+     )
+ 
+ 
+-def main() -> None:
++def main(*, discover_new: bool = False) -> None:
+     """Run the complete ingestion pipeline."""
+ 
+     events, errors = collect_events()
+@@ -197,7 +199,13 @@ def main() -> None:
+     validate_events(events)
+ 
+     now = datetime.now(timezone.utc)
+-    dataset = build_dataset(events, previous_dataset(), now)
++    previous = previous_dataset()
++    discovered, history = auto_discovery.collect(events, previous, now, discover_new=discover_new)
++    events = deduplicate_events(events + discovered)
++    validate_events(events)
++    dataset = build_dataset(events, previous, now)
++    if history is not None:
++        auto_discovery.save(history)
+     CHECK_PATH.write_text(json.dumps({"last_successful_check": now.isoformat()}, indent=2) + "\n", encoding="utf-8")
+     if events_unchanged(dataset):
+         print("Event data unchanged; keeping the previous refresh timestamp.")
+@@ -211,4 +219,6 @@ def main() -> None:
+ 
+ 
+ if __name__ == "__main__":
+-    main()
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--discover-new", action="store_true", help="Search for and validate new events before building")
++    main(discover_new=parser.parse_args().discover_new)
+diff --git a/src/events/http.py b/src/events/http.py
+index f13903e..4153509 100644
+--- a/src/events/http.py
++++ b/src/events/http.py
+@@ -1,7 +1,7 @@
+ """Shared HTTP utilities for event ingestion."""
+ 
+ from urllib.error import HTTPError, URLError
+-from urllib.request import Request, urlopen
++from urllib.request import HTTPRedirectHandler, Request, build_opener, urlopen
+ 
+ 
+ REQUEST_TIMEOUT_SECONDS = 20
+@@ -16,8 +16,14 @@ class FetchError(RuntimeError):
+     """Raised when an event source cannot be retrieved."""
+ 
+ 
++class NoRedirects(HTTPRedirectHandler):
++    def redirect_request(self, req, fp, code, msg, headers, newurl):
++        return None
++
++
+ def fetch_html(url: str, *, timeout: int = REQUEST_TIMEOUT_SECONDS,
+-               attempts: int = 2, max_bytes: int | None = None) -> str:
++               attempts: int = 2, max_bytes: int | None = None,
++               allow_redirects: bool = True) -> str:
+     """Fetch an HTML page using a bounded network request."""
+ 
+     request = Request(
+@@ -28,9 +34,10 @@ def fetch_html(url: str, *, timeout: int = REQUEST_TIMEOUT_SECONDS,
+         },
+     )
+ 
++    open_request = urlopen if allow_redirects else build_opener(NoRedirects()).open
+     for attempt in range(attempts):
+         try:
+-            with urlopen(
++            with open_request(
+                 request,
+                 timeout=timeout,
+             ) as response:
+diff --git a/tests/test_auto_discovery.py b/tests/test_auto_discovery.py
+new file mode 100644
+index 0000000..ef414b1
+--- /dev/null
++++ b/tests/test_auto_discovery.py
+@@ -0,0 +1,98 @@
++from dataclasses import replace
++from datetime import datetime, timezone
++import json
++from pathlib import Path
++from tempfile import TemporaryDirectory
++import unittest
++from unittest.mock import patch
++
++from src.events import auto_discovery as auto
++from src.events import build
++from src.events.http import FetchError
++from src.events.models import Event
++from src.events.search import SearchSummary
++
++NOW = datetime(2026, 11, 21, 12, tzinfo=timezone.utc)
++URL = "https://www.eventbrite.co.uk/e/analytics-meetup-tickets-123"
++EVENT = Event("new", "Product Analytics Meetup", "2026-12-01T18:00:00+00:00",
++              "in_person", "Local organiser", "Web discovery", URL, venue_name="London Venue")
++
++
++def listing(**overrides):
++    return {
++        "@context": "https://schema.org", "@type": "Event", "url": URL,
++        "name": EVENT.title, "startDate": EVENT.start_at, "eventStatus": "https://schema.org/EventScheduled",
++        "location": {"@type": "Place", "name": EVENT.venue_name,
++                     "address": {"addressLocality": "London", "addressCountry": "GB"}},
++        "organizer": {"name": EVENT.organiser},
++        "offers": {"url": URL, "availability": "https://schema.org/InStock"},
++        **overrides,
++    }
++
++
++class AutomaticDiscoveryTest(unittest.TestCase):
++    def test_direct_listing_qualifies_and_skips_uncertain_evidence(self):
++        for changes, expected in [
++            ({}, True), ({"offers": {}}, False),
++            ({"description": "Invitation only"}, False),
++            ({"description": "This workshop is for employees only."}, False),
++            ({"startDate": "2026-12-01"}, False),
++            ({"startDate": "2026-11-21T11:30:00+00:00"}, False),
++            ({"eventStatus": "https://schema.org/EventCancelled"}, False),
++            ({"offers": {"url": URL.replace("123", "456"), "availability": "InStock"}}, False),
++            ({"location": {"@type": "Place", "name": "Venue",
++                           "address": {"addressLocality": "London", "addressCountry": "CA"}}}, False),
++        ]:
++            with self.subTest(changes=changes), patch("src.events.auto_discovery.fetch_html") as fetch:
++                fetch.return_value = f'<script type="application/ld+json">{json.dumps(listing(**changes))}</script>'
++                event, _ = auto.verify_page(URL, NOW)
++                self.assertEqual(event is not None, expected)
++                self.assertFalse(fetch.call_args.kwargs["allow_redirects"])
++        self.assertIsNone(auto.verify_page(URL.replace("www.eventbrite.co.uk", "example.org"), NOW)[0])
++        with patch("src.events.auto_discovery.fetch_html", side_effect=FetchError("redirect")):
++            self.assertIsNone(auto.verify_page(URL, NOW)[0])
++
++    def test_duplicates_are_excluded_from_active_archive_and_same_run(self):
++        crosspost = replace(EVENT, id="crosspost", source_url="https://luma.com/abcdef")
++        second = replace(EVENT, id="second", title="Experimentation meetup",
++                         source_url="https://www.eventbrite.co.uk/e/other-tickets-456")
++        lookup = {event.source_url: event for event in (EVENT, crosspost, second)}
++        for previous_section in ("events", "past_events"):
++            with self.subTest(previous_section=previous_section), TemporaryDirectory() as tmp, \
++                    patch.object(auto, "REGISTRY", Path(tmp) / "history.json"), \
++                    patch("src.events.search.discover", return_value=(set(lookup), SearchSummary(12, 3, 3))), \
++                    patch.object(auto, "verify_page", side_effect=lambda url, *_: (lookup[url], "verified")):
++                events, history = auto.collect([], {previous_section: [EVENT.to_dict()]}, NOW, discover_new=True)
++                self.assertEqual(events, [second])
++                self.assertEqual(history, [second.to_dict()])
++        self.assertTrue(auto.identity(EVENT.to_dict()) & auto.identity(replace(
++            EVENT, id="changed-id", title="Renamed", source_url=URL.replace("analytics-meetup", "new-name")
++        ).to_dict()))
++
++    def test_daily_rechecks_without_web_search_and_remembers_unavailable_event(self):
++        with TemporaryDirectory() as tmp, patch.object(auto, "REGISTRY", Path(tmp) / "history.json"), \
++                patch.object(auto, "verify_page", return_value=(None, "page unavailable")), \
++                patch("src.events.search.discover") as search:
++            auto.save([EVENT.to_dict()])
++            self.assertEqual(auto.collect([], {}, NOW, discover_new=False), ([], None))
++            search.assert_not_called()
++            self.assertEqual(json.loads(auto.REGISTRY.read_text())["events"], [EVENT.to_dict()])
++
++    def test_successful_build_publishes_and_second_run_does_not_add_again(self):
++        base = replace(EVENT, id="existing", title="Python London",
++                       source_url="https://example.org/python")
++        with TemporaryDirectory() as tmp:
++            data = Path(tmp)
++            output, status = data / "events.json", data / "status.json"
++            with patch.object(auto, "REGISTRY", data / "history.json"), \
++                    patch.object(build, "OUTPUT_PATH", output), patch.object(build, "CHECK_PATH", status), \
++                    patch.object(build, "datetime", wraps=datetime) as clock, \
++                    patch.object(build, "collect_events", return_value=([base], [])), \
++                    patch("src.events.search.discover", return_value=({URL}, SearchSummary(12, 1, 1))), \
++                    patch.object(auto, "fetch_html", return_value=f'<script type="application/ld+json">{json.dumps(listing())}</script>'):
++                clock.now.return_value = NOW
++                build.main(discover_new=True)
++                first = output.read_bytes()
++                self.assertEqual(json.loads(first)["event_count"], 2)
++                build.main(discover_new=True)
++                self.assertEqual(output.read_bytes(), first)
