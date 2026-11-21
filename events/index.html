@@ -299,6 +299,13 @@
       letter-spacing: 0.07em;
     }
 
+    .event-weekday {
+      display: block;
+      margin-top: 4px;
+      color: #71777e;
+      font-size: 12px;
+    }
+
     .event-time {
       display: block;
       margin-top: 14px;
@@ -785,10 +792,16 @@
         .replaceAll("'", "&#039;");
     }
 
+    const weekdayFormatter = new Intl.DateTimeFormat("en-GB", {
+      weekday: "short",
+      timeZone: "Europe/London"
+    });
+
     function formatDateParts(isoDate) {
       const date = new Date(isoDate);
 
       return {
+        weekday: weekdayFormatter.format(date),
         day: new Intl.DateTimeFormat(
           "en-GB",
           {
@@ -826,11 +839,12 @@
       if (londonDayKey(new Date(event.start_at)) ===
           londonDayKey(new Date(event.end_at))) return start;
 
+      const weekday = `${start.weekday}–${end.weekday}`;
       if (start.month === end.month) {
-        return { ...start, day: `${start.day}–${end.day}` };
+        return { ...start, weekday, day: `${start.day}–${end.day}` };
       }
 
-      return { ...start, month: `${start.month} – ${end.day} ${end.month}` };
+      return { ...start, weekday, month: `${start.month} – ${end.day} ${end.month}` };
     }
 
     function formatUpdated(isoDate) {
@@ -948,6 +962,8 @@
             <span class="event-month">
               ${escapeHtml(date.month)}
             </span>
+
+            <span class="event-weekday">${escapeHtml(date.weekday)}</span>
 
             <span class="event-time">
               ${event.time_tbc ? "Time TBC" : escapeHtml(date.time)}
