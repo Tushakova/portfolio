@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-20T15:26:14.171160+00:00",
+  "generated_at": "2026-11-25T17:12:12.821176+00:00",
   "event_count": 12,
   "events": [
     {
@@ -246,6 +246,24 @@
     }
   ],
   "past_events": [
+    {
+      "id": "rss-gradient-flows-for-sampling,-inference,-and-learni",
+      "title": "Gradient Flows for Sampling, Inference, and Learning",
+      "start_at": "2026-11-23T00:00:00+00:00",
+      "format": "in_person",
+      "organiser": "Royal Statistical Society",
+      "source": "Royal Statistical Society",
+      "source_url": "https://rss.org.uk/training-events/events/events-2026/section-groups/gradient-flows-for-sampling,-inference,-and-learni/",
+      "end_at": null,
+      "venue_name": "South Kensington, London",
+      "address": "South Kensington, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [],
+      "status": "scheduled",
+      "time_tbc": false
+    },
     {
       "id": "meetup-316972421",
       "title": "MarTech London: Building an Experimentation Practice That Delivers Value",
@@ -1257,6 +1275,12 @@
       "event_id": "meetup-316972421",
       "title": "MarTech London: Building an Experimentation Practice That Delivers Value",
       "action": "archived"
+    },
+    {
+      "at": "2026-11-25T17:12:12.821176+00:00",
+      "event_id": "rss-gradient-flows-for-sampling,-inference,-and-learni",
+      "title": "Gradient Flows for Sampling, Inference, and Learning",
+      "action": "added"
     }
   ]
 }
