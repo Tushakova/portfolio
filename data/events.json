@@ -1,68 +1,8 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-26T16:53:01.659648+00:00",
-  "event_count": 12,
+  "generated_at": "2026-11-27T16:38:48.449281+00:00",
+  "event_count": 9,
   "events": [
-    {
-      "id": "meetup-317497917",
-      "title": "Free Intro to: Qlik Cloud Analytics - Workshop",
-      "start_at": "2026-11-26T08:30:00+00:00",
-      "format": "online",
-      "organiser": "Qlik Meetup London",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/qlik-meetup-london-uk/events/317497917/",
-      "end_at": null,
-      "venue_name": null,
-      "address": null,
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Analytics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
-    {
-      "id": "meetup-317070814",
-      "title": "Databricks London - Nov 2026",
-      "start_at": "2026-11-26T17:30:00+00:00",
-      "format": "in_person",
-      "organiser": "Databricks London Meetup",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/databricks-london/events/317070814/",
-      "end_at": null,
-      "venue_name": "Databricks",
-      "address": "11-14 Windmill St, London W1T 2JG, UK, London",
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Analytics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
-    {
-      "id": "meetup-316997928",
-      "title": "Fireside: AI with Prod Data - Hype vs Reality",
-      "start_at": "2026-11-26T19:00:00+00:00",
-      "format": "in_person",
-      "organiser": "The Friendly Data Meetup London",
-      "source": "Meetup",
-      "source_url": "https://www.meetup.com/the-friendly-data-meetup/events/316997928/",
-      "end_at": "2026-11-26T21:00:00+00:00",
-      "venue_name": "230 Blackfriars Road",
-      "address": "230 Blackfriars Rd, London SE1 8NW, UK, London",
-      "is_free": null,
-      "price_from_gbp": null,
-      "registration_status": "unknown",
-      "topics": [
-        "Data Analytics"
-      ],
-      "status": "scheduled",
-      "time_tbc": false
-    },
     {
       "id": "meetup-317483522",
       "title": "PyData London - 112th Meetup",
@@ -246,6 +186,66 @@
     }
   ],
   "past_events": [
+    {
+      "id": "meetup-316997928",
+      "title": "Fireside: AI with Prod Data - Hype vs Reality",
+      "start_at": "2026-11-26T19:00:00+00:00",
+      "format": "in_person",
+      "organiser": "The Friendly Data Meetup London",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/the-friendly-data-meetup/events/316997928/",
+      "end_at": "2026-11-26T21:00:00+00:00",
+      "venue_name": "230 Blackfriars Road",
+      "address": "230 Blackfriars Rd, London SE1 8NW, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-317070814",
+      "title": "Databricks London - Nov 2026",
+      "start_at": "2026-11-26T17:30:00+00:00",
+      "format": "in_person",
+      "organiser": "Databricks London Meetup",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/databricks-london/events/317070814/",
+      "end_at": null,
+      "venue_name": "Databricks",
+      "address": "11-14 Windmill St, London W1T 2JG, UK, London",
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
+    {
+      "id": "meetup-317497917",
+      "title": "Free Intro to: Qlik Cloud Analytics - Workshop",
+      "start_at": "2026-11-26T08:30:00+00:00",
+      "format": "online",
+      "organiser": "Qlik Meetup London",
+      "source": "Meetup",
+      "source_url": "https://www.meetup.com/qlik-meetup-london-uk/events/317497917/",
+      "end_at": null,
+      "venue_name": null,
+      "address": null,
+      "is_free": null,
+      "price_from_gbp": null,
+      "registration_status": "unknown",
+      "topics": [
+        "Data Analytics"
+      ],
+      "status": "scheduled",
+      "time_tbc": false
+    },
     {
       "id": "meetup-317313443",
       "title": "London Analytics Engineering Christmas Jumper Meet-up #27",
@@ -1382,6 +1382,24 @@
       "at": "2026-11-26T16:53:01.659648+00:00",
       "event_id": "meetup-317046809",
       "title": "Experimentation London Meetup #13",
+      "action": "archived"
+    },
+    {
+      "at": "2026-11-27T16:38:48.449281+00:00",
+      "event_id": "meetup-317497917",
+      "title": "Free Intro to: Qlik Cloud Analytics - Workshop",
+      "action": "archived"
+    },
+    {
+      "at": "2026-11-27T16:38:48.449281+00:00",
+      "event_id": "meetup-317070814",
+      "title": "Databricks London - Nov 2026",
+      "action": "archived"
+    },
+    {
+      "at": "2026-11-27T16:38:48.449281+00:00",
+      "event_id": "meetup-316997928",
+      "title": "Fireside: AI with Prod Data - Hype vs Reality",
       "action": "archived"
     }
   ]
